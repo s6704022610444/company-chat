@@ -294,10 +294,10 @@
             border-radius: 6px;
         }
 
-        .badge-role-admin { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-        .badge-role-manager { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
-        .badge-role-supervisor { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .badge-role-staff { background: var(--role-staff-bg); color: var(--role-staff-text); border: 1px solid var(--border-color); }
+        .badge-role-admin { background: rgba(255, 61, 0, 0.15); color: #FF3D00; border: 1px solid rgba(255, 61, 0, 0.4); }
+        .badge-role-manager { background: rgba(255, 179, 0, 0.15); color: #FFB300; border: 1px solid rgba(255, 179, 0, 0.4); }
+        .badge-role-supervisor { background: rgba(0, 176, 255, 0.15); color: #00B0FF; border: 1px solid rgba(0, 176, 255, 0.4); }
+        .badge-role-staff { background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.4); }
 
         .badge-priority-urgent { background: rgba(239, 68, 68, 0.2); color: #f87171; }
         .badge-priority-high { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
@@ -542,9 +542,9 @@
                                 <td>
                                     @php
                                         $rClass = match($u->position) {
-                                            'ผู้ดูแลระบบ' => 'badge-role-admin',
-                                            'ผู้จัดการ' => 'badge-role-manager',
-                                            'หัวหน้างาน' => 'badge-role-supervisor',
+                                            'ผู้ดูแลระบบ', 'แอดมิน', 'Admin' => 'badge-role-admin',
+                                            'ผู้จัดการ', 'Manager' => 'badge-role-manager',
+                                            'หัวหน้างาน', 'Supervisor' => 'badge-role-supervisor',
                                             default => 'badge-role-staff'
                                         };
                                     @endphp

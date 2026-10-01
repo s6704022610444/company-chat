@@ -52,4 +52,26 @@ class User extends Authenticatable
         $position = $this->position ?: 'พนักงาน';
         return "{$firstName} ({$position})";
     }
+
+    /**
+     * Get the hex color corresponding to the user's position/role:
+     * 1. พนักงาน: เขียวสด (#00C853)
+     * 2. หัวหน้างาน: ฟ้าสว่าง (#00B0FF)
+     * 3. ผู้จัดการ: เหลืองทองเข้ม (#FFB300)
+     * 4. แอดมิน / ผู้ดูแลระบบ: แดงนีออน/สว่าง (#FF3D00)
+     */
+    public function getPositionColorAttribute(): string
+    {
+        $pos = mb_strtolower(trim($this->position ?? ''));
+        if (str_contains($pos, 'แอดมิน') || str_contains($pos, 'ผู้ดูแลระบบ') || str_contains($pos, 'admin')) {
+            return '#FF3D00';
+        }
+        if (str_contains($pos, 'ผู้จัดการ') || str_contains($pos, 'manager')) {
+            return '#FFB300';
+        }
+        if (str_contains($pos, 'หัวหน้างาน') || str_contains($pos, 'supervisor')) {
+            return '#00B0FF';
+        }
+        return '#00C853';
+    }
 }

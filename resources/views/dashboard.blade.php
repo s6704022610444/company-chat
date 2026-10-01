@@ -486,39 +486,39 @@
         }
 
         .role-admin {
-            background: rgba(245, 158, 11, 0.16);
-            color: #d97706;
-            border: 1px solid rgba(245, 158, 11, 0.35);
+            background: rgba(255, 61, 0, 0.15);
+            color: #FF3D00;
+            border: 1px solid rgba(255, 61, 0, 0.4);
         }
         [data-theme="dark"] .role-admin {
-            color: #fbbf24;
+            color: #FF3D00;
         }
 
         .role-manager {
-            background: rgba(6, 182, 212, 0.16);
-            color: #0284c7;
-            border: 1px solid rgba(6, 182, 212, 0.35);
+            background: rgba(255, 179, 0, 0.15);
+            color: #FFB300;
+            border: 1px solid rgba(255, 179, 0, 0.4);
         }
         [data-theme="dark"] .role-manager {
-            color: #38bdf8;
+            color: #FFB300;
         }
 
         .role-supervisor {
-            background: rgba(16, 185, 129, 0.16);
-            color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.35);
+            background: rgba(0, 176, 255, 0.15);
+            color: #00B0FF;
+            border: 1px solid rgba(0, 176, 255, 0.4);
         }
         [data-theme="dark"] .role-supervisor {
-            color: #34d399;
+            color: #00B0FF;
         }
 
         .role-staff {
-            background: rgba(148, 163, 184, 0.18);
-            color: #475569;
-            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(0, 200, 83, 0.15);
+            color: #00C853;
+            border: 1px solid rgba(0, 200, 83, 0.4);
         }
         [data-theme="dark"] .role-staff {
-            color: #cbd5e1;
+            color: #00C853;
         }
 
         .logout-btn {
@@ -870,13 +870,14 @@
         }
 
         .message-sender-name {
-            font-size: 12.5px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             color: var(--bubble-sender-color);
+            letter-spacing: 0.15px;
         }
 
         .my-message .message-sender-name {
-            color: var(--text-secondary);
+            font-weight: 700;
         }
 
         .message-bubble {
@@ -2250,9 +2251,9 @@
         <!-- Sidebar Footer (Bottom Left): User Profile & Settings -->
         @php
             $roleClass = match(auth()->user()->position) {
-                'ผู้ดูแลระบบ' => 'role-admin',
-                'ผู้จัดการ' => 'role-manager',
-                'หัวหน้างาน' => 'role-supervisor',
+                'ผู้ดูแลระบบ', 'แอดมิน', 'Admin' => 'role-admin',
+                'ผู้จัดการ', 'Manager' => 'role-manager',
+                'หัวหน้างาน', 'Supervisor' => 'role-supervisor',
                 default => 'role-staff',
             };
         @endphp
@@ -2299,6 +2300,7 @@
                         $firstName = $sender?->resolved_first_name ?? 'User';
                         $position = $sender?->position ?? 'พนักงาน';
                         $senderDisplay = "{$firstName} ({$position})";
+                        $positionColor = $sender?->position_color ?? '#00C853';
                         $avatarUrl = $sender?->avatar;
                         $initial = strtoupper(mb_substr($firstName, 0, 1));
                     @endphp
@@ -2307,7 +2309,7 @@
                             <div class="message-content-wrap">
                                 <div class="message-header-line">
                                     <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
-                                    <span class="message-sender-name">{{ $senderDisplay }}</span>
+                                    <span class="message-sender-name" style="color: {{ $positionColor }} !important;">{{ $senderDisplay }}</span>
                                 </div>
                                 <div class="message-bubble">
                                     @if($message->image)
@@ -2344,7 +2346,7 @@
                             </div>
                             <div class="message-content-wrap">
                                 <div class="message-header-line">
-                                    <span class="message-sender-name">{{ $senderDisplay }}</span>
+                                    <span class="message-sender-name" style="color: {{ $positionColor }} !important;">{{ $senderDisplay }}</span>
                                     <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
                                 </div>
                                 <div class="message-bubble">
@@ -3054,7 +3056,22 @@
         const currentUserName = @json(auth()->user()->name);
         const currentUserFirstName = @json(auth()->user()->resolved_first_name);
         const currentUserPosition = @json(auth()->user()->position ?? 'พนักงาน');
+        const currentUserPositionColor = @json(auth()->user()->position_color ?? '#00C853');
         const currentUserDisplayName = `${currentUserFirstName} (${currentUserPosition})`;
+
+        function getPositionColor(position) {
+            const pos = (position || '').toString().toLowerCase().trim();
+            if (pos.includes('แอดมิน') || pos.includes('ผู้ดูแลระบบ') || pos.includes('admin')) {
+                return '#FF3D00';
+            }
+            if (pos.includes('ผู้จัดการ') || pos.includes('manager')) {
+                return '#FFB300';
+            }
+            if (pos.includes('หัวหน้างาน') || pos.includes('supervisor')) {
+                return '#00B0FF';
+            }
+            return '#00C853';
+        }
 
         function appendMessage(data) {
             if (!chatContainer) return;
@@ -3074,6 +3091,8 @@
                 ? `${data.user_first_name} (${data.user_position || 'พนักงาน'})` 
                 : (data.user_name ? `${data.user_name.split(' ')[0]} (${data.user_position || 'พนักงาน'})` : (isMe ? currentUserDisplayName : 'User')));
 
+            const positionColor = data.user_position_color || (isMe ? currentUserPositionColor : getPositionColor(data.user_position));
+
             const firstName = data.user_first_name || (data.user_name ? data.user_name.split(' ')[0] : (isMe ? currentUserFirstName : 'U'));
             const initial = firstName.charAt(0).toUpperCase();
             const time = data.created_at || '';
@@ -3090,8 +3109,8 @@
 
             const headerLineHtml = `
                 <div class="message-header-line">
-                    ${isMe ? `<span class="message-time">${escapeHtml(time)}</span><span class="message-sender-name">${escapeHtml(senderDisplay)}</span>` 
-                           : `<span class="message-sender-name">${escapeHtml(senderDisplay)}</span><span class="message-time">${escapeHtml(time)}</span>`
+                    ${isMe ? `<span class="message-time">${escapeHtml(time)}</span><span class="message-sender-name" style="color: ${positionColor} !important;">${escapeHtml(senderDisplay)}</span>` 
+                           : `<span class="message-sender-name" style="color: ${positionColor} !important;">${escapeHtml(senderDisplay)}</span><span class="message-time">${escapeHtml(time)}</span>`
                     }
                 </div>
             `;

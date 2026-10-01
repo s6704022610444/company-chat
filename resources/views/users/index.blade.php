@@ -171,27 +171,27 @@
         }
 
         .role-admin {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(236, 72, 153, 0.2));
-            color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.35);
+            background: rgba(255, 61, 0, 0.15);
+            color: #FF3D00;
+            border: 1px solid rgba(255, 61, 0, 0.4);
         }
 
         .role-manager {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
-            color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.35);
+            background: rgba(255, 179, 0, 0.15);
+            color: #FFB300;
+            border: 1px solid rgba(255, 179, 0, 0.4);
         }
 
         .role-supervisor {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(20, 184, 166, 0.2));
-            color: #34d399;
-            border: 1px solid rgba(52, 211, 153, 0.35);
+            background: rgba(0, 176, 255, 0.15);
+            color: #00B0FF;
+            border: 1px solid rgba(0, 176, 255, 0.4);
         }
 
         .role-staff {
-            background: var(--role-staff-bg);
-            color: var(--role-staff-text);
-            border: 1px solid var(--role-staff-border);
+            background: rgba(0, 200, 83, 0.15);
+            color: #00C853;
+            border: 1px solid rgba(0, 200, 83, 0.4);
         }
 
         .role-form {
@@ -356,9 +356,9 @@
                     <div>
                         @php
                             $roleClass = match($user->position) {
-                                'ผู้ดูแลระบบ' => 'role-admin',
-                                'ผู้จัดการ' => 'role-manager',
-                                'หัวหน้างาน' => 'role-supervisor',
+                                'ผู้ดูแลระบบ', 'แอดมิน', 'Admin' => 'role-admin',
+                                'ผู้จัดการ', 'Manager' => 'role-manager',
+                                'หัวหน้างาน', 'Supervisor' => 'role-supervisor',
                                 default => 'role-staff',
                             };
                         @endphp
@@ -383,8 +383,8 @@
                     <option value="ผู้จัดการ" {{ $user->position === 'ผู้จัดการ' ? 'selected' : '' }}>
                         ผู้จัดการ
                     </option>
-                    <option value="ผู้ดูแลระบบ" {{ $user->position === 'ผู้ดูแลระบบ' ? 'selected' : '' }}>
-                        ผู้ดูแลระบบ
+                    <option value="ผู้ดูแลระบบ" {{ in_array($user->position, ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin']) ? 'selected' : '' }}>
+                        ผู้ดูแลระบบ (แอดมิน)
                     </option>
                 </select>
 
@@ -400,25 +400,25 @@
         <h3>สรุปโครงสร้างสิทธิ์การใช้งานทั้ง 4 ระดับ</h3>
         <div class="guide-grid">
             <div class="guide-item">
-                <strong style="color: var(--role-staff-text);">พนักงาน</strong>
+                <strong style="color: #00C853;">1. พนักงาน (#00C853 เขียวสด)</strong><br>
                 - ดูงานที่ได้รับมอบหมาย<br>
                 - อัปเดตสถานะงานตัวเอง<br>
                 - สนทนาในห้องแชต
             </div>
             <div class="guide-item">
-                <strong style="color: #34d399;">หัวหน้างาน</strong>
+                <strong style="color: #00B0FF;">2. หัวหน้างาน (#00B0FF ฟ้าสว่าง)</strong><br>
                 - ดูงานทั้งหมดของทีม<br>
                 - สร้างและมอบหมายงาน<br>
                 - แก้ไข/ลบงานที่ดูแล
             </div>
             <div class="guide-item">
-                <strong style="color: #38bdf8;">ผู้จัดการ</strong>
+                <strong style="color: #FFB300;">3. ผู้จัดการ (#FFB300 เหลืองทองเข้ม)</strong><br>
                 - จัดการงานทั้งหมดในระบบ<br>
                 - สร้างห้องสนทนาใหม่<br>
                 - ติดตาม Dashboard สรุปงาน
             </div>
             <div class="guide-item">
-                <strong style="color: #fbbf24;">ผู้ดูแลระบบ</strong>
+                <strong style="color: #FF3D00;">4. แอดมิน / ผู้ดูแลระบบ (#FF3D00 แดงนีออน/สว่าง)</strong><br>
                 - สิทธิ์สูงสุดทุกฟังก์ชัน<br>
                 - ปรับเปลี่ยนตำแหน่งผู้ใช้<br>
                 - ลบห้องสนทนาที่ไม่ใช้งาน

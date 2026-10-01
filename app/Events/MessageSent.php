@@ -61,6 +61,7 @@ class MessageSent implements ShouldBroadcastNow
             'user_name' => $this->message->user ? $this->message->user->name : 'User',
             'user_first_name' => $this->message->user ? $this->message->user->resolved_first_name : 'User',
             'user_position' => $this->message->user ? ($this->message->user->position ?: 'พนักงาน') : 'พนักงาน',
+            'user_position_color' => $this->message->user ? $this->message->user->position_color : '#00C853',
             'user_display_name' => $this->message->user ? $this->message->user->chat_display_name : 'User',
             'user_avatar' => $this->message->user ? $this->message->user->avatar : null,
             'created_at' => $this->message->created_at ? $this->message->created_at->format('H:i') : '',

@@ -9,7 +9,7 @@ class UserManagementController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->position !== 'ผู้ดูแลระบบ') {
+        if (!in_array(auth()->user()->position, ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])) {
             abort(403, 'คุณไม่มีสิทธิ์เข้าหน้านี้');
         }
 
@@ -20,12 +20,12 @@ class UserManagementController extends Controller
 
     public function updatePosition(Request $request, User $user)
     {
-        if (auth()->user()->position !== 'ผู้ดูแลระบบ') {
+        if (!in_array(auth()->user()->position, ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])) {
             abort(403, 'คุณไม่มีสิทธิ์เปลี่ยนตำแหน่ง');
         }
 
         $request->validate([
-            'position' => 'required|in:พนักงาน,หัวหน้างาน,ผู้จัดการ,ผู้ดูแลระบบ',
+            'position' => 'required|in:พนักงาน,หัวหน้างาน,ผู้จัดการ,ผู้ดูแลระบบ,แอดมิน',
         ]);
 
         $user->update([
