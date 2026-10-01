@@ -384,7 +384,7 @@
                         ผู้จัดการ
                     </option>
                     <option value="ผู้ดูแลระบบ" {{ in_array($user->position, ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin']) ? 'selected' : '' }}>
-                        ผู้ดูแลระบบ (แอดมิน)
+                        ผู้ดูแลระบบ
                     </option>
                 </select>
 
@@ -400,25 +400,25 @@
         <h3>สรุปโครงสร้างสิทธิ์การใช้งานทั้ง 4 ระดับ</h3>
         <div class="guide-grid">
             <div class="guide-item">
-                <strong style="color: #00C853;">1. พนักงาน (#00C853 เขียวสด)</strong><br>
+                <strong style="color: #00C853;">1. พนักงาน</strong><br>
                 - ดูงานที่ได้รับมอบหมาย<br>
                 - อัปเดตสถานะงานตัวเอง<br>
                 - สนทนาในห้องแชต
             </div>
             <div class="guide-item">
-                <strong style="color: #00B0FF;">2. หัวหน้างาน (#00B0FF ฟ้าสว่าง)</strong><br>
+                <strong style="color: #00B0FF;">2. หัวหน้างาน</strong><br>
                 - ดูงานทั้งหมดของทีม<br>
                 - สร้างและมอบหมายงาน<br>
                 - แก้ไข/ลบงานที่ดูแล
             </div>
             <div class="guide-item">
-                <strong style="color: #FFB300;">3. ผู้จัดการ (#FFB300 เหลืองทองเข้ม)</strong><br>
+                <strong style="color: #FFB300;">3. ผู้จัดการ</strong><br>
                 - จัดการงานทั้งหมดในระบบ<br>
                 - สร้างห้องสนทนาใหม่<br>
                 - ติดตาม Dashboard สรุปงาน
             </div>
             <div class="guide-item">
-                <strong style="color: #FF3D00;">4. แอดมิน / ผู้ดูแลระบบ (#FF3D00 แดงนีออน/สว่าง)</strong><br>
+                <strong style="color: #FF3D00;">4. แอดมิน / ผู้ดูแลระบบ</strong><br>
                 - สิทธิ์สูงสุดทุกฟังก์ชัน<br>
                 - ปรับเปลี่ยนตำแหน่งผู้ใช้<br>
                 - ลบห้องสนทนาที่ไม่ใช้งาน
