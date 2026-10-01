@@ -11,36 +11,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
-
-        // หัวหน้า / ผู้จัดการ / แอดมิน เห็นงานทั้งหมด
-        if (in_array($user->position, [
-                'หัวหน้างาน',
-                'ผู้จัดการ',
-                'ผู้ดูแลระบบ'
-            ])) {
-                $tasks = Task::with([
-                    'creator',
-                    'assignee',
-                    'histories.user'
-                ])
-                ->latest()
-                ->get();
-            } else {
-                // พนักงานเห็นเฉพาะงานที่ตัวเองได้รับมอบหมาย
-                $tasks = Task::with([
-                    'creator',
-                    'assignee',
-                    'histories.user'
-                ])
-                ->where('assigned_to', $user->id)
-                ->latest()
-                ->get();
-            }
-
-        $users = User::orderBy('name')->get();
-
-        return view('tasks.index', compact('tasks', 'users'));
+        return redirect()->to('/dashboard?view=all-tasks');
     }
 
     public function store(Request $request)

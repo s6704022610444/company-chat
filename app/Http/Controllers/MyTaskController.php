@@ -10,22 +10,7 @@ class MyTaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::with(['histories.user'])
-            ->where('assigned_to', auth()->id())
-            ->where('status', '!=', 'เสร็จแล้ว')
-            ->orderByRaw("
-                CASE
-                    WHEN priority = 'ด่วน' THEN 1
-                    WHEN priority = 'สูง' THEN 2
-                    WHEN priority = 'ปกติ' THEN 3
-                    WHEN priority = 'ต่ำ' THEN 4
-                    ELSE 5
-                END
-            ")
-            ->orderBy('due_at')
-            ->get();
-
-        return view('tasks.mine', compact('tasks'));
+        return redirect()->to('/dashboard?view=my-tasks');
     }
 
     public function updateStatus(Request $request, Task $task)
