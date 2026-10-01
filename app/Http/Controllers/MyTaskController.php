@@ -40,6 +40,15 @@ class MyTaskController extends Controller
             ]);
         }
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'task_id' => $task->id,
+                'status' => $task->status,
+                'message' => 'อัปเดตสถานะงานเรียบร้อยแล้ว',
+            ]);
+        }
+
         return redirect()
             ->to('/dashboard?view=my-tasks')
             ->with('success', 'อัปเดตสถานะงานเรียบร้อยแล้ว');

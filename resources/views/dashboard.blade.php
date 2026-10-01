@@ -2541,7 +2541,7 @@
                 </h2>
                 <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
                     <span>งานทั้งหมดในระบบ</span>
-                    <span class="nav-badge" style="background: var(--bg-surface); color: var(--text-secondary); font-size: 10.5px;">{{ $allTasks->count() }} รายการ</span>
+                    <span class="nav-badge" id="headerAllTasksCountBadge" style="background: var(--bg-surface); color: var(--text-secondary); font-size: 10.5px;">{{ $allTasks->count() }} รายการ</span>
                 </div>
             </div>
 
@@ -2552,7 +2552,7 @@
                 </h2>
                 <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
                     <span>ข่าวสารองค์กร</span>
-                    <span class="nav-badge" style="background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.3); font-size: 10.5px;">{{ $newsCount }} รายการ</span>
+                    <span class="nav-badge" id="headerNewsCountBadge" style="background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.3); font-size: 10.5px;">{{ $newsCount }} รายการ</span>
                 </div>
             </div>
         </div>
@@ -2566,9 +2566,7 @@
                     aria-label="แจ้งเตือนงานสำคัญ"
                     onclick="toggleNotificationDropdown(event)">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                @if(isset($notifications) && $notifications > 0)
-                    <span class="bell-badge">{{ $notifications > 9 ? '9+' : $notifications }}</span>
-                @endif
+                <span class="bell-badge" id="headerBellBadge" style="{{ (isset($notifications) && $notifications > 0) ? '' : 'display:none;' }}">{{ ($notifications ?? 0) > 9 ? '9+' : ($notifications ?? 0) }}</span>
             </button>
 
             <!-- Notification Dropdown Menu -->
@@ -2577,12 +2575,10 @@
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span style="font-weight: 700; font-size: 14px; color: var(--text-primary);">แจ้งเตือนงานสำคัญ</span>
                     </div>
-                    @if(isset($notifications) && $notifications > 0)
-                        <span class="nav-badge badge-amber">{{ $notifications }} งาน</span>
-                    @endif
+                    <span class="nav-badge badge-amber" id="notificationDropdownCount" style="{{ (isset($notifications) && $notifications > 0) ? '' : 'display:none;' }}">{{ $notifications ?? 0 }} งาน</span>
                 </div>
 
-                <div class="notification-body">
+                <div class="notification-body" id="notificationDropdownBody">
                     @forelse($urgentTasks as $task)
                         <div class="notification-item" onclick="openTaskFromNotification('{{ $task->id }}')">
                             <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
@@ -2653,14 +2649,12 @@
                     <span style="display: flex; align-items: center; gap: 8px;">
                         ข่าวสารองค์กร
                     </span>
-                    @if(isset($newsCount) && $newsCount > 0)
-                        <span class="nav-badge" style="background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.3);">{{ $newsCount }}</span>
-                    @endif
+                    <span class="nav-badge" id="sidebarNewsCountBadge" style="background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.3); {{ (isset($newsCount) && $newsCount > 0) ? '' : 'display:none;' }}">{{ $newsCount ?? 0 }}</span>
                 </a>
             </div>
 
             <!-- Tasks Navigation -->
-            <div>
+            <div id="navTasksSection">
                 <div class="nav-section-title">งานและภารกิจ</div>
 
                 <!-- งานของฉัน (My Tasks) -->
@@ -2671,9 +2665,7 @@
                     <span style="display: flex; align-items: center; gap: 8px;">
                         งานของฉัน
                     </span>
-                    @if(isset($myTasksCount) && $myTasksCount > 0)
-                        <span class="nav-badge badge-blue" id="sidebarMyTasksBadge">{{ $myTasksCount }}</span>
-                    @endif
+                    <span class="nav-badge badge-blue" id="sidebarMyTasksBadge" style="{{ (isset($myTasksCount) && $myTasksCount > 0) ? '' : 'display:none;' }}">{{ $myTasksCount ?? 0 }}</span>
                 </a>
 
                 <!-- งานทั้งหมด (All Tasks) -->
@@ -2684,26 +2676,27 @@
                     <span style="display: flex; align-items: center; gap: 8px;">
                         จัดการงานทั้งหมด
                     </span>
-                    <span class="nav-badge" style="background: rgba(255,255,255,0.1); color: #94a3b8;">{{ $allTasks->count() }}</span>
+                    <span class="nav-badge" id="sidebarAllTasksCountBadge" style="background: rgba(255,255,255,0.1); color: #94a3b8;">{{ $allTasks->count() }}</span>
                 </a>
 
-                @if($notifications > 0)
+                <div id="sidebarUrgentNavWrap" style="{{ (isset($notifications) && $notifications > 0) ? '' : 'display:none;' }}">
                     <a href="{{ url('/dashboard?view=my-tasks') }}"
+                       id="navBtnUrgentTasks"
                        class="nav-button"
                        onclick="switchDashboardView('my-tasks', event)"
                        style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35);">
                         <span style="color: #fbbf24; font-size: 13px;">
                             ⏰ ใกล้ครบกำหนด
                         </span>
-                        <span class="nav-badge badge-amber">{{ $notifications }}</span>
+                        <span class="nav-badge badge-amber" id="sidebarUrgentCountBadge">{{ $notifications ?? 0 }}</span>
                     </a>
-                @endif
+                </div>
             </div>
 
             <!-- Chat Rooms Section -->
             <div>
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                    <div class="nav-section-title" style="margin-bottom: 0;">ห้องแชต ({{ $rooms->count() }})</div>
+                    <div class="nav-section-title" id="sidebarRoomsCountTitle" style="margin-bottom: 0;">ห้องแชต ({{ $rooms->count() }})</div>
 
                     {{-- ปุ่มสร้างห้อง (ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ) --}}
                     @if(in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
@@ -2716,30 +2709,33 @@
                     @endif
                 </div>
 
-                @foreach($rooms as $room)
-                    <div class="room-item {{ ($currentView === 'chat' && $selectedRoom == $room->id) ? 'active' : '' }}" data-room-id="{{ $room->id }}">
-                        <a href="{{ url('/dashboard?room=' . $room->id) }}"
-                           class="room-link"
-                           onclick="handleRoomClick({{ $room->id }}, event)">
-                            <span class="room-hash">#</span>
-                            <span>{{ $room->name }}</span>
-                        </a>
+                <div id="sidebarRoomsList">
+                    @foreach($rooms as $room)
+                        <div class="room-item {{ ($currentView === 'chat' && $selectedRoom == $room->id) ? 'active' : '' }}" data-room-id="{{ $room->id }}">
+                            <a href="{{ url('/dashboard?room=' . $room->id) }}"
+                               class="room-link"
+                               onclick="handleRoomClick({{ $room->id }}, event)">
+                                <span class="room-hash">#</span>
+                                <span>{{ $room->name }}</span>
+                            </a>
 
-                        {{-- ลบห้อง (ผู้ดูแลระบบเท่านั้น) --}}
-                        @if(auth()->user()->position === 'ผู้ดูแลระบบ')
-                            <form method="POST"
-                                  action="{{ route('rooms.destroy', $room->id) }}"
-                                  onsubmit="return confirm('ต้องการลบห้อง {{ $room->name }} ใช่หรือไม่?')"
-                                  style="margin: 0;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
-                                    🗑️
-                                </button>
-                            </form>
-                        @endif
-                    </div>
-                @endforeach
+                            {{-- ลบห้อง (ผู้ดูแลระบบเท่านั้น) --}}
+                            @if(auth()->user()->position === 'ผู้ดูแลระบบ')
+                                <form method="POST"
+                                      action="{{ route('rooms.destroy', $room->id) }}"
+                                      onsubmit="return confirm('ต้องการลบห้อง {{ $room->name }} ใช่หรือไม่?')"
+                                      style="margin: 0;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
+                                        🗑️
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </div>
             </div>
 
             <!-- Admin Area -->
@@ -2968,7 +2964,7 @@
         <div id="viewMyTasks" class="task-workspace" style="{{ $currentView === 'my-tasks' ? 'display:flex;' : 'display:none;' }}">
             <div class="task-content-inner">
                 @forelse($myTasks as $task)
-                    <div class="task-card">
+                    <div class="task-card" data-my-task-id="{{ $task->id }}">
                         <div class="task-top">
                             <div class="task-title">{{ $task->title }}</div>
 
@@ -3016,7 +3012,7 @@
                         </div>
 
                         {{-- Quick status changer form --}}
-                        <form method="POST" action="{{ route('my.tasks.status', $task->id) }}" class="status-form">
+                        <form method="POST" action="{{ route('my.tasks.status', $task->id) }}" class="status-form" onsubmit="return false;">
                             @csrf
                             @method('PUT')
 
@@ -3024,7 +3020,7 @@
                                 อัปเดตสถานะงาน:
                             </span>
 
-                            <select name="status" class="status-select" onchange="this.form.submit()">
+                            <select name="status" class="status-select" onchange="updateTaskStatusAjax(this, {{ $task->id }}, 'my')">
                                 <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>⏳ ยังไม่เริ่ม</option>
                                 <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>รับงานแล้ว</option>
                                 <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>กำลังดำเนินการ</option>
@@ -3130,6 +3126,7 @@
                 <div id="allTasksList" style="display: flex; flex-direction: column; gap: 14px;">
                     @forelse($allTasks as $task)
                         <div class="task-card all-task-item"
+                             data-task-id="{{ $task->id }}"
                              data-status="{{ $task->status }}"
                              data-priority="{{ $task->priority }}">
 
@@ -3192,11 +3189,11 @@
 
                             <div class="task-actions">
                                 @if($canChangeStatus)
-                                    <form method="POST" action="{{ route('tasks.update', $task->id) }}" style="display: flex; align-items: center; gap: 8px; margin: 0;">
+                                    <form method="POST" action="{{ route('tasks.update', $task->id) }}" style="display: flex; align-items: center; gap: 8px; margin: 0;" onsubmit="return false;">
                                         @csrf
                                         @method('PUT')
                                         <span style="font-size: 12.5px; color: var(--text-secondary);">เปลี่ยนสถานะ:</span>
-                                        <select name="status" class="status-select" onchange="this.form.submit()">
+                                        <select name="status" class="status-select" onchange="updateTaskStatusAjax(this, {{ $task->id }}, 'all')">
                                             <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>⏳ ยังไม่เริ่ม</option>
                                             <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>รับงานแล้ว</option>
                                             <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>กำลังดำเนินการ</option>
@@ -3210,7 +3207,7 @@
                                         <a href="{{ route('tasks.edit', $task->id) }}" class="btn-action-edit">
                                             แก้ไข
                                         </a>
-                                        <form method="POST" action="{{ route('tasks.destroy', $task->id) }}" onsubmit="return confirm('ยืนยันที่จะลบงานนี้หรือไม่?')" style="margin: 0;">
+                                        <form method="POST" action="{{ route('tasks.destroy', $task->id) }}" onsubmit="return handleDeleteTaskAjax(event, {{ $task->id }})" style="margin: 0;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-action-delete">
@@ -3306,6 +3303,7 @@
                         <article class="news-card {{ $item->is_pinned ? 'is-pinned' : '' }}" 
                                  data-category="{{ $item->category }}" 
                                  data-is-pinned="{{ $item->is_pinned ? '1' : '0' }}"
+                                 data-news-id="{{ $item->id }}"
                                  id="newsCard{{ $item->id }}">
                             
                             <div class="news-card-header">
@@ -3338,7 +3336,7 @@
                                 {{-- Management Actions for Executives / Admins --}}
                                 @if(auth()->user()->canManageNews())
                                     <div class="news-admin-actions">
-                                        <form method="POST" action="{{ route('news.pin', $item->id) }}" style="display:inline; margin:0;">
+                                        <form method="POST" action="{{ route('news.pin', $item->id) }}" onsubmit="return handlePinNewsAjax(event, {{ $item->id }})" style="display:inline; margin:0;">
                                             @csrf
                                             <button type="submit" class="btn-news-action" title="{{ $item->is_pinned ? 'ยกเลิกการปักหมุด' : 'ปักหมุดข่าวนี้' }}">
                                                 {{ $item->is_pinned ? '📌 เลิกปักหมุด' : '📍 ปักหมุด' }}
@@ -3357,7 +3355,7 @@
                                             ✏️ แก้ไข
                                         </button>
 
-                                        <form method="POST" action="{{ route('news.destroy', $item->id) }}" onsubmit="return confirm('ยืนยันที่จะลบประกาศข่าวนี้หรือไม่?')" style="display:inline; margin:0;">
+                                        <form method="POST" action="{{ route('news.destroy', $item->id) }}" onsubmit="return handleDeleteNewsAjax(event, {{ $item->id }})" style="display:inline; margin:0;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-news-action danger" title="ลบประกาศข่าว">
@@ -5008,6 +5006,524 @@
                 console.error('Error toggling like:', err);
             });
         };
+
+        // ==========================================
+        // REAL-TIME AJAX ACTION HANDLERS
+        // ==========================================
+        window.updateTaskStatusAjax = function(selectEl, taskId, viewType) {
+            const newStatus = selectEl.value;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+            const endpoint = (viewType === 'my') ? `/my-tasks/${taskId}/status` : `/tasks/${taskId}`;
+
+            // Optimistic UI update
+            const myCard = document.querySelector(`[data-my-task-id="${taskId}"]`);
+            const allCard = document.querySelector(`[data-task-id="${taskId}"]`);
+
+            if (allCard) {
+                allCard.setAttribute('data-status', newStatus);
+                const badge = allCard.querySelector('.status-badge');
+                if (badge) badge.textContent = newStatus;
+                const selectInAll = allCard.querySelector('select[name="status"]');
+                if (selectInAll && selectInAll !== selectEl) selectInAll.value = newStatus;
+            }
+
+            if (myCard) {
+                const badge = myCard.querySelector('.status-badge');
+                if (badge) badge.textContent = newStatus;
+                const selectInMy = myCard.querySelector('select[name="status"]');
+                if (selectInMy && selectInMy !== selectEl) selectInMy.value = newStatus;
+
+                if (newStatus === 'เสร็จแล้ว') {
+                    myCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease, max-height 0.4s ease';
+                    myCard.style.opacity = '0';
+                    myCard.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        myCard.remove();
+                    }, 350);
+                }
+            }
+
+            fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (window.runGlobalRealtimeSync) {
+                    window.runGlobalRealtimeSync();
+                }
+            })
+            .catch(err => {
+                console.error('Error updating task status:', err);
+            });
+        };
+
+        window.handleDeleteTaskAjax = function(event, taskId) {
+            event.preventDefault();
+            if (!confirm('ยืนยันที่จะลบงานนี้หรือไม่?')) return false;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+            const allCard = document.querySelector(`[data-task-id="${taskId}"]`);
+            const myCard = document.querySelector(`[data-my-task-id="${taskId}"]`);
+
+            if (allCard) {
+                allCard.style.transition = 'opacity 0.3s, transform 0.3s';
+                allCard.style.opacity = '0';
+                allCard.style.transform = 'scale(0.95)';
+                setTimeout(() => allCard.remove(), 300);
+            }
+            if (myCard) {
+                myCard.style.transition = 'opacity 0.3s, transform 0.3s';
+                myCard.style.opacity = '0';
+                myCard.style.transform = 'scale(0.95)';
+                setTimeout(() => myCard.remove(), 300);
+            }
+
+            fetch(`/tasks/${taskId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (window.runGlobalRealtimeSync) {
+                    window.runGlobalRealtimeSync();
+                }
+            })
+            .catch(err => {
+                console.error('Error deleting task:', err);
+            });
+
+            return false;
+        };
+
+        window.handlePinNewsAjax = function(event, newsId) {
+            event.preventDefault();
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+
+            fetch(`/news/${newsId}/pin`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (window.runGlobalRealtimeSync) {
+                    window.runGlobalRealtimeSync(true);
+                }
+            })
+            .catch(err => {
+                console.error('Error toggling pin:', err);
+            });
+
+            return false;
+        };
+
+        window.handleDeleteNewsAjax = function(event, newsId) {
+            event.preventDefault();
+            if (!confirm('ยืนยันที่จะลบประกาศข่าวนี้หรือไม่?')) return false;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+            const card = document.getElementById(`newsCard${newsId}`);
+            if (card) {
+                card.style.transition = 'opacity 0.3s, transform 0.3s';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => card.remove(), 300);
+            }
+
+            fetch(`/news/${newsId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (window.runGlobalRealtimeSync) {
+                    window.runGlobalRealtimeSync(true);
+                }
+            })
+            .catch(err => {
+                console.error('Error deleting news:', err);
+            });
+
+            return false;
+        };
+
+        // ==========================================
+        // GLOBAL REAL-TIME SYNCHRONIZATION ENGINE
+        // ==========================================
+        let lastNewsHash = null;
+        let lastRoomsHash = null;
+        let isSyncing = false;
+
+        window.escapeHtml = function(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return String(text).replace(/[&<>"']/g, m => map[m]);
+        };
+
+        window.runGlobalRealtimeSync = async function(forceNews = false) {
+            if (isSyncing) return;
+            isSyncing = true;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+
+            try {
+                const res = await fetch('/realtime/sync', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!res.ok) {
+                    isSyncing = false;
+                    return;
+                }
+
+                const data = await res.json();
+
+                // 1. Urgent Notifications & Bell Badge
+                const notifCount = data.notifications_count || 0;
+                const headerBellBadge = document.getElementById('headerBellBadge');
+                if (headerBellBadge) {
+                    headerBellBadge.textContent = notifCount > 9 ? '9+' : notifCount;
+                    headerBellBadge.style.display = notifCount > 0 ? '' : 'none';
+                }
+
+                const notifDropdownCount = document.getElementById('notificationDropdownCount');
+                if (notifDropdownCount) {
+                    notifDropdownCount.textContent = `${notifCount} งาน`;
+                    notifDropdownCount.style.display = notifCount > 0 ? '' : 'none';
+                }
+
+                const sidebarUrgentNavWrap = document.getElementById('sidebarUrgentNavWrap');
+                if (sidebarUrgentNavWrap) {
+                    sidebarUrgentNavWrap.style.display = notifCount > 0 ? 'block' : 'none';
+                }
+
+                const sidebarUrgentCountBadge = document.getElementById('sidebarUrgentCountBadge');
+                if (sidebarUrgentCountBadge) {
+                    sidebarUrgentCountBadge.textContent = notifCount;
+                }
+
+                // Urgent Dropdown Items list
+                const notifBody = document.getElementById('notificationDropdownBody');
+                if (notifBody && data.urgent_tasks) {
+                    if (data.urgent_tasks.length === 0) {
+                        notifBody.innerHTML = `
+                            <div class="notification-empty">
+                                <div style="font-size: 13.5px; font-weight: 600; color: var(--text-primary);">ไม่มีงานสำคัญเร่งด่วนในขณะนี้</div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">คุณและทีมงานจัดการภารกิจได้อย่างยอดเยี่ยม!</div>
+                            </div>
+                        `;
+                    } else {
+                        let html = '';
+                        data.urgent_tasks.forEach(task => {
+                            const pClass = task.priority === 'ด่วน' ? 'badge-red' : (task.priority === 'สูง' ? 'badge-amber' : 'badge-blue');
+                            const dueHtml = task.due_human ? `<span>•</span><span style="color: ${task.is_overdue ? '#ef4444' : '#f59e0b'}; font-weight: 500;">${window.escapeHtml(task.due_human)}</span>` : '';
+                            html += `
+                                <div class="notification-item" onclick="openTaskFromNotification('${task.id}')">
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+                                        <span class="notification-item-title">${window.escapeHtml(task.title)}</span>
+                                        <span class="nav-badge ${pClass}" style="font-size: 10px; flex-shrink: 0;">${window.escapeHtml(task.priority)}</span>
+                                    </div>
+                                    <div class="notification-item-meta">
+                                        <span>${window.escapeHtml(task.assignee)}</span>
+                                        ${dueHtml}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        notifBody.innerHTML = html;
+                    }
+                }
+
+                // 2. Task Badges & Live Status Sync
+                const myTasksCount = data.my_tasks_count || 0;
+                const sidebarMyTasksBadge = document.getElementById('sidebarMyTasksBadge');
+                if (sidebarMyTasksBadge) {
+                    sidebarMyTasksBadge.textContent = myTasksCount;
+                    sidebarMyTasksBadge.style.display = myTasksCount > 0 ? '' : 'none';
+                }
+
+                const allTasksCount = data.all_tasks_count || 0;
+                const sidebarAllTasksCountBadge = document.getElementById('sidebarAllTasksCountBadge');
+                if (sidebarAllTasksCountBadge) {
+                    sidebarAllTasksCountBadge.textContent = allTasksCount;
+                }
+
+                const headerAllTasksCountBadge = document.getElementById('headerAllTasksCountBadge');
+                if (headerAllTasksCountBadge) {
+                    headerAllTasksCountBadge.textContent = `${allTasksCount} รายการ`;
+                }
+
+                // Task Statuses Live Sync
+                if (data.task_statuses) {
+                    for (const [taskId, info] of Object.entries(data.task_statuses)) {
+                        const allCard = document.querySelector(`.all-task-item[data-task-id="${taskId}"]`);
+                        if (allCard) {
+                            allCard.setAttribute('data-status', info.status);
+                            const badge = allCard.querySelector('.status-badge');
+                            if (badge && badge.textContent.trim() !== info.status) {
+                                badge.textContent = info.status;
+                            }
+                            const selectEl = allCard.querySelector('select[name="status"]');
+                            if (selectEl && selectEl !== document.activeElement && selectEl.value !== info.status) {
+                                selectEl.value = info.status;
+                            }
+                        }
+
+                        const myCard = document.querySelector(`[data-my-task-id="${taskId}"]`);
+                        if (myCard) {
+                            if (info.status === 'เสร็จแล้ว') {
+                                myCard.style.transition = 'opacity 0.3s, transform 0.3s';
+                                myCard.style.opacity = '0';
+                                myCard.style.transform = 'scale(0.95)';
+                                setTimeout(() => myCard.remove(), 300);
+                            } else {
+                                const badge = myCard.querySelector('.status-badge');
+                                if (badge && badge.textContent.trim() !== info.status) {
+                                    badge.textContent = info.status;
+                                }
+                                const selectEl = myCard.querySelector('select[name="status"]');
+                                if (selectEl && selectEl !== document.activeElement && selectEl.value !== info.status) {
+                                    selectEl.value = info.status;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 3. News Likes & Feed Live Sync
+                const newsCount = data.news_count || 0;
+                const sidebarNewsCountBadge = document.getElementById('sidebarNewsCountBadge');
+                if (sidebarNewsCountBadge) {
+                    sidebarNewsCountBadge.textContent = newsCount;
+                    sidebarNewsCountBadge.style.display = newsCount > 0 ? '' : 'none';
+                }
+
+                const headerNewsCountBadge = document.getElementById('headerNewsCountBadge');
+                if (headerNewsCountBadge) {
+                    headerNewsCountBadge.textContent = `${newsCount} รายการ`;
+                }
+
+                // Live Likes Sync
+                if (data.news_likes) {
+                    for (const [newsId, likeInfo] of Object.entries(data.news_likes)) {
+                        const card = document.getElementById(`newsCard${newsId}`);
+                        if (card) {
+                            const likeBtn = card.querySelector('.news-like-btn');
+                            if (likeBtn) {
+                                const counter = likeBtn.querySelector('.like-counter');
+                                if (counter) counter.textContent = `(${likeInfo.likes_count})`;
+                                const icon = likeBtn.querySelector('.like-icon');
+                                const label = likeBtn.querySelector('.like-label');
+                                if (likeInfo.is_liked) {
+                                    likeBtn.classList.add('liked');
+                                    if (icon) icon.textContent = '❤️';
+                                    if (label) label.textContent = 'ถูกใจแล้ว';
+                                } else {
+                                    likeBtn.classList.remove('liked');
+                                    if (icon) icon.textContent = '🤍';
+                                    if (label) label.textContent = 'ถูกใจ';
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // News Feed Re-render when new items added/pinned/removed
+                if ((data.news_hash && data.news_hash !== lastNewsHash) || forceNews) {
+                    const isFirstRun = (lastNewsHash === null);
+                    lastNewsHash = data.news_hash;
+
+                    if (!isFirstRun || forceNews) {
+                        const feedList = document.getElementById('newsFeedList');
+                        if (feedList && data.news_items) {
+                            if (data.news_items.length === 0) {
+                                feedList.innerHTML = `
+                                    <div style="background: var(--bg-card); padding: 70px 20px; text-align: center; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow);">
+                                        <div style="font-size: 38px; margin-bottom: 10px;">📰</div>
+                                        <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">ยังไม่มีข่าวสารหรือประกาศในขณะนี้</div>
+                                    </div>
+                                `;
+                            } else {
+                                let html = '';
+                                data.news_items.forEach(item => {
+                                    const roleClass = item.author_role_class || 'role-staff';
+                                    const avatarHtml = item.author_avatar 
+                                        ? `<img src="${item.author_avatar}" class="news-author-avatar" alt="${window.escapeHtml(item.author_name)}">`
+                                        : `<div class="news-author-initial" style="background: ${item.position_color};">${window.escapeHtml(item.author_initial)}</div>`;
+                                    
+                                    const pinBadge = item.is_pinned ? `<span class="news-badge-pinned">📌 ปักหมุด</span>` : '';
+                                    
+                                    let adminActionsHtml = '';
+                                    if (data.can_manage_news) {
+                                        const editJson = window.escapeHtml(JSON.stringify({
+                                            id: item.id,
+                                            title: item.title,
+                                            category: item.category,
+                                            content: item.content,
+                                            is_pinned: item.is_pinned,
+                                            has_cover: !!item.cover_image,
+                                            has_audio: !!item.audio_file
+                                        }));
+
+                                        adminActionsHtml = `
+                                            <div class="news-admin-actions">
+                                                <form method="POST" action="/news/${item.id}/pin" onsubmit="return handlePinNewsAjax(event, ${item.id})" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="_token" value="${csrfToken}">
+                                                    <button type="submit" class="btn-news-action" title="${item.is_pinned ? 'ยกเลิกการปักหมุด' : 'ปักหมุดข่าวนี้'}">
+                                                        ${item.is_pinned ? '📌 เลิกปักหมุด' : '📍 ปักหมุด'}
+                                                    </button>
+                                                </form>
+
+                                                <button type="button" class="btn-news-action" onclick='openEditNewsModal(${editJson})' title="แก้ไขข่าว">
+                                                    ✏️ แก้ไข
+                                                </button>
+
+                                                <form method="POST" action="/news/${item.id}" onsubmit="return handleDeleteNewsAjax(event, ${item.id})" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="_token" value="${csrfToken}">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit" class="btn-news-action danger" title="ลบประกาศข่าว">
+                                                        🗑️ ลบ
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        `;
+                                    }
+
+                                    const coverHtml = item.cover_image 
+                                        ? `<div class="news-cover-wrap" onclick="openImageModal('${item.cover_image}')"><img src="${item.cover_image}" class="news-cover-img" alt="${window.escapeHtml(item.title)}" loading="lazy"></div>`
+                                        : '';
+
+                                    const audioHtml = item.audio_file
+                                        ? `<div class="news-audio-player"><div class="news-audio-icon">🎙️</div><div class="news-audio-info"><div class="news-audio-title">🔊 คลิปเสียงแถลงการณ์ / ประกาศเสียง</div><audio controls class="news-audio-element" src="${item.audio_file}"></audio></div></div>`
+                                        : '';
+
+                                    const contentFormatted = window.escapeHtml(item.content).replace(/\n/g, '<br>');
+
+                                    html += `
+                                        <article class="news-card ${item.is_pinned ? 'is-pinned' : ''}" 
+                                                 data-category="${window.escapeHtml(item.category)}" 
+                                                 data-is-pinned="${item.is_pinned ? '1' : '0'}"
+                                                 data-news-id="${item.id}"
+                                                 id="newsCard${item.id}">
+                                            
+                                            <div class="news-card-header">
+                                                <div class="news-author-group">
+                                                    ${avatarHtml}
+                                                    <div class="news-author-meta">
+                                                        <div class="news-author-name">
+                                                            <span>${window.escapeHtml(item.author_name)}</span>
+                                                            <span class="role-pill ${roleClass}" style="font-size: 10.5px; padding: 1px 8px;">
+                                                                ${window.escapeHtml(item.author_position)}
+                                                            </span>
+                                                            ${pinBadge}
+                                                        </div>
+                                                        <div class="news-timestamp">
+                                                            <span>${window.escapeHtml(item.created_at_formatted)}</span>
+                                                            <span style="margin: 0 4px; opacity: 0.5;">•</span>
+                                                            <span style="color: ${item.category_color}; font-weight: 600;">${window.escapeHtml(item.category)}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                ${adminActionsHtml}
+                                            </div>
+
+                                            <h2 class="news-title">${window.escapeHtml(item.title)}</h2>
+                                            ${coverHtml}
+                                            ${audioHtml}
+                                            <div class="news-content">${contentFormatted}</div>
+
+                                            <div class="news-footer">
+                                                <button type="button" 
+                                                        class="news-like-btn ${item.is_liked ? 'liked' : ''}" 
+                                                        onclick="toggleNewsLike(${item.id}, this)">
+                                                    <span class="like-icon">${item.is_liked ? '❤️' : '🤍'}</span>
+                                                    <span class="like-label">${item.is_liked ? 'ถูกใจแล้ว' : 'ถูกใจ'}</span>
+                                                    <span class="like-counter" style="margin-left: 2px;">(${item.likes_count})</span>
+                                                </button>
+
+                                                <button type="button" 
+                                                        class="btn-news-action" 
+                                                        onclick="copyNewsLink(${item.id})">
+                                                    🔗 คัดลอกลิงก์
+                                                </button>
+                                            </div>
+                                        </article>
+                                    `;
+                                });
+                                feedList.innerHTML = html;
+                            }
+                        }
+                    }
+                }
+
+                // 4. Chat Rooms live sync
+                if (data.rooms_hash && data.rooms_hash !== lastRoomsHash) {
+                    const isFirstRoomsRun = (lastRoomsHash === null);
+                    lastRoomsHash = data.rooms_hash;
+
+                    if (!isFirstRoomsRun) {
+                        const roomsTitle = document.getElementById('sidebarRoomsCountTitle');
+                        if (roomsTitle) roomsTitle.textContent = `ห้องแชต (${data.rooms.length})`;
+
+                        const roomsList = document.getElementById('sidebarRoomsList');
+                        if (roomsList && data.rooms) {
+                            let rHtml = '';
+                            data.rooms.forEach(r => {
+                                const isActive = (window.currentRoomId && window.currentRoomId == r.id);
+                                let deleteHtml = '';
+                                if (data.is_admin) {
+                                    deleteHtml = `
+                                        <form method="POST" action="/rooms/${r.id}" onsubmit="return confirm('ต้องการลบห้อง ${window.escapeHtml(r.name)} ใช่หรือไม่?')" style="margin: 0;">
+                                            <input type="hidden" name="_token" value="${csrfToken}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="room-delete-btn" title="ลบห้องนี้">🗑️</button>
+                                        </form>
+                                    `;
+                                }
+
+                                rHtml += `
+                                    <div class="room-item ${isActive ? 'active' : ''}" data-room-id="${r.id}">
+                                        <a href="/dashboard?room=${r.id}" class="room-link" onclick="handleRoomClick(${r.id}, event)">
+                                            <span class="room-hash">#</span>
+                                            <span>${window.escapeHtml(r.name)}</span>
+                                        </a>
+                                        ${deleteHtml}
+                                    </div>
+                                `;
+                            });
+                            roomsList.innerHTML = rHtml;
+                        }
+                    }
+                }
+
+            } catch (err) {
+                // background sync silent catch
+            } finally {
+                isSyncing = false;
+            }
+        };
+
+        // Start real-time background sync polling every 2.5 seconds
+        setTimeout(window.runGlobalRealtimeSync, 1000);
+        setInterval(window.runGlobalRealtimeSync, 2500);
 
         window.copyNewsLink = function(newsId) {
             const url = `${window.location.origin}/dashboard?view=news#newsCard${newsId}`;

@@ -142,6 +142,15 @@ class TaskController extends Controller
             ]);
         }
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'task_id' => $task->id,
+                'status' => $task->status,
+                'message' => 'อัปเดตสถานะงานเรียบร้อยแล้ว',
+            ]);
+        }
+
         return redirect()
             ->to('/dashboard?view=all-tasks')
             ->with('success', 'อัปเดตสถานะงานเรียบร้อยแล้ว');
@@ -154,6 +163,14 @@ class TaskController extends Controller
         }
 
         $task->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'task_id' => $task->id,
+                'message' => 'ลบงานเรียบร้อยแล้ว',
+            ]);
+        }
 
         return redirect()
             ->to('/dashboard?view=all-tasks')

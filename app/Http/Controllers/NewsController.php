@@ -139,6 +139,10 @@ class NewsController extends Controller
 
         $news->delete();
 
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->to(url('/dashboard?view=news'))->with('success', 'ลบข่าวสารเรียบร้อยแล้ว');
     }
 
@@ -146,7 +150,7 @@ class NewsController extends Controller
      * Toggle pinned status.
      * Restricted strictly to ผู้บริหาร / แอดมิน.
      */
-    public function togglePin(News $news)
+    public function togglePin(Request $request, News $news)
     {
         $user = auth()->user();
 
@@ -156,7 +160,7 @@ class NewsController extends Controller
 
         $news->update(['is_pinned' => !$news->is_pinned]);
 
-        if (request()->wantsJson()) {
+        if ($request->wantsJson() || $request->ajax()) {
             return response()->json(['is_pinned' => $news->is_pinned]);
         }
 
@@ -189,13 +193,9 @@ class NewsController extends Controller
 
         $likesCount = $news->likes()->count();
 
-        if (request()->wantsJson() || request()->ajax()) {
-            return response()->json([
-                'liked' => $liked,
-                'likes_count' => $likesCount,
-            ]);
-        }
-
-        return redirect()->back();
+        return response()->json([
+            'liked' => $liked,
+            'likes_count' => $likesCount,
+        ]);
     }
 }

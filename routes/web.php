@@ -10,6 +10,7 @@ use App\Http\Controllers\DatabaseViewerController;
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\RealtimeSyncController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -159,6 +160,10 @@ Route::post('/news/{news}/like', [NewsController::class, 'toggleLike'])
 Route::put('/profile', [ProfileController::class, 'update'])
     ->middleware('auth')
     ->name('profile.update');
+
+Route::get('/realtime/sync', [RealtimeSyncController::class, 'sync'])
+    ->middleware('auth')
+    ->name('realtime.sync');
 
 Route::get('/messages', [MessageController::class, 'index'])
     ->middleware('auth')
