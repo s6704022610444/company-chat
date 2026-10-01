@@ -390,24 +390,14 @@
             flex-shrink: 0;
         }
 
-        .user-footer-btn {
+        .user-footer-info {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 4px 6px;
-            border-radius: 8px;
-            text-align: left;
+            padding: 4px 2px;
             flex: 1;
             min-width: 0;
-            transition: all 0.18s;
-            font-family: inherit;
-        }
-
-        .user-footer-btn:hover {
-            background: rgba(255, 255, 255, 0.06);
+            user-select: text;
         }
 
         .user-footer-meta {
@@ -1439,7 +1429,7 @@
             };
         @endphp
         <div class="sidebar-footer">
-            <button type="button" class="user-footer-btn" onclick="openSettingsModal()" title="คลิกเพื่อแก้ไขข้อมูลส่วนตัวและการตั้งค่า">
+            <div class="user-footer-info">
                 <div class="user-avatar" style="width: 36px; height: 36px; font-size: 14px; border-radius: 9px; flex-shrink: 0;">
                     {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
                 </div>
@@ -1449,7 +1439,7 @@
                         {{ auth()->user()->position ?? 'พนักงาน' }}
                     </span>
                 </div>
-            </button>
+            </div>
             <button type="button" class="settings-icon-btn" onclick="openSettingsModal()" title="การตั้งค่าและออกจากระบบ">
                 ⚙️
             </button>
