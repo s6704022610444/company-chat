@@ -56,7 +56,7 @@ class MyTaskController extends Controller
         }
 
         return redirect()
-            ->route('my.tasks')
+            ->to('/dashboard?view=my-tasks')
             ->with('success', 'อัปเดตสถานะงานเรียบร้อยแล้ว');
     }
 }

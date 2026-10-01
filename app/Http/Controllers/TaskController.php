@@ -88,7 +88,7 @@ class TaskController extends Controller
         ]);
 
         return redirect()
-            ->route('tasks.index')
+            ->to('/dashboard?view=all-tasks')
             ->with('success', 'สร้างงานเรียบร้อยแล้ว');
     }
 
@@ -146,7 +146,7 @@ class TaskController extends Controller
         ]);
 
         return redirect()
-            ->route('tasks.index')
+            ->to('/dashboard?view=all-tasks')
             ->with('success', 'แก้ไขงานเรียบร้อยแล้ว');
     }
 
@@ -188,7 +188,7 @@ class TaskController extends Controller
         }
 
         return redirect()
-            ->route('tasks.index')
+            ->to('/dashboard?view=all-tasks')
             ->with('success', 'อัปเดตสถานะงานเรียบร้อยแล้ว');
     }
 
@@ -205,7 +205,7 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()
-            ->route('tasks.index')
+            ->to('/dashboard?view=all-tasks')
             ->with('success', 'ลบงานเรียบร้อยแล้ว');
     }
 }

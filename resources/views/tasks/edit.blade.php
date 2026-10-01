@@ -167,7 +167,7 @@
             <span>แก้ไขรายละเอียดงาน</span>
         </h1>
 
-        <a href="{{ route('tasks.index') }}" class="btn-cancel" style="padding: 8px 16px;">
+        <a href="{{ url('/dashboard?view=all-tasks') }}" class="btn-cancel" style="padding: 8px 16px;">
             ← กลับรายการงาน
         </a>
     </div>
@@ -223,7 +223,7 @@
                 <button type="submit" class="btn-save">
                     💾 บันทึกการเปลี่ยนแปลง
                 </button>
-                <a href="{{ route('tasks.index') }}" class="btn-cancel">
+                <a href="{{ url('/dashboard?view=all-tasks') }}" class="btn-cancel">
                     ยกเลิก
                 </a>
             </div>
