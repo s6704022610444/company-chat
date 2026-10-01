@@ -310,11 +310,11 @@
             <div style="margin-top: 6px; display: flex; align-items: center; gap: 10px;">
                 @if($isPostgres)
                     <span class="db-info-badge db-postgres">
-                        🟢 เชื่อมต่อ PostgreSQL (Cloud Database ถาวร)
+                        เชื่อมต่อ PostgreSQL (Cloud Database ถาวร)
                     </span>
                 @else
                     <span class="db-info-badge db-sqlite">
-                        🟡 ใช้ SQLite ชั่วคราว (Local)
+                        ใช้ SQLite ชั่วคราว (Local)
                     </span>
                 @endif
                 <span style="font-size: 12px; color: var(--text-secondary);">
@@ -474,7 +474,7 @@
                                 </td>
                                 <td>
                                     <span style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; padding: 2px 8px; border-radius: 6px; font-size: 12px;">
-                                        📌 {{ $t->status }}
+                                        {{ $t->status }}
                                     </span>
                                 </td>
                                 <td>

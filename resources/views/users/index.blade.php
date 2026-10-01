@@ -306,7 +306,6 @@
 
     <div class="top-bar">
         <h1 class="page-title">
-            <span>🔐</span>
             <span>จัดการสิทธิ์และตำแหน่งผู้ใช้</span>
         </h1>
 
@@ -317,7 +316,7 @@
 
     @if(session('success'))
         <div class="alert-success">
-            ✅ {{ session('success') }}
+            {{ session('success') }}
         </div>
     @endif
 
@@ -361,16 +360,16 @@
 
                 <select name="position">
                     <option value="พนักงาน" {{ $user->position === 'พนักงาน' ? 'selected' : '' }}>
-                        👤 พนักงาน
+                        พนักงาน
                     </option>
                     <option value="หัวหน้างาน" {{ $user->position === 'หัวหน้างาน' ? 'selected' : '' }}>
-                        👔 หัวหน้างาน
+                        หัวหน้างาน
                     </option>
                     <option value="ผู้จัดการ" {{ $user->position === 'ผู้จัดการ' ? 'selected' : '' }}>
-                        💼 ผู้จัดการ
+                        ผู้จัดการ
                     </option>
                     <option value="ผู้ดูแลระบบ" {{ $user->position === 'ผู้ดูแลระบบ' ? 'selected' : '' }}>
-                        👑 ผู้ดูแลระบบ
+                        ผู้ดูแลระบบ
                     </option>
                 </select>
 
@@ -383,28 +382,28 @@
 
     {{-- Role Permissions Summary Guide --}}
     <div class="role-guide">
-        <h3>📖 สรุปโครงสร้างสิทธิ์การใช้งานทั้ง 4 ระดับ</h3>
+        <h3>สรุปโครงสร้างสิทธิ์การใช้งานทั้ง 4 ระดับ</h3>
         <div class="guide-grid">
             <div class="guide-item">
-                <strong style="color: #cbd5e1;">👤 พนักงาน</strong>
+                <strong style="color: #cbd5e1;">พนักงาน</strong>
                 - ดูงานที่ได้รับมอบหมาย<br>
                 - อัปเดตสถานะงานตัวเอง<br>
                 - สนทนาในห้องแชต
             </div>
             <div class="guide-item">
-                <strong style="color: #34d399;">👔 หัวหน้างาน</strong>
+                <strong style="color: #34d399;">หัวหน้างาน</strong>
                 - ดูงานทั้งหมดของทีม<br>
                 - สร้างและมอบหมายงาน<br>
                 - แก้ไข/ลบงานที่ดูแล
             </div>
             <div class="guide-item">
-                <strong style="color: #38bdf8;">💼 ผู้จัดการ</strong>
+                <strong style="color: #38bdf8;">ผู้จัดการ</strong>
                 - จัดการงานทั้งหมดในระบบ<br>
                 - สร้างห้องสนทนาใหม่<br>
                 - ติดตาม Dashboard สรุปงาน
             </div>
             <div class="guide-item">
-                <strong style="color: #fbbf24;">👑 ผู้ดูแลระบบ</strong>
+                <strong style="color: #fbbf24;">ผู้ดูแลระบบ</strong>
                 - สิทธิ์สูงสุดทุกฟังก์ชัน<br>
                 - ปรับเปลี่ยนตำแหน่งผู้ใช้<br>
                 - ลบห้องสนทนาที่ไม่ใช้งาน

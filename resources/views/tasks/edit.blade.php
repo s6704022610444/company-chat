@@ -175,7 +175,6 @@
 
     <div class="top-bar">
         <h1 class="page-title">
-            <span>✏️</span>
             <span>แก้ไขรายละเอียดงาน</span>
         </h1>
 
@@ -189,7 +188,7 @@
         @if($errors->any())
             <div class="alert-error">
                 @foreach($errors->all() as $error)
-                    <div>⚠️ {{ $error }}</div>
+                    <div>{{ $error }}</div>
                 @endforeach
             </div>
         @endif
@@ -220,10 +219,10 @@
 
             <label>ระดับความสำคัญ <span style="color: #f87171;">*</span></label>
             <select name="priority" required>
-                <option value="ต่ำ" {{ old('priority', $task->priority) === 'ต่ำ' ? 'selected' : '' }}>🟢 ต่ำ</option>
-                <option value="ปกติ" {{ old('priority', $task->priority) === 'ปกติ' ? 'selected' : '' }}>📌 ปกติ</option>
-                <option value="สูง" {{ old('priority', $task->priority) === 'สูง' ? 'selected' : '' }}>⚡ สูง</option>
-                <option value="ด่วน" {{ old('priority', $task->priority) === 'ด่วน' ? 'selected' : '' }}>🔥 ด่วน</option>
+                <option value="ต่ำ" {{ old('priority', $task->priority) === 'ต่ำ' ? 'selected' : '' }}>ต่ำ</option>
+                <option value="ปกติ" {{ old('priority', $task->priority) === 'ปกติ' ? 'selected' : '' }}>ปกติ</option>
+                <option value="สูง" {{ old('priority', $task->priority) === 'สูง' ? 'selected' : '' }}>สูง</option>
+                <option value="ด่วน" {{ old('priority', $task->priority) === 'ด่วน' ? 'selected' : '' }}>ด่วน</option>
             </select>
 
             <label>กำหนดวัน/เวลาส่ง</label>
@@ -233,7 +232,7 @@
 
             <div class="btn-group">
                 <button type="submit" class="btn-save">
-                    💾 บันทึกการเปลี่ยนแปลง
+                    บันทึกการเปลี่ยนแปลง
                 </button>
                 <a href="{{ url('/dashboard?view=all-tasks') }}" class="btn-cancel">
                     ยกเลิก

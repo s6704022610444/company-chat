@@ -1636,7 +1636,6 @@
             <!-- My Tasks Title -->
             <div id="titleMyTasks" class="room-title-area" style="{{ $currentView === 'my-tasks' ? 'display:flex;' : 'display:none;' }}">
                 <h2>
-                    <span>📌</span>
                     <span>งานของฉัน</span>
                 </h2>
                 <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
@@ -1648,7 +1647,6 @@
             <!-- All Tasks Title -->
             <div id="titleAllTasks" class="room-title-area" style="{{ $currentView === 'all-tasks' ? 'display:flex;' : 'display:none;' }}">
                 <h2>
-                    <span>📋</span>
                     <span>จัดการงานทั้งหมด</span>
                 </h2>
                 <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
@@ -1666,7 +1664,7 @@
                     title="แจ้งเตือนงานสำคัญ"
                     aria-label="แจ้งเตือนงานสำคัญ"
                     onclick="toggleNotificationDropdown(event)">
-                <span style="font-size: 18px;">🔔</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                 @if(isset($notifications) && $notifications > 0)
                     <span class="bell-badge">{{ $notifications > 9 ? '9+' : $notifications }}</span>
                 @endif
@@ -1676,7 +1674,6 @@
             <div id="notificationDropdown" class="notification-dropdown">
                 <div class="notification-header">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span>🔔</span>
                         <span style="font-weight: 700; font-size: 14px; color: var(--text-primary);">แจ้งเตือนงานสำคัญ</span>
                     </div>
                     @if(isset($notifications) && $notifications > 0)
@@ -1699,20 +1696,19 @@
                                 <span class="nav-badge {{ $pClass }}" style="font-size: 10px; flex-shrink: 0;">{{ $task->priority }}</span>
                             </div>
                             <div class="notification-item-meta">
-                                <span>👤 {{ $task->assignee?->name ?? 'ยังไม่ระบุ' }}</span>
+                                <span>{{ $task->assignee?->name ?? 'ยังไม่ระบุ' }}</span>
                                 @if($task->due_at)
                                     <span>•</span>
                                     @if($task->due_at->isPast())
-                                        <span style="color: #ef4444; font-weight: 600;">🔴 เกินกำหนด</span>
+                                        <span style="color: #ef4444; font-weight: 600;">เกินกำหนด</span>
                                     @else
-                                        <span style="color: #f59e0b; font-weight: 500;">⏳ {{ $task->due_at->diffForHumans() }}</span>
+                                        <span style="color: #f59e0b; font-weight: 500;">{{ $task->due_at->diffForHumans() }}</span>
                                     @endif
                                 @endif
                             </div>
                         </div>
                     @empty
                         <div class="notification-empty">
-                            <div style="font-size: 26px; margin-bottom: 6px;">🎉</div>
                             <div style="font-size: 13.5px; font-weight: 600; color: var(--text-primary);">ไม่มีงานสำคัญเร่งด่วนในขณะนี้</div>
                             <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">คุณและทีมงานจัดการภารกิจได้อย่างยอดเยี่ยม!</div>
                         </div>
@@ -1747,7 +1743,7 @@
                    class="nav-button {{ $currentView === 'my-tasks' ? 'active' : '' }}"
                    onclick="switchDashboardView('my-tasks', event)">
                     <span style="display: flex; align-items: center; gap: 8px;">
-                        📌 งานของฉัน
+                        งานของฉัน
                     </span>
                     @if(isset($myTasksCount) && $myTasksCount > 0)
                         <span class="nav-badge badge-blue" id="sidebarMyTasksBadge">{{ $myTasksCount }}</span>
@@ -1760,7 +1756,7 @@
                    class="nav-button {{ $currentView === 'all-tasks' ? 'active' : '' }}"
                    onclick="switchDashboardView('all-tasks', event)">
                     <span style="display: flex; align-items: center; gap: 8px;">
-                        📋 จัดการงานทั้งหมด
+                        จัดการงานทั้งหมด
                     </span>
                     <span class="nav-badge" style="background: rgba(255,255,255,0.1); color: #94a3b8;">{{ $allTasks->count() }}</span>
                 </a>
@@ -1825,11 +1821,11 @@
                 <div>
                     <div class="nav-section-title">การจัดการระบบ</div>
                     <a href="{{ route('users.index') }}" class="nav-button" style="background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.35);">
-                        <span>🔐 จัดการสิทธิ์ผู้ใช้</span>
+                        <span>จัดการสิทธิ์ผู้ใช้</span>
                         <span style="font-size: 11px; color: #a5b4fc;">Admin</span>
                     </a>
                     <a href="{{ route('admin.database') }}" class="nav-button" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35);">
-                        <span>🗄️ ดูข้อมูลสด (Database)</span>
+                        <span>ดูข้อมูลสด (Database)</span>
                         <span style="font-size: 11px; color: #6ee7b7;">DB</span>
                     </a>
                 </div>
@@ -1863,7 +1859,7 @@
                 </div>
             </div>
             <button type="button" class="settings-icon-btn" onclick="openSettingsModal()" title="การตั้งค่าและออกจากระบบ">
-                ⚙️
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </button>
         </div>
 
@@ -1971,7 +1967,7 @@
                                 };
                             @endphp
                             <span class="badge {{ $priorityClass }}">
-                                {{ $task->priority === 'ด่วน' ? '🔥' : ($task->priority === 'สูง' ? '⚡' : '📌') }} {{ $task->priority }}
+                                {{ $task->priority }}
                             </span>
                         </div>
 
@@ -1981,7 +1977,7 @@
 
                         <div class="badges-row">
                             <span class="badge status-badge">
-                                📌 {{ $task->status }}
+                                {{ $task->status }}
                             </span>
 
                             @if($task->due_at)
@@ -1989,17 +1985,17 @@
                                     $diffMin = now()->diffInMinutes($task->due_at, false);
                                 @endphp
                                 @if($diffMin < 0)
-                                    <span class="badge due-overdue">🔴 งานนี้เกินกำหนดแล้ว ({{ $task->due_at->format('d/m/Y H:i') }})</span>
+                                    <span class="badge due-overdue">งานนี้เกินกำหนดแล้ว ({{ $task->due_at->format('d/m/Y H:i') }})</span>
                                 @elseif($diffMin <= 60)
-                                    <span class="badge due-warning">🟠 ใกล้ครบกำหนด (เหลือ {{ $task->due_at->diffForHumans() }})</span>
+                                    <span class="badge due-warning">ใกล้ครบกำหนด (เหลือ {{ $task->due_at->diffForHumans() }})</span>
                                 @else
-                                    <span class="badge due-normal">🟢 เหลือเวลา: {{ $task->due_at->diffForHumans() }}</span>
+                                    <span class="badge due-normal">เหลือเวลา: {{ $task->due_at->diffForHumans() }}</span>
                                 @endif
                             @endif
                         </div>
 
                         <div class="meta-line">
-                            <span>📅 กำหนดส่ง: <strong>{{ $task->due_at?->format('d/m/Y H:i') ?? 'ไม่ระบุ' }}</strong></span>
+                            <span>กำหนดส่ง: <strong>{{ $task->due_at?->format('d/m/Y H:i') ?? 'ไม่ระบุ' }}</strong></span>
                             @if($task->creator)
                                 <span>• มอบหมายโดย: <strong>{{ $task->creator->name }}</strong></span>
                             @endif
@@ -2016,19 +2012,19 @@
 
                             <select name="status" class="status-select" onchange="this.form.submit()">
                                 <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>⏳ ยังไม่เริ่ม</option>
-                                <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>📥 รับงานแล้ว</option>
-                                <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>⚙️ กำลังดำเนินการ</option>
-                                <option value="เสร็จแล้ว">✅ เสร็จแล้ว</option>
+                                <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>รับงานแล้ว</option>
+                                <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>กำลังดำเนินการ</option>
+                                <option value="เสร็จแล้ว">เสร็จแล้ว</option>
                             </select>
                         </form>
 
                         {{-- History of status changes --}}
                         @if($task->histories->count() > 0)
                             <div class="history-box">
-                                <div class="history-title">🕘 ประวัติการเปลี่ยนสถานะ</div>
+                                <div class="history-title">ประวัติการเปลี่ยนสถานะ</div>
                                 @foreach($task->histories as $history)
                                     <div class="history-item">
-                                        <span>👤 {{ $history->user?->name ?? 'User' }}: <strong>{{ $history->old_status }}</strong> → <strong>{{ $history->new_status }}</strong></span>
+                                        <span>{{ $history->user?->name ?? 'User' }}: <strong>{{ $history->old_status }}</strong> → <strong>{{ $history->new_status }}</strong></span>
                                         <span style="color: var(--text-secondary);">{{ $history->created_at->format('d/m/Y H:i') }}</span>
                                     </div>
                                 @endforeach
@@ -2037,7 +2033,6 @@
                     </div>
                 @empty
                     <div style="background: var(--bg-card); padding: 60px 20px; text-align: center; border-radius: 14px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow);">
-                        <div style="font-size: 40px; margin-bottom: 12px;">🎉</div>
                         <div style="font-size: 19px; font-weight: 700; color: var(--text-primary);">ไม่มีงานคั่งค้างในขณะนี้</div>
                         <div style="font-size: 14px; color: var(--text-secondary); margin-top: 6px;">คุณได้จัดการงานที่ได้รับมอบหมายเสร็จสิ้นทั้งหมดแล้ว</div>
                     </div>
@@ -2053,7 +2048,6 @@
                 @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้จัดการ', 'ผู้ดูแลระบบ']))
                     <div class="create-card">
                         <div class="card-header-title">
-                            <span>➕</span>
                             <span>สร้างงานและมอบหมาย</span>
                         </div>
 
@@ -2086,10 +2080,10 @@
                                 <div>
                                     <label>ระดับความสำคัญ <span style="color: #f87171;">*</span></label>
                                     <select name="priority" required>
-                                        <option value="ต่ำ">🟢 ต่ำ</option>
-                                        <option value="ปกติ" selected>📌 ปกติ</option>
-                                        <option value="สูง">⚡ สูง</option>
-                                        <option value="ด่วน">🔥 ด่วน</option>
+                                        <option value="ต่ำ">ต่ำ</option>
+                                        <option value="ปกติ" selected>ปกติ</option>
+                                        <option value="สูง">สูง</option>
+                                        <option value="ด่วน">ด่วน</option>
                                     </select>
                                 </div>
 
@@ -2110,12 +2104,12 @@
 
                 {{-- Quick Filter Pills --}}
                 <div class="filter-pills-bar">
-                    <button type="button" class="filter-pill active" onclick="filterAllTasks('all', this)">📋 ทั้งหมด ({{ $allTasks->count() }})</button>
+                    <button type="button" class="filter-pill active" onclick="filterAllTasks('all', this)">ทั้งหมด ({{ $allTasks->count() }})</button>
                     <button type="button" class="filter-pill" onclick="filterAllTasks('ยังไม่เริ่ม', this)">⏳ ยังไม่เริ่ม ({{ $allTasks->where('status', 'ยังไม่เริ่ม')->count() }})</button>
-                    <button type="button" class="filter-pill" onclick="filterAllTasks('รับงานแล้ว', this)">📥 รับงานแล้ว ({{ $allTasks->where('status', 'รับงานแล้ว')->count() }})</button>
-                    <button type="button" class="filter-pill" onclick="filterAllTasks('กำลังดำเนินการ', this)">⚙️ กำลังทำ ({{ $allTasks->where('status', 'กำลังดำเนินการ')->count() }})</button>
-                    <button type="button" class="filter-pill" onclick="filterAllTasks('เสร็จแล้ว', this)">✅ เสร็จแล้ว ({{ $allTasks->where('status', 'เสร็จแล้ว')->count() }})</button>
-                    <button type="button" class="filter-pill" onclick="filterAllTasks('ด่วน', this)">🔥 งานด่วน ({{ $allTasks->where('priority', 'ด่วน')->count() }})</button>
+                    <button type="button" class="filter-pill" onclick="filterAllTasks('รับงานแล้ว', this)">รับงานแล้ว ({{ $allTasks->where('status', 'รับงานแล้ว')->count() }})</button>
+                    <button type="button" class="filter-pill" onclick="filterAllTasks('กำลังดำเนินการ', this)">กำลังทำ ({{ $allTasks->where('status', 'กำลังดำเนินการ')->count() }})</button>
+                    <button type="button" class="filter-pill" onclick="filterAllTasks('เสร็จแล้ว', this)">เสร็จแล้ว ({{ $allTasks->where('status', 'เสร็จแล้ว')->count() }})</button>
+                    <button type="button" class="filter-pill" onclick="filterAllTasks('ด่วน', this)">งานด่วน ({{ $allTasks->where('priority', 'ด่วน')->count() }})</button>
                 </div>
 
                 {{-- Task Cards List --}}
@@ -2129,7 +2123,7 @@
                                 <div>
                                     <div class="task-title">{{ $task->title }}</div>
                                     <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 3px;">
-                                        👤 ผู้รับผิดชอบ: <strong style="color: #93c5fd;">{{ $task->assignee?->name ?? 'ยังไม่มอบหมาย' }}</strong>
+                                        ผู้รับผิดชอบ: <strong style="color: #93c5fd;">{{ $task->assignee?->name ?? 'ยังไม่มอบหมาย' }}</strong>
                                         &nbsp;•&nbsp; ผู้สร้าง: <span>{{ $task->creator?->name ?? '-' }}</span>
                                     </div>
                                 </div>
@@ -2143,7 +2137,7 @@
                                     };
                                 @endphp
                                 <span class="badge {{ $priorityClass }}">
-                                    {{ $task->priority === 'ด่วน' ? '🔥' : ($task->priority === 'สูง' ? '⚡' : '📌') }} {{ $task->priority }}
+                                    {{ $task->priority }}
                                 </span>
                             </div>
 
@@ -2153,7 +2147,7 @@
 
                             <div class="badges-row">
                                 <span class="badge status-badge">
-                                    📌 {{ $task->status }}
+                                    {{ $task->status }}
                                 </span>
 
                                 @if($task->due_at)
@@ -2161,17 +2155,17 @@
                                         $diffMin = now()->diffInMinutes($task->due_at, false);
                                     @endphp
                                     @if($diffMin < 0)
-                                        <span class="badge due-overdue">🔴 เกินกำหนดแล้ว</span>
+                                        <span class="badge due-overdue">เกินกำหนดแล้ว</span>
                                     @elseif($diffMin <= 60)
-                                        <span class="badge due-warning">🟠 ใกล้ครบกำหนด</span>
+                                        <span class="badge due-warning">ใกล้ครบกำหนด</span>
                                     @else
-                                        <span class="badge due-normal">🟢 เหลือเวลา: {{ $task->due_at->diffForHumans() }}</span>
+                                        <span class="badge due-normal">เหลือเวลา: {{ $task->due_at->diffForHumans() }}</span>
                                     @endif
                                 @endif
                             </div>
 
                             <div class="meta-line">
-                                <span>📅 กำหนดส่ง: <strong>{{ $task->due_at?->format('d/m/Y H:i') ?? 'ไม่ระบุ' }}</strong></span>
+                                <span>กำหนดส่ง: <strong>{{ $task->due_at?->format('d/m/Y H:i') ?? 'ไม่ระบุ' }}</strong></span>
                                 <span>• สร้างเมื่อ: {{ $task->created_at->format('d/m/Y H:i') }}</span>
                             </div>
 
@@ -2190,9 +2184,9 @@
                                         <span style="font-size: 12.5px; color: var(--text-secondary);">เปลี่ยนสถานะ:</span>
                                         <select name="status" class="status-select" onchange="this.form.submit()">
                                             <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>⏳ ยังไม่เริ่ม</option>
-                                            <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>📥 รับงานแล้ว</option>
-                                            <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>⚙️ กำลังดำเนินการ</option>
-                                            <option value="เสร็จแล้ว" {{ $task->status === 'เสร็จแล้ว' ? 'selected' : '' }}>✅ เสร็จแล้ว</option>
+                                            <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>รับงานแล้ว</option>
+                                            <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>กำลังดำเนินการ</option>
+                                            <option value="เสร็จแล้ว" {{ $task->status === 'เสร็จแล้ว' ? 'selected' : '' }}>เสร็จแล้ว</option>
                                         </select>
                                     </form>
                                 @endif
@@ -2200,13 +2194,13 @@
                                 <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
                                     @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้จัดการ', 'ผู้ดูแลระบบ']))
                                         <a href="{{ route('tasks.edit', $task->id) }}" class="btn-action-edit">
-                                            ✏️ แก้ไข
+                                            แก้ไข
                                         </a>
                                         <form method="POST" action="{{ route('tasks.destroy', $task->id) }}" onsubmit="return confirm('ยืนยันที่จะลบงานนี้หรือไม่?')" style="margin: 0;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-action-delete">
-                                                🗑️ ลบ
+                                                ลบ
                                             </button>
                                         </form>
                                     @endif
@@ -2216,10 +2210,10 @@
                             {{-- History log --}}
                             @if($task->histories->count() > 0)
                                 <div class="history-box">
-                                    <div class="history-title">🕘 ประวัติการเปลี่ยนสถานะ</div>
+                                    <div class="history-title">ประวัติการเปลี่ยนสถานะ</div>
                                     @foreach($task->histories as $history)
                                         <div class="history-item">
-                                            <span>👤 {{ $history->user?->name ?? 'User' }}: <strong>{{ $history->old_status }}</strong> → <strong>{{ $history->new_status }}</strong></span>
+                                            <span>{{ $history->user?->name ?? 'User' }}: <strong>{{ $history->old_status }}</strong> → <strong>{{ $history->new_status }}</strong></span>
                                             <span style="color: var(--text-secondary);">{{ $history->created_at->format('d/m/Y H:i') }}</span>
                                         </div>
                                     @endforeach
@@ -2228,7 +2222,6 @@
                         </div>
                     @empty
                         <div style="background: var(--bg-card); padding: 60px 20px; text-align: center; border-radius: 14px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow);">
-                            <div style="font-size: 40px; margin-bottom: 12px;">📭</div>
                             <div style="font-size: 19px; font-weight: 700; color: var(--text-primary);">ยังไม่มีงานในระบบ</div>
                             <div style="font-size: 14px; color: var(--text-secondary); margin-top: 6px;">คุณสามารถสร้างงานใหม่และมอบหมายให้ทีมงานได้จากฟอร์มด้านบน</div>
                         </div>
@@ -2246,7 +2239,6 @@
         <div class="modal-card" style="width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto;">
             <div class="modal-title" style="justify-content: space-between; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 20px;">⚙️</span>
                     <span>การตั้งค่าบัญชีผู้ใช้</span>
                 </div>
                 <button type="button" onclick="closeSettingsModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px; border-radius: 6px;" aria-label="ปิดหน้าต่าง">✕</button>
@@ -2276,7 +2268,7 @@
             <div style="margin-bottom: 20px; padding: 14px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color);">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                     <label style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin: 0;">
-                        🌓 รูปแบบธีม (Appearance)
+                        รูปแบบธีม (Appearance)
                     </label>
                     <span id="currentThemeLabel" style="font-size: 11.5px; color: var(--text-secondary); font-weight: 500;"></span>
                 </div>
@@ -2285,14 +2277,12 @@
                             id="themeBtnLight"
                             class="theme-choice-btn"
                             onclick="setTheme('light')">
-                        <span style="font-size: 16px;">☀️</span>
                         <span>โหมดสว่าง (สีขาว)</span>
                     </button>
                     <button type="button" 
                             id="themeBtnDark"
                             class="theme-choice-btn"
                             onclick="setTheme('dark')">
-                        <span style="font-size: 16px;">🌙</span>
                         <span>โหมดมืด (สีดำ)</span>
                     </button>
                 </div>
@@ -2328,7 +2318,6 @@
                         </div>
                         <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
                             <button type="button" class="btn-avatar-pick" onclick="document.getElementById('avatarFileInput').click()">
-                                <span>📷</span>
                                 <span>เลือกรูปจากเครื่อง / คลังรูป</span>
                             </button>
                             <button type="button"
@@ -2336,7 +2325,6 @@
                                     class="btn-avatar-remove"
                                     onclick="removeAvatarPhoto()"
                                     style="{{ auth()->user()->avatar ? 'display:inline-flex;' : 'display:none;' }}">
-                                <span>🗑️</span>
                                 <span>ลบรูป</span>
                             </button>
                         </div>
@@ -2378,7 +2366,7 @@
                     <button type="submit"
                             class="btn-submit"
                             style="padding: 9px 22px; font-size: 13px;">
-                        💾 บันทึกการเปลี่ยนแปลง
+                        บันทึกการเปลี่ยนแปลง
                     </button>
                 </div>
             </form>
@@ -2392,7 +2380,6 @@
                 <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                     @csrf
                     <button type="submit" class="logout-btn" style="padding: 9px 18px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
-                        <span>🚪</span>
                         <span>ออกจากระบบ</span>
                     </button>
                 </form>
@@ -2404,7 +2391,6 @@
     <div id="createRoomModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-title">
-                <span>➕</span>
                 <span>สร้างห้องแชตใหม่</span>
             </div>
 
