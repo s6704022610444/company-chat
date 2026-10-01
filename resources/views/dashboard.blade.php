@@ -2489,6 +2489,30 @@
             border-color: rgba(239, 68, 68, 0.4);
             background: rgba(239, 68, 68, 0.1);
         }
+
+        .chat-news-card {
+            background: rgba(0, 200, 83, 0.12);
+            border: 1px solid rgba(0, 200, 83, 0.35);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .chat-news-card:hover {
+            background: rgba(0, 200, 83, 0.2);
+            border-color: #00C853;
+            transform: translateY(-1px);
+        }
+        .chat-link {
+            color: #38bdf8;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        .my-message .chat-link {
+            color: #a5f3fc;
+        }
     </style>
 </head>
 <body>
@@ -2736,7 +2760,6 @@
                     @endforeach
                 </div>
             </div>
-            </div>
 
             <!-- Admin Area -->
             @if(auth()->user()->position === 'ผู้ดูแลระบบ')
@@ -2832,7 +2855,26 @@
                                         </div>
                                     @endif
                                     @if(!empty($message->message))
-                                        <div class="message-text">{{ $message->message }}</div>
+                                        @php
+                                            $text = $message->message;
+                                            $hasNewsLink = preg_match('/view=news#newsCard(\d+)/i', $text, $matches);
+                                            $newsId = $hasNewsLink ? $matches[1] : null;
+                                            $escaped = e($text);
+                                            $linked = preg_replace('/(https?:\/\/[^\s]+)/', '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>', $escaped);
+                                        @endphp
+                                        <div class="message-text">
+                                            {!! $linked !!}
+                                            @if($newsId)
+                                                <div class="chat-news-card" onclick="window.switchDashboardView('news'); setTimeout(() => { const c = document.getElementById('newsCard{{ $newsId }}'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);">
+                                                    <div style="font-weight: 700; font-size: 13px; color: #00C853; display: flex; align-items: center; gap: 6px;">
+                                                        <span>📰</span> <span>ประกาศข่าวสารองค์กร</span>
+                                                    </div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">
+                                                        คลิกที่นี่เพื่อเปิดดูข่าวสารนี้ใน CompanyChat ➔
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -2870,7 +2912,26 @@
                                         </div>
                                     @endif
                                     @if(!empty($message->message))
-                                        <div class="message-text">{{ $message->message }}</div>
+                                        @php
+                                            $text = $message->message;
+                                            $hasNewsLink = preg_match('/view=news#newsCard(\d+)/i', $text, $matches);
+                                            $newsId = $hasNewsLink ? $matches[1] : null;
+                                            $escaped = e($text);
+                                            $linked = preg_replace('/(https?:\/\/[^\s]+)/', '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>', $escaped);
+                                        @endphp
+                                        <div class="message-text">
+                                            {!! $linked !!}
+                                            @if($newsId)
+                                                <div class="chat-news-card" onclick="window.switchDashboardView('news'); setTimeout(() => { const c = document.getElementById('newsCard{{ $newsId }}'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);">
+                                                    <div style="font-weight: 700; font-size: 13px; color: #00C853; display: flex; align-items: center; gap: 6px;">
+                                                        <span>📰</span> <span>ประกาศข่าวสารองค์กร</span>
+                                                    </div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">
+                                                        คลิกที่นี่เพื่อเปิดดูข่าวสารนี้ใน CompanyChat ➔
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -3929,6 +3990,32 @@
             return '#00C853';
         }
 
+        function formatChatMessage(text) {
+            if (!text) return '';
+            const escaped = escapeHtml(text);
+            
+            const newsMatch = text.match(/(https?:\/\/[^\s]+view=news#newsCard(\d+)[^\s]*)/i);
+            let newsPreview = '';
+            if (newsMatch) {
+                const newsId = newsMatch[2];
+                newsPreview = `
+                    <div class="chat-news-card" onclick="window.switchDashboardView('news'); setTimeout(() => { const c = document.getElementById('newsCard${newsId}'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);">
+                        <div style="font-weight: 700; font-size: 13px; color: #00C853; display: flex; align-items: center; gap: 6px;">
+                            <span>📰</span> <span>ประกาศข่าวสารองค์กร</span>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">
+                            คลิกที่นี่เพื่อเปิดดูข่าวสารนี้ใน CompanyChat ➔
+                        </div>
+                    </div>
+                `;
+            }
+
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const linked = escaped.replace(urlRegex, url => `<a href="${url}" target="_blank" rel="noopener noreferrer" class="chat-link">${url}</a>`);
+            
+            return linked + newsPreview;
+        }
+
         function appendMessage(data) {
             if (!chatContainer) return;
             if (data.id) {
@@ -3989,7 +4076,7 @@
                 `;
             }
             if (data.message && data.message.trim()) {
-                bubbleContent += `<div class="message-text">${escapeHtml(data.message)}</div>`;
+                bubbleContent += `<div class="message-text">${formatChatMessage(data.message)}</div>`;
             }
 
             const contentWrapHtml = `
