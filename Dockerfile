@@ -24,6 +24,16 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Set build-time & runtime environment defaults
+ENV VITE_REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
+    REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
+    REVERB_APP_ID="372109" \
+    REVERB_APP_SECRET="44vhsrogqglvwcn4uavh" \
+    BROADCAST_CONNECTION="reverb" \
+    DB_CONNECTION="sqlite" \
+    SESSION_DRIVER="database" \
+    QUEUE_CONNECTION="sync"
+
 # Install NPM dependencies and build assets
 RUN npm install && npm run build
 
