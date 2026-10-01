@@ -176,15 +176,32 @@
     <form method="POST" action="{{ route('register.store') }}">
         @csrf
 
-        <label for="name">ชื่อ</label>
-        <input
-            type="text"
-            id="name"
-            name="name"
-            value="{{ old('name') }}"
-            placeholder="กรอกชื่อ"
-            required
-        >
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+                <label for="first_name">ชื่อจริง</label>
+                <input
+                    type="text"
+                    id="first_name"
+                    name="first_name"
+                    value="{{ old('first_name') }}"
+                    placeholder="กรอกชื่อจริง"
+                    required
+                    autocomplete="given-name"
+                >
+            </div>
+            <div>
+                <label for="last_name">นามสกุล</label>
+                <input
+                    type="text"
+                    id="last_name"
+                    name="last_name"
+                    value="{{ old('last_name') }}"
+                    placeholder="กรอกนามสกุล"
+                    required
+                    autocomplete="family-name"
+                >
+            </div>
+        </div>
 
         <label for="email">Email</label>
         <input

@@ -11,17 +11,31 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['nullable', 'string', 'max:100'],
+            'last_name' => ['nullable', 'string', 'max:100'],
+            'name' => ['nullable', 'string', 'max:255'],
             'avatar' => ['nullable', 'string'],
             'avatar_file' => ['nullable', 'image', 'max:10240'], // up to 10MB direct file
             'remove_avatar' => ['nullable'],
         ], [
-            'name.required' => 'กรุณากรอกชื่อ-นามสกุล',
+            'first_name.required' => 'กรุณากรอกชื่อจริง',
             'avatar_file.image' => 'ไฟล์ที่เลือกต้องเป็นรูปภาพเท่านั้น',
             'avatar_file.max' => 'ขนาดไฟล์รูปภาพต้องไม่เกิน 10MB',
         ]);
 
-        $user->name = $validated['name'];
+        $firstName = trim($request->input('first_name') ?? '');
+        $lastName = trim($request->input('last_name') ?? '');
+
+        if (!empty($firstName)) {
+            $user->first_name = $firstName;
+            $user->last_name = $lastName;
+            $user->name = trim($firstName . ' ' . $lastName);
+        } elseif (!empty($request->input('name'))) {
+            $parts = explode(' ', trim($request->input('name')), 2);
+            $user->first_name = $parts[0];
+            $user->last_name = $parts[1] ?? '';
+            $user->name = trim($request->input('name'));
+        }
 
         if ($request->input('remove_avatar') == '1' || $request->input('remove_avatar') === true) {
             $user->avatar = null;

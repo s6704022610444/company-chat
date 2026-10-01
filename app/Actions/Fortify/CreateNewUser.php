@@ -22,8 +22,25 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+        $firstName = trim($input['first_name'] ?? '');
+        $lastName = trim($input['last_name'] ?? '');
+
+        // Fallback for name if first_name / last_name submitted or legacy name submitted
+        if (empty($firstName) && !empty($input['name'])) {
+            $parts = explode(' ', trim($input['name']), 2);
+            $firstName = $parts[0];
+            $lastName = $parts[1] ?? '';
+        }
+
+        $fullName = trim($firstName . ' ' . $lastName);
+
+        Validator::make(array_merge($input, [
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'name' => $fullName,
+        ]), [
+            'first_name' => ['required', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
             'email' => [
                 'required',
                 'string',
@@ -32,10 +49,18 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
+        ], [
+            'first_name.required' => 'กรุณากรอกชื่อจริง',
+            'last_name.required' => 'กรุณากรอกนามสกุล',
+            'email.required' => 'กรุณากรอกอีเมล',
+            'email.unique' => 'อีเมลนี้ถูกใช้งานแล้ว',
+            'password.required' => 'กรุณากรอกรหัสผ่าน',
         ])->validate();
 
         return User::create([
-            'name' => $input['name'],
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'name' => $fullName,
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'position' => 'พนักงาน',

@@ -1882,16 +1882,18 @@
                     @php
                         $isMe = $message->user_id === auth()->id();
                         $sender = $message->user;
-                        $senderName = $sender?->name ?? 'User';
+                        $firstName = $sender?->resolved_first_name ?? 'User';
+                        $position = $sender?->position ?? 'พนักงาน';
+                        $senderDisplay = "{$firstName} ({$position})";
                         $avatarUrl = $sender?->avatar;
-                        $initial = strtoupper(mb_substr($senderName, 0, 1));
+                        $initial = strtoupper(mb_substr($firstName, 0, 1));
                     @endphp
                     <div class="message-row {{ $isMe ? 'my-message' : 'other-message' }}" data-message-id="{{ $message->id }}">
                         @if($isMe)
                             <div class="message-content-wrap">
                                 <div class="message-header-line">
                                     <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
-                                    <span class="message-sender-name">{{ $senderName }}</span>
+                                    <span class="message-sender-name">{{ $senderDisplay }}</span>
                                 </div>
                                 <div class="message-bubble">
                                     {{ $message->message }}
@@ -1899,7 +1901,7 @@
                             </div>
                             <div class="message-avatar-wrap">
                                 @if($avatarUrl)
-                                    <img src="{{ $avatarUrl }}" class="chat-avatar-img" alt="{{ $senderName }}">
+                                    <img src="{{ $avatarUrl }}" class="chat-avatar-img" alt="{{ $senderDisplay }}">
                                 @else
                                     <div class="chat-avatar-fallback">{{ $initial }}</div>
                                 @endif
@@ -1907,14 +1909,14 @@
                         @else
                             <div class="message-avatar-wrap">
                                 @if($avatarUrl)
-                                    <img src="{{ $avatarUrl }}" class="chat-avatar-img" alt="{{ $senderName }}">
+                                    <img src="{{ $avatarUrl }}" class="chat-avatar-img" alt="{{ $senderDisplay }}">
                                 @else
                                     <div class="chat-avatar-fallback">{{ $initial }}</div>
                                 @endif
                             </div>
                             <div class="message-content-wrap">
                                 <div class="message-header-line">
-                                    <span class="message-sender-name">{{ $senderName }}</span>
+                                    <span class="message-sender-name">{{ $senderDisplay }}</span>
                                     <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
                                 </div>
                                 <div class="message-bubble">
@@ -2336,14 +2338,25 @@
                     </div>
                 </div>
 
-                <div style="margin-bottom: 14px;">
-                    <label class="form-label">ชื่อ-นามสกุล (ชื่อที่แสดงในระบบ)</label>
-                    <input type="text"
-                           name="name"
-                           class="form-input"
-                           value="{{ old('name', auth()->user()->name) }}"
-                           required
-                           placeholder="ชื่อ-นามสกุล">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                    <div>
+                        <label class="form-label">ชื่อจริง</label>
+                        <input type="text"
+                               name="first_name"
+                               class="form-input"
+                               value="{{ old('first_name', auth()->user()->first_name ?? (explode(' ', trim(auth()->user()->name))[0] ?? '')) }}"
+                               required
+                               placeholder="ชื่อจริง">
+                    </div>
+                    <div>
+                        <label class="form-label">นามสกุล</label>
+                        <input type="text"
+                               name="last_name"
+                               class="form-input"
+                               value="{{ old('last_name', auth()->user()->last_name ?? (explode(' ', trim(auth()->user()->name))[1] ?? '')) }}"
+                               required
+                               placeholder="นามสกุล">
+                    </div>
                 </div>
 
                 <div style="margin-bottom: 18px;">
@@ -2479,6 +2492,9 @@
 
         const currentUserAvatar = @json(auth()->user()->avatar);
         const currentUserName = @json(auth()->user()->name);
+        const currentUserFirstName = @json(auth()->user()->resolved_first_name);
+        const currentUserPosition = @json(auth()->user()->position ?? 'พนักงาน');
+        const currentUserDisplayName = `${currentUserFirstName} (${currentUserPosition})`;
 
         function appendMessage(data) {
             if (!chatContainer) return;
@@ -2494,15 +2510,19 @@
             msgEl.className = `message-row ${isMe ? 'my-message' : 'other-message'}`;
             if (data.id) msgEl.setAttribute('data-message-id', data.id);
 
-            const userName = data.user_name || (isMe ? currentUserName : 'User');
-            const initial = userName.charAt(0).toUpperCase();
+            const senderDisplay = data.user_display_name || (data.user_first_name 
+                ? `${data.user_first_name} (${data.user_position || 'พนักงาน'})` 
+                : (data.user_name ? `${data.user_name.split(' ')[0]} (${data.user_position || 'พนักงาน'})` : (isMe ? currentUserDisplayName : 'User')));
+
+            const firstName = data.user_first_name || (data.user_name ? data.user_name.split(' ')[0] : (isMe ? currentUserFirstName : 'U'));
+            const initial = firstName.charAt(0).toUpperCase();
             const time = data.created_at || '';
             const avatarSrc = (isMe && currentUserAvatar) ? currentUserAvatar : (data.user_avatar || null);
 
             const avatarHtml = `
                 <div class="message-avatar-wrap">
                     ${avatarSrc 
-                        ? `<img src="${avatarSrc}" class="chat-avatar-img" alt="${escapeHtml(userName)}">` 
+                        ? `<img src="${avatarSrc}" class="chat-avatar-img" alt="${escapeHtml(senderDisplay)}">` 
                         : `<div class="chat-avatar-fallback">${escapeHtml(initial)}</div>`
                     }
                 </div>
@@ -2510,8 +2530,8 @@
 
             const headerLineHtml = `
                 <div class="message-header-line">
-                    ${isMe ? `<span class="message-time">${escapeHtml(time)}</span><span class="message-sender-name">${escapeHtml(userName)}</span>` 
-                           : `<span class="message-sender-name">${escapeHtml(userName)}</span><span class="message-time">${escapeHtml(time)}</span>`
+                    ${isMe ? `<span class="message-time">${escapeHtml(time)}</span><span class="message-sender-name">${escapeHtml(senderDisplay)}</span>` 
+                           : `<span class="message-sender-name">${escapeHtml(senderDisplay)}</span><span class="message-time">${escapeHtml(time)}</span>`
                     }
                 </div>
             `;
