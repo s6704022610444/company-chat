@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+export TZ="Asia/Bangkok"
+
 # Replace PORT in nginx.conf if provided by Render
 PORT=${PORT:-8080}
 sed -i "s/listen 8080;/listen $PORT;/g" /etc/nginx/nginx.conf

@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     libzip-dev \
     sed \
     curl \
+    tzdata \
     && docker-php-ext-install pdo pdo_sqlite pdo_pgsql pcntl bcmath zip
 
 # Copy Composer from official image
@@ -25,7 +26,10 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
 # Set build-time & runtime environment defaults
-ENV VITE_REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
+ENV TZ="Asia/Bangkok" \
+    APP_TIMEZONE="Asia/Bangkok" \
+    APP_LOCALE="th" \
+    VITE_REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
     REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
     REVERB_APP_ID="372109" \
     REVERB_APP_SECRET="44vhsrogqglvwcn4uavh" \
