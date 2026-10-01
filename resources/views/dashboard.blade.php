@@ -170,38 +170,52 @@
             transition: background-color 0.2s ease, color 0.2s ease;
         }
 
-        .app {
+                .app {
             display: flex;
+            flex-direction: column;
             height: 100vh;
+            overflow: hidden;
             background: var(--bg-app);
         }
 
-        /* Sidebar (YouTube Clean Style) */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
+        /* Top Header (Full Width Unified Bar - YouTube Style) */
+        .top-header {
+            height: 60px;
+            min-height: 60px;
+            max-height: 60px;
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            flex-direction: column;
-            user-select: none;
-            flex-shrink: 0;
-            z-index: 20;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 30;
+            box-sizing: border-box;
             transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
-        .sidebar-header {
-            height: 64px;
-            min-height: 64px;
-            max-height: 64px;
-            padding: 0 20px;
+        .header-brand {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: var(--bg-header);
-            border-bottom: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            box-sizing: border-box;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
+            width: 260px;
+            flex-shrink: 0;
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+            padding-left: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
         .logo-icon {
@@ -225,19 +239,27 @@
             color: var(--text-primary);
         }
 
-        .sidebar-close-btn {
-            display: none;
-            margin-left: auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
+        .app-body {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            min-height: 0;
+            overflow: hidden;
+            background: var(--bg-app);
+        }
+
+        /* Sidebar (Below Top Header - YouTube Clean Style) */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            flex-shrink: 0;
+            z-index: 20;
+            height: 100%;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
         .sidebar-scroll {
@@ -384,24 +406,12 @@
             background: var(--bg-main);
             position: relative;
             min-width: 0;
+            height: 100%;
+            overflow: hidden;
             transition: background-color 0.2s ease;
         }
 
-        /* Top Header (YouTube Clean Bar - Flush aligned) */
-        .top-header {
-            height: 64px;
-            min-height: 64px;
-            max-height: 64px;
-            background: var(--bg-header);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            z-index: 10;
-            box-sizing: border-box;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
+        
 
         .room-title-area {
             display: flex;
@@ -1340,22 +1350,31 @@
                 display: flex;
             }
 
-            .sidebar-close-btn {
-                display: flex;
+            .header-brand {
+                width: auto;
+            }
+
+            .header-center {
+                padding-left: 0;
             }
 
             .sidebar {
                 position: fixed;
-                top: 0;
+                top: 60px;
                 bottom: 0;
                 left: 0;
                 transform: translateX(-100%);
                 transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
                 box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+                height: calc(100vh - 60px);
             }
 
             .sidebar.open {
                 transform: translateX(0);
+            }
+
+            .sidebar-backdrop {
+                top: 60px;
             }
 
             .sidebar-backdrop.open {
@@ -1367,16 +1386,7 @@
                 min-width: 100vw;
             }
 
-            .sidebar-header {
-                height: 60px;
-                min-height: 60px;
-                max-height: 60px;
-            }
-
             .top-header {
-                height: 60px;
-                min-height: 60px;
-                max-height: 60px;
                 padding: 0 12px;
                 gap: 8px;
             }
@@ -1420,16 +1430,135 @@
 
 <div class="app">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+    <!-- Unified Top Header (Full Width - YouTube Style) -->
+    <header class="top-header">
 
-        <div class="sidebar-header">
+        <!-- Left: Logo & Mobile Toggle -->
+        <div class="header-brand">
+            <button type="button" id="sidebarToggle" class="mobile-toggle-btn" aria-label="เปิดเมนู">
+                ☰
+            </button>
             <div class="logo-icon">💬</div>
             <div class="logo-text">CompanyChat</div>
-            <button type="button" id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="ปิดเมนู">✕</button>
         </div>
 
-        <div class="sidebar-scroll">
+        <!-- Center: Room Title / Active View Title -->
+        <div class="header-center">
+            <!-- Chat Room Title -->
+            <div id="titleChat" class="room-title-area" style="{{ $currentView === 'chat' ? 'display:flex;' : 'display:none;' }}">
+                <h2>
+                    <span style="color: var(--text-secondary); opacity: 0.7;">#</span>
+                    <span>{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
+                </h2>
+                <div class="live-status">
+                    <span class="live-dot"></span>
+                    <span id="socketStatus">Real-time WebSocket (เชื่อมต่อสำเร็จ)</span>
+                </div>
+            </div>
+
+            <!-- My Tasks Title -->
+            <div id="titleMyTasks" class="room-title-area" style="{{ $currentView === 'my-tasks' ? 'display:flex;' : 'display:none;' }}">
+                <h2>
+                    <span>📌</span>
+                    <span>งานของฉัน</span>
+                </h2>
+                <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                    <span>งานที่ได้รับมอบหมาย</span>
+                    <span class="nav-badge badge-blue" style="font-size: 10.5px;">{{ $myTasksCount }} รายการ</span>
+                </div>
+            </div>
+
+            <!-- All Tasks Title -->
+            <div id="titleAllTasks" class="room-title-area" style="{{ $currentView === 'all-tasks' ? 'display:flex;' : 'display:none;' }}">
+                <h2>
+                    <span>📋</span>
+                    <span>จัดการงานทั้งหมด</span>
+                </h2>
+                <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                    <span>งานทั้งหมดในระบบ</span>
+                    <span class="nav-badge" style="background: var(--bg-surface); color: var(--text-secondary); font-size: 10.5px;">{{ $allTasks->count() }} รายการ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Notification Bell -->
+        <div class="header-right" style="position: relative;" id="notificationContainer">
+            <button type="button"
+                    id="notificationBellBtn"
+                    class="bell-btn"
+                    title="แจ้งเตือนงานสำคัญ"
+                    aria-label="แจ้งเตือนงานสำคัญ"
+                    onclick="toggleNotificationDropdown(event)">
+                <span style="font-size: 18px;">🔔</span>
+                @if(isset($notifications) && $notifications > 0)
+                    <span class="bell-badge">{{ $notifications > 9 ? '9+' : $notifications }}</span>
+                @endif
+            </button>
+
+            <!-- Notification Dropdown Menu -->
+            <div id="notificationDropdown" class="notification-dropdown">
+                <div class="notification-header">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>🔔</span>
+                        <span style="font-weight: 700; font-size: 14px; color: var(--text-primary);">แจ้งเตือนงานสำคัญ</span>
+                    </div>
+                    @if(isset($notifications) && $notifications > 0)
+                        <span class="nav-badge badge-amber">{{ $notifications }} งาน</span>
+                    @endif
+                </div>
+
+                <div class="notification-body">
+                    @forelse($urgentTasks as $task)
+                        <div class="notification-item" onclick="openTaskFromNotification('{{ $task->id }}')">
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+                                <span class="notification-item-title">{{ $task->title }}</span>
+                                @php
+                                    $pClass = match($task->priority) {
+                                        'ด่วน' => 'badge-red',
+                                        'สูง' => 'badge-amber',
+                                        default => 'badge-blue',
+                                    };
+                                @endphp
+                                <span class="nav-badge {{ $pClass }}" style="font-size: 10px; flex-shrink: 0;">{{ $task->priority }}</span>
+                            </div>
+                            <div class="notification-item-meta">
+                                <span>👤 {{ $task->assignee?->name ?? 'ยังไม่ระบุ' }}</span>
+                                @if($task->due_at)
+                                    <span>•</span>
+                                    @if($task->due_at->isPast())
+                                        <span style="color: #ef4444; font-weight: 600;">🔴 เกินกำหนด</span>
+                                    @else
+                                        <span style="color: #f59e0b; font-weight: 500;">⏳ {{ $task->due_at->diffForHumans() }}</span>
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="notification-empty">
+                            <div style="font-size: 26px; margin-bottom: 6px;">🎉</div>
+                            <div style="font-size: 13.5px; font-weight: 600; color: var(--text-primary);">ไม่มีงานสำคัญเร่งด่วนในขณะนี้</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">คุณและทีมงานจัดการภารกิจได้อย่างยอดเยี่ยม!</div>
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="notification-footer">
+                    <a href="{{ url('/dashboard?view=my-tasks') }}" onclick="switchDashboardView('my-tasks', event); closeNotificationDropdown();" class="notification-view-all">
+                        ดูงานของฉันทั้งหมด →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- App Body (Underneath Unified Header) -->
+    <div class="app-body">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="sidebar-scroll">
 
             <!-- Tasks Navigation -->
             <div>
@@ -1565,141 +1694,7 @@
     <!-- Main Workspace -->
     <main class="main">
 
-        <!-- Top Header -->
-        <header class="top-header">
-
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <button type="button" id="sidebarToggle" class="mobile-toggle-btn" aria-label="เปิดเมนู">
-                    ☰
-                </button>
-                
-                <!-- Chat Room Title -->
-                <div id="titleChat" class="room-title-area" style="{{ $currentView === 'chat' ? 'display:flex;' : 'display:none;' }}">
-                    <h2>
-                        <span style="color: var(--accent-blue);">#</span>
-                        <span>{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
-                    </h2>
-                    <div class="live-status">
-                        <span class="live-dot"></span>
-                        <span id="socketStatus">Real-time WebSocket (Reverb)</span>
-                    </div>
-                </div>
-
-                <!-- My Tasks Title -->
-                <div id="titleMyTasks" class="room-title-area" style="{{ $currentView === 'my-tasks' ? 'display:flex;' : 'display:none;' }}">
-                    <h2>
-                        <span style="color: #60a5fa;">📌</span>
-                        <span>งานของฉัน</span>
-                    </h2>
-                    <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                        <span>งานที่ได้รับมอบหมาย</span>
-                        <span class="nav-badge badge-blue" style="font-size: 10.5px;">{{ $myTasksCount }} รายการ</span>
-                    </div>
-                </div>
-
-                <!-- All Tasks Title -->
-                <div id="titleAllTasks" class="room-title-area" style="{{ $currentView === 'all-tasks' ? 'display:flex;' : 'display:none;' }}">
-                    <h2>
-                        <span style="color: #a5b4fc;">📋</span>
-                        <span>จัดการงานทั้งหมด</span>
-                    </h2>
-                    <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                        <span>งานทั้งหมดในระบบ</span>
-                        <span class="nav-badge" style="background: var(--bg-surface); color: var(--text-secondary); font-size: 10.5px;">{{ $allTasks->count() }} รายการ</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notification Bell (Top Right) -->
-            <div style="position: relative;" id="notificationContainer">
-                <button type="button"
-                        id="notificationBellBtn"
-                        class="bell-btn"
-                        title="แจ้งเตือนงานสำคัญ"
-                        aria-label="แจ้งเตือนงานสำคัญ"
-                        onclick="toggleNotificationDropdown(event)">
-                    <span style="font-size: 18px;">🔔</span>
-                    @if(isset($notifications) && $notifications > 0)
-                        <span class="bell-badge">{{ $notifications > 9 ? '9+' : $notifications }}</span>
-                    @endif
-                </button>
-
-                <!-- Notification Dropdown Menu -->
-                <div id="notificationDropdown" class="notification-dropdown">
-                    <div class="notification-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span>🔔</span>
-                            <span style="font-weight: 700; font-size: 14px; color: var(--text-primary);">แจ้งเตือนงานสำคัญ</span>
-                        </div>
-                        @if(isset($notifications) && $notifications > 0)
-                            <span class="nav-badge badge-amber">{{ $notifications }} งาน</span>
-                        @endif
-                    </div>
-
-                    <div class="notification-body">
-                        @forelse($urgentTasks as $task)
-                            <div class="notification-item" onclick="openTaskFromNotification('{{ $task->id }}')">
-                                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
-                                    <span class="notification-item-title">{{ $task->title }}</span>
-                                    @php
-                                        $pClass = match($task->priority) {
-                                            'ด่วน' => 'badge-red',
-                                            'สูง' => 'badge-amber',
-                                            default => 'badge-blue',
-                                        };
-                                    @endphp
-                                    <span class="nav-badge {{ $pClass }}" style="font-size: 10px; flex-shrink: 0;">{{ $task->priority }}</span>
-                                </div>
-                                <div class="notification-item-meta">
-                                    <span>👤 {{ $task->assignee?->name ?? 'ยังไม่ระบุ' }}</span>
-                                    @if($task->due_at)
-                                        <span>•</span>
-                                        @if($task->due_at->isPast())
-                                            <span style="color: #f87171; font-weight: 600;">🔴 เกินกำหนด</span>
-                                        @else
-                                            <span style="color: #fbbf24; font-weight: 500;">⏳ {{ $task->due_at->diffForHumans() }}</span>
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-                        @empty
-                            <div class="notification-empty">
-                                <div style="font-size: 26px; margin-bottom: 6px;">🎉</div>
-                                <div style="font-size: 13.5px; font-weight: 600; color: #fff;">ไม่มีงานสำคัญเร่งด่วนในขณะนี้</div>
-                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">คุณและทีมงานจัดการภารกิจได้อย่างยอดเยี่ยม!</div>
-                            </div>
-                        @endforelse
-                    </div>
-
-                    <div class="notification-footer">
-                        <a href="{{ url('/dashboard?view=my-tasks') }}" onclick="switchDashboardView('my-tasks', event); closeNotificationDropdown();" class="notification-view-all">
-                            ดูงานของฉันทั้งหมด →
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </header>
-
-        <!-- Global Flash Alerts -->
-        @if(session('success'))
-            <div style="padding: 12px 24px 0;">
-                <div class="dash-alert-success">
-                    <span>✅ {{ session('success') }}</span>
-                    <button type="button" onclick="this.parentElement.remove()" style="background: transparent; border: none; color: inherit; cursor: pointer; font-size: 14px;">✕</button>
-                </div>
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div style="padding: 12px 24px 0;">
-                <div class="dash-alert-error">
-                    @foreach($errors->all() as $error)
-                        <div>⚠️ {{ $error }}</div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
+        <!-- Views -->
 
         <!-- 1) VIEW: CHAT ROOM -->
         <div id="viewChat" style="{{ $currentView === 'chat' ? 'display:flex;' : 'display:none;' }} flex-direction: column; flex: 1; min-height: 0;">
@@ -2037,6 +2032,7 @@
         </div>
 
     </main>
+    </div>
 
     <!-- Settings Modal (Account Profile & Password & Logout) -->
     <div id="settingsModal" class="modal-overlay">
