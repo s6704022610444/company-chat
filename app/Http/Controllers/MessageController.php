@@ -25,7 +25,10 @@ class MessageController extends Controller
             ->map(function ($msg) {
                 return [
                     'id' => $msg->id,
-                    'message' => $msg->message,
+                    'message' => $msg->message ?? '',
+                    'image' => $msg->image,
+                    'audio' => $msg->audio,
+                    'audio_duration' => $msg->audio_duration,
                     'room_id' => $msg->room_id,
                     'user_id' => $msg->user_id,
                     'user_name' => $msg->user ? $msg->user->name : 'User',
@@ -43,14 +46,32 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'message' => 'required|string|max:1000',
+            'message' => 'nullable|string|max:2000',
             'room_id' => 'required|exists:chat_rooms,id',
+            'image' => 'nullable|string',
+            'audio' => 'nullable|string',
+            'audio_duration' => 'nullable|integer',
         ]);
+
+        $text = trim($request->input('message') ?? '');
+        $image = $request->input('image');
+        $audio = $request->input('audio');
+        $audioDuration = $request->input('audio_duration');
+
+        if ($text === '' && empty($image) && empty($audio)) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => 'กรุณากรอกข้อความ แนบรูปภาพ หรือบันทึกเสียง'], 422);
+            }
+            return back()->withErrors(['message' => 'กรุณากรอกข้อความ แนบรูปภาพ หรือบันทึกเสียง']);
+        }
 
         $message = Message::create([
             'user_id' => auth()->id(),
             'room_id' => $request->room_id,
-            'message' => $request->message,
+            'message' => $text,
+            'image' => $image,
+            'audio' => $audio,
+            'audio_duration' => $audioDuration,
         ]);
 
         $message->load('user');
@@ -67,7 +88,10 @@ class MessageController extends Controller
                 'success' => true,
                 'message' => [
                     'id' => $message->id,
-                    'message' => $message->message,
+                    'message' => $message->message ?? '',
+                    'image' => $message->image,
+                    'audio' => $message->audio,
+                    'audio_duration' => $message->audio_duration,
                     'room_id' => $message->room_id,
                     'user_id' => $message->user_id,
                     'user_name' => $message->user ? $message->user->name : 'User',

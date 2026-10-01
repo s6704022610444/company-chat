@@ -908,6 +908,49 @@
             color: var(--text-muted);
         }
 
+        /* Message Media (Images & Voice) */
+        .message-image-wrap {
+            margin-bottom: 6px;
+        }
+
+        .message-chat-image {
+            max-width: 100%;
+            max-height: 280px;
+            border-radius: 12px;
+            display: block;
+            object-fit: contain;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.2s ease, transform 0.15s ease;
+        }
+
+        .message-chat-image:hover {
+            opacity: 0.95;
+            transform: scale(1.01);
+        }
+
+        .message-audio-wrap {
+            margin-bottom: 6px;
+        }
+
+        .message-audio-player {
+            width: 100%;
+            min-width: 200px;
+            max-width: 280px;
+            height: 38px;
+            border-radius: 20px;
+            display: block;
+            outline: none;
+        }
+
+        .message-text {
+            word-break: break-word;
+        }
+
+        .message-bubble > :last-child {
+            margin-bottom: 0;
+        }
+
         /* Settings Avatar Uploader Card */
         .avatar-uploader-card {
             display: flex;
@@ -989,6 +1032,7 @@
 
         /* Input Bar (Exact Height Aligned with Sidebar Footer) */
         .input-bar {
+            position: relative;
             height: 72px;
             min-height: 72px;
             max-height: 72px;
@@ -1005,12 +1049,187 @@
             width: 100%;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             background: var(--bg-input);
             border: 1.5px solid var(--border-input);
             border-radius: 14px;
-            padding: 6px 8px 6px 18px;
+            padding: 6px 8px 6px 10px;
             transition: all 0.2s ease;
+        }
+
+        /* Chat Tool Buttons (Attach Photo & Voice) */
+        .chat-tool-btn {
+            background: transparent;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.18s ease;
+            padding: 0;
+        }
+
+        .chat-tool-btn:hover {
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
+        }
+
+        .chat-tool-btn.active-recording {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.12);
+            animation: pulse-recording 1.2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-recording {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.85; }
+        }
+
+        /* Floating Attached Media Preview Bar */
+        .chat-media-preview-bar {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 24px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 8px 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            z-index: 50;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .media-preview-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 8px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+
+        .media-preview-thumb {
+            width: 44px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-app);
+            flex-shrink: 0;
+        }
+
+        .media-preview-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .media-preview-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .media-preview-subtitle {
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+
+        .media-preview-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .media-preview-close:hover {
+            background: var(--bg-surface-hover);
+            color: #ef4444;
+        }
+
+        /* Voice Live Recording Box */
+        .voice-recording-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .voice-live-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: pulse-recording 1.2s infinite ease-in-out;
+            flex-shrink: 0;
+        }
+
+        .voice-status-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ef4444;
+        }
+
+        .voice-timer {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-variant-numeric: tabular-nums;
+            margin-left: auto;
+        }
+
+        .btn-voice-stop {
+            background: #ef4444;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: inherit;
+            transition: opacity 0.15s;
+        }
+
+        .btn-voice-stop:hover {
+            opacity: 0.9;
+        }
+
+        .voice-playback-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .media-preview-audio {
+            flex: 1;
+            height: 36px;
+            outline: none;
         }
 
         .input-form:focus-within {
@@ -1593,6 +1812,12 @@
                 padding: 0 14px;
             }
 
+            .chat-media-preview-bar {
+                left: 14px;
+                right: 14px;
+                bottom: calc(100% + 6px);
+            }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -1896,7 +2121,19 @@
                                     <span class="message-sender-name">{{ $senderDisplay }}</span>
                                 </div>
                                 <div class="message-bubble">
-                                    {{ $message->message }}
+                                    @if($message->image)
+                                        <div class="message-image-wrap">
+                                            <img src="{{ $message->image }}" class="message-chat-image" onclick="window.open(this.src, '_blank')" alt="รูปภาพ">
+                                        </div>
+                                    @endif
+                                    @if($message->audio)
+                                        <div class="message-audio-wrap">
+                                            <audio controls class="message-audio-player" src="{{ $message->audio }}"></audio>
+                                        </div>
+                                    @endif
+                                    @if(!empty($message->message))
+                                        <div class="message-text">{{ $message->message }}</div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="message-avatar-wrap">
@@ -1920,7 +2157,19 @@
                                     <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
                                 </div>
                                 <div class="message-bubble">
-                                    {{ $message->message }}
+                                    @if($message->image)
+                                        <div class="message-image-wrap">
+                                            <img src="{{ $message->image }}" class="message-chat-image" onclick="window.open(this.src, '_blank')" alt="รูปภาพ">
+                                        </div>
+                                    @endif
+                                    @if($message->audio)
+                                        <div class="message-audio-wrap">
+                                            <audio controls class="message-audio-player" src="{{ $message->audio }}"></audio>
+                                        </div>
+                                    @endif
+                                    @if(!empty($message->message))
+                                        <div class="message-text">{{ $message->message }}</div>
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -1930,9 +2179,67 @@
 
             <!-- Input Bar -->
             <div class="input-bar">
+                <!-- Attached Media Preview Bar (Floating above input) -->
+                <div id="chatMediaPreview" class="chat-media-preview-bar">
+                    <!-- Image Preview Item -->
+                    <div id="imagePreviewItem" class="media-preview-card" style="display: none;">
+                        <img id="imagePreviewThumb" src="" alt="ตัวอย่างรูปภาพ" class="media-preview-thumb">
+                        <div class="media-preview-meta">
+                            <span class="media-preview-title">รูปภาพที่แนบ</span>
+                            <span class="media-preview-subtitle">พร้อมส่ง</span>
+                        </div>
+                        <button type="button" class="media-preview-close" onclick="removeAttachedImage()" aria-label="ลบรูปภาพ" title="ลบรูปภาพ">✕</button>
+                    </div>
+
+                    <!-- Voice Recording / Recorded Item -->
+                    <div id="voicePreviewItem" class="media-preview-card" style="display: none;">
+                        <!-- While Recording -->
+                        <div id="voiceRecordingStatus" class="voice-recording-box" style="display: none;">
+                            <div class="voice-live-dot"></div>
+                            <span class="voice-status-label">กำลังบันทึกเสียง...</span>
+                            <span id="recordingTimerText" class="voice-timer">00:00</span>
+                            <button type="button" class="btn-voice-stop" id="stopRecordBtn" onclick="stopVoiceRecording()" title="เสร็จสิ้นการบันทึก">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                                <span>หยุด</span>
+                            </button>
+                        </div>
+                        <!-- After Recorded (Playback) -->
+                        <div id="voicePlaybackWrap" class="voice-playback-box" style="display: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-secondary);flex-shrink:0;">
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            </svg>
+                            <audio id="voicePreviewAudio" controls class="media-preview-audio"></audio>
+                            <button type="button" class="media-preview-close" onclick="removeAttachedVoice()" aria-label="ลบเสียง" title="ลบเสียง">✕</button>
+                        </div>
+                    </div>
+                </div>
+
                 <form id="chatForm" method="POST" action="/messages" class="input-form">
                     @csrf
                     <input type="hidden" id="roomIdInput" name="room_id" value="{{ $selectedRoom }}">
+                    <input type="file" id="chatFileInput" accept="image/*" style="display:none;" onchange="handleChatImageSelect(event)">
+                    <input type="hidden" id="chatImageData" name="image" value="">
+                    <input type="hidden" id="chatAudioData" name="audio" value="">
+                    <input type="hidden" id="chatAudioDuration" name="audio_duration" value="">
+
+                    <!-- Attach Image Button -->
+                    <button type="button" class="chat-tool-btn" id="attachImageBtn" title="แนบรูปภาพ" onclick="document.getElementById('chatFileInput').click()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                            <circle cx="9" cy="9" r="2"/>
+                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                        </svg>
+                    </button>
+
+                    <!-- Record Voice Button -->
+                    <button type="button" class="chat-tool-btn" id="recordVoiceBtn" title="บันทึกเสียง" onclick="toggleVoiceRecording()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" x2="12" y1="19" y2="22"/>
+                        </svg>
+                    </button>
 
                     <input
                         type="text"
@@ -1940,7 +2247,6 @@
                         name="message"
                         class="chat-input"
                         placeholder="พิมพ์ข้อความในห้องนี้... (กด Enter เพื่อส่งทันที)"
-                        required
                         autocomplete="off"
                     >
 
@@ -2536,10 +2842,29 @@
                 </div>
             `;
 
+            let bubbleContent = '';
+            if (data.image) {
+                bubbleContent += `
+                    <div class="message-image-wrap">
+                        <img src="${data.image}" class="message-chat-image" onclick="window.open(this.src, '_blank')" alt="รูปภาพ">
+                    </div>
+                `;
+            }
+            if (data.audio) {
+                bubbleContent += `
+                    <div class="message-audio-wrap">
+                        <audio controls class="message-audio-player" src="${data.audio}"></audio>
+                    </div>
+                `;
+            }
+            if (data.message && data.message.trim()) {
+                bubbleContent += `<div class="message-text">${escapeHtml(data.message)}</div>`;
+            }
+
             const contentWrapHtml = `
                 <div class="message-content-wrap">
                     ${headerLineHtml}
-                    <div class="message-bubble">${escapeHtml(data.message)}</div>
+                    <div class="message-bubble">${bubbleContent}</div>
                 </div>
             `;
 
@@ -2624,6 +2949,260 @@
             if (removeBtn) removeBtn.style.display = 'none';
         };
 
+        // Chat Image Handlers
+        window.handleChatImageSelect = function(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDim = 1200;
+
+                    if (width > maxDim || height > maxDim) {
+                        if (width > height) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        } else {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+                    window.setAttachedImage(compressedDataUrl);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.setAttachedImage = function(dataUrl) {
+            const chatImageData = document.getElementById('chatImageData');
+            const imagePreviewThumb = document.getElementById('imagePreviewThumb');
+            const imagePreviewItem = document.getElementById('imagePreviewItem');
+            const chatMediaPreview = document.getElementById('chatMediaPreview');
+
+            if (chatImageData) chatImageData.value = dataUrl;
+            if (imagePreviewThumb) imagePreviewThumb.src = dataUrl;
+            if (imagePreviewItem) imagePreviewItem.style.display = 'flex';
+            if (chatMediaPreview) chatMediaPreview.style.display = 'flex';
+        };
+
+        window.removeAttachedImage = function() {
+            const chatImageData = document.getElementById('chatImageData');
+            const chatFileInput = document.getElementById('chatFileInput');
+            const imagePreviewThumb = document.getElementById('imagePreviewThumb');
+            const imagePreviewItem = document.getElementById('imagePreviewItem');
+            const chatMediaPreview = document.getElementById('chatMediaPreview');
+            const voicePreviewItem = document.getElementById('voicePreviewItem');
+
+            if (chatImageData) chatImageData.value = '';
+            if (chatFileInput) chatFileInput.value = '';
+            if (imagePreviewThumb) imagePreviewThumb.src = '';
+            if (imagePreviewItem) imagePreviewItem.style.display = 'none';
+
+            if (chatMediaPreview && (!voicePreviewItem || voicePreviewItem.style.display === 'none')) {
+                chatMediaPreview.style.display = 'none';
+            }
+        };
+
+        // Voice Message Recording Handlers
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let voiceRecordingTimer = null;
+        let recordingSeconds = 0;
+        let isVoiceRecording = false;
+        let audioStream = null;
+
+        function getSupportedMimeType() {
+            const types = [
+                'audio/webm;codecs=opus',
+                'audio/webm',
+                'audio/mp4',
+                'audio/aac',
+                'audio/ogg'
+            ];
+            for (const t of types) {
+                if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) {
+                    return t;
+                }
+            }
+            return '';
+        }
+
+        window.toggleVoiceRecording = async function() {
+            if (isVoiceRecording) {
+                window.stopVoiceRecording();
+            } else {
+                window.startVoiceRecording();
+            }
+        };
+
+        window.startVoiceRecording = async function() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('เบราว์เซอร์ของคุณไม่รองรับการบันทึกเสียง หรือต้องใช้งานผ่าน HTTPS');
+                return;
+            }
+
+            try {
+                audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            } catch (err) {
+                console.error('Microphone permission error:', err);
+                alert('ไม่สามารถเข้าถึงไมโครโฟนได้ กรุณาอนุญาตการเข้าถึงไมโครโฟน');
+                return;
+            }
+
+            audioChunks = [];
+            recordingSeconds = 0;
+            const mimeType = getSupportedMimeType();
+            const options = mimeType ? { mimeType } : {};
+
+            try {
+                mediaRecorder = new MediaRecorder(audioStream, options);
+            } catch (e) {
+                mediaRecorder = new MediaRecorder(audioStream);
+            }
+
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) {
+                    audioChunks.push(e.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const actualMime = mediaRecorder.mimeType || mimeType || 'audio/webm';
+                const audioBlob = new Blob(audioChunks, { type: actualMime });
+                
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const base64Audio = evt.target.result;
+                    const chatAudioData = document.getElementById('chatAudioData');
+                    const chatAudioDuration = document.getElementById('chatAudioDuration');
+                    const voicePreviewAudio = document.getElementById('voicePreviewAudio');
+                    const voiceRecordingStatus = document.getElementById('voiceRecordingStatus');
+                    const voicePlaybackWrap = document.getElementById('voicePlaybackWrap');
+
+                    if (chatAudioData) chatAudioData.value = base64Audio;
+                    if (chatAudioDuration) chatAudioDuration.value = recordingSeconds;
+                    if (voicePreviewAudio) {
+                        voicePreviewAudio.src = URL.createObjectURL(audioBlob);
+                    }
+                    if (voiceRecordingStatus) voiceRecordingStatus.style.display = 'none';
+                    if (voicePlaybackWrap) voicePlaybackWrap.style.display = 'flex';
+                };
+                reader.readAsDataURL(audioBlob);
+
+                if (audioStream) {
+                    audioStream.getTracks().forEach(track => track.stop());
+                    audioStream = null;
+                }
+            };
+
+            mediaRecorder.start(250);
+            isVoiceRecording = true;
+
+            const recordBtn = document.getElementById('recordVoiceBtn');
+            if (recordBtn) recordBtn.classList.add('active-recording');
+
+            const chatMediaPreview = document.getElementById('chatMediaPreview');
+            const voicePreviewItem = document.getElementById('voicePreviewItem');
+            const voiceRecordingStatus = document.getElementById('voiceRecordingStatus');
+            const voicePlaybackWrap = document.getElementById('voicePlaybackWrap');
+            const timerText = document.getElementById('recordingTimerText');
+
+            if (chatMediaPreview) chatMediaPreview.style.display = 'flex';
+            if (voicePreviewItem) voicePreviewItem.style.display = 'flex';
+            if (voiceRecordingStatus) voiceRecordingStatus.style.display = 'flex';
+            if (voicePlaybackWrap) voicePlaybackWrap.style.display = 'none';
+
+            if (timerText) timerText.textContent = 'กำลังบันทึกเสียง... 00:00';
+
+            if (voiceRecordingTimer) clearInterval(voiceRecordingTimer);
+            voiceRecordingTimer = setInterval(() => {
+                recordingSeconds++;
+                const mins = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
+                const secs = String(recordingSeconds % 60).padStart(2, '0');
+                if (timerText) {
+                    timerText.textContent = `กำลังบันทึกเสียง... ${mins}:${secs}`;
+                }
+                if (recordingSeconds >= 300) {
+                    window.stopVoiceRecording();
+                }
+            }, 1000);
+        };
+
+        window.stopVoiceRecording = function() {
+            if (voiceRecordingTimer) {
+                clearInterval(voiceRecordingTimer);
+                voiceRecordingTimer = null;
+            }
+            isVoiceRecording = false;
+
+            const recordBtn = document.getElementById('recordVoiceBtn');
+            if (recordBtn) recordBtn.classList.remove('active-recording');
+
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+        };
+
+        window.stopVoiceRecordingPromise = function() {
+            return new Promise((resolve) => {
+                if (!isVoiceRecording || !mediaRecorder || mediaRecorder.state === 'inactive') {
+                    resolve();
+                    return;
+                }
+                const originalOnStop = mediaRecorder.onstop;
+                mediaRecorder.onstop = function(e) {
+                    if (originalOnStop) originalOnStop.call(mediaRecorder, e);
+                    setTimeout(resolve, 150);
+                };
+                window.stopVoiceRecording();
+            });
+        };
+
+        window.removeAttachedVoice = function() {
+            window.stopVoiceRecording();
+
+            const chatAudioData = document.getElementById('chatAudioData');
+            const chatAudioDuration = document.getElementById('chatAudioDuration');
+            const voicePreviewAudio = document.getElementById('voicePreviewAudio');
+            const voicePreviewItem = document.getElementById('voicePreviewItem');
+            const voicePlaybackWrap = document.getElementById('voicePlaybackWrap');
+            const voiceRecordingStatus = document.getElementById('voiceRecordingStatus');
+            const chatMediaPreview = document.getElementById('chatMediaPreview');
+            const imagePreviewItem = document.getElementById('imagePreviewItem');
+
+            if (chatAudioData) chatAudioData.value = '';
+            if (chatAudioDuration) chatAudioDuration.value = '';
+            if (voicePreviewAudio) {
+                voicePreviewAudio.pause();
+                voicePreviewAudio.src = '';
+            }
+            if (voiceRecordingStatus) voiceRecordingStatus.style.display = 'none';
+            if (voicePlaybackWrap) voicePlaybackWrap.style.display = 'none';
+            if (voicePreviewItem) voicePreviewItem.style.display = 'none';
+
+            if (chatMediaPreview && (!imagePreviewItem || imagePreviewItem.style.display === 'none')) {
+                chatMediaPreview.style.display = 'none';
+            }
+        };
+
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
@@ -2650,11 +3229,37 @@
         if (chatForm && messageInput) {
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                if (isVoiceRecording && mediaRecorder && mediaRecorder.state === 'recording') {
+                    await window.stopVoiceRecordingPromise();
+                }
+
+                const chatImageData = document.getElementById('chatImageData');
+                const chatAudioData = document.getElementById('chatAudioData');
+                const chatAudioDuration = document.getElementById('chatAudioDuration');
+
                 const text = messageInput.value.trim();
-                if (!text || !currentRoomId) return;
+                const image = chatImageData ? chatImageData.value : '';
+                const audio = chatAudioData ? chatAudioData.value : '';
+                const audioDuration = chatAudioDuration ? (parseInt(chatAudioDuration.value, 10) || null) : null;
+
+                if (!text && !image && !audio) {
+                    messageInput.focus();
+                    return;
+                }
+                if (!currentRoomId) return;
+
+                const sendBtn = document.getElementById('sendBtn');
+                if (sendBtn) sendBtn.disabled = true;
+
+                const oldText = text;
+                const oldImage = image;
+                const oldAudio = audio;
+                const oldAudioDuration = audioDuration;
 
                 messageInput.value = '';
-                messageInput.focus();
+                window.removeAttachedImage();
+                window.removeAttachedVoice();
 
                 try {
                     const res = await fetch('/messages', {
@@ -2666,7 +3271,10 @@
                         },
                         body: JSON.stringify({
                             room_id: currentRoomId,
-                            message: text
+                            message: oldText || null,
+                            image: oldImage || null,
+                            audio: oldAudio || null,
+                            audio_duration: oldAudioDuration
                         })
                     });
 
@@ -2679,13 +3287,18 @@
                     } else {
                         const err = await res.text();
                         console.error('Send error:', err);
-                        messageInput.value = text;
+                        messageInput.value = oldText;
+                        if (oldImage) window.setAttachedImage(oldImage);
                         alert('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
                     }
                 } catch (err) {
                     console.error('Fetch error:', err);
-                    messageInput.value = text;
+                    messageInput.value = oldText;
+                    if (oldImage) window.setAttachedImage(oldImage);
                     alert('เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + (err.message || err));
+                } finally {
+                    if (sendBtn) sendBtn.disabled = false;
+                    messageInput.focus();
                 }
             });
         }
