@@ -6,8 +6,10 @@ PORT=${PORT:-8080}
 sed -i "s/listen 8080;/listen $PORT;/g" /etc/nginx/nginx.conf
 
 # Prepare database
-touch /var/www/database/database.sqlite
-chmod 777 /var/www/database/database.sqlite
+if [ -z "$DATABASE_URL" ]; then
+    touch /var/www/database/database.sqlite
+    chmod 777 /var/www/database/database.sqlite
+fi
 chmod -R 777 /var/www/storage /var/www/bootstrap/cache
 
 # Run migrations

@@ -5,11 +5,13 @@ RUN apk add --no-cache \
     nginx \
     sqlite-dev \
     sqlite-libs \
+    libpq \
+    postgresql-dev \
     icu-dev \
     libzip-dev \
     sed \
     curl \
-    && docker-php-ext-install pdo pdo_sqlite pcntl bcmath zip
+    && docker-php-ext-install pdo pdo_sqlite pdo_pgsql pcntl bcmath zip
 
 # Copy Composer from official image
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

@@ -1161,6 +1161,23 @@
             return div.innerHTML;
         }
 
+        // Draft Auto-Save
+        const draftKey = `company_chat_draft_${currentRoomId}`;
+        if (messageInput && currentRoomId) {
+            const savedDraft = localStorage.getItem(draftKey);
+            if (savedDraft) {
+                messageInput.value = savedDraft;
+            }
+
+            messageInput.addEventListener('input', () => {
+                if (messageInput.value.trim()) {
+                    localStorage.setItem(draftKey, messageInput.value);
+                } else {
+                    localStorage.removeItem(draftKey);
+                }
+            });
+        }
+
         if (chatForm && messageInput) {
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -1187,6 +1204,7 @@
                     if (res.ok) {
                         const json = await res.json();
                         if (json.success && json.message) {
+                            localStorage.removeItem(draftKey);
                             appendMessage(json.message);
                         }
                     } else {
