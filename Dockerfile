@@ -1,4 +1,4 @@
-FROM php:8.3-cli-alpine
+FROM php:8.4-cli-alpine
 
 # Install system dependencies, Nginx, Node.js, and PHP extensions
 RUN apk add --no-cache \
@@ -22,7 +22,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
 # Set build-time & runtime environment defaults
 ENV VITE_REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
