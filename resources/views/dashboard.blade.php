@@ -378,44 +378,233 @@
             border-color: #ef4444;
         }
 
-        /* Important Task Banner */
-        .urgent-task-banner {
-            margin: 14px 24px 0;
-            padding: 12px 16px;
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.35);
-            border-left: 4px solid #f59e0b;
-            border-radius: 10px;
+        /* Sidebar Footer (Bottom-Left Settings & Profile) */
+        .sidebar-footer {
+            padding: 12px 14px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.6);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(8px);
+            gap: 8px;
+            flex-shrink: 0;
         }
 
-        .urgent-task-content {
+        .user-footer-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 8px;
+            text-align: left;
+            flex: 1;
+            min-width: 0;
+            transition: all 0.18s;
+            font-family: inherit;
+        }
+
+        .user-footer-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .user-footer-meta {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            min-width: 0;
+            line-height: 1.25;
         }
 
-        .urgent-task-label {
-            font-size: 11px;
+        .user-footer-name {
+            font-weight: 600;
+            font-size: 13.5px;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .settings-icon-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: #94a3b8;
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 17px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .settings-icon-btn:hover {
+            color: #ffffff;
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.15);
+            transform: rotate(45deg);
+        }
+
+        /* Notification Bell (Top-Right) */
+        .bell-btn {
+            position: relative;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: #f8fafc;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .bell-btn:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .bell-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 10.5px;
             font-weight: 700;
-            text-transform: uppercase;
-            color: #fbbf24;
-            letter-spacing: 0.5px;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 4px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+            border: 2px solid var(--bg-secondary);
+            animation: bellBadgePulse 2s infinite;
         }
 
-        .urgent-task-title {
-            font-size: 14px;
+        @keyframes bellBadgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 360px;
+            max-width: 90vw;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-hover);
+            border-radius: 14px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            flex-direction: column;
+            overflow: hidden;
+            animation: dropFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .notification-dropdown.show {
+            display: flex;
+        }
+
+        @keyframes dropFade {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notification-header {
+            padding: 13px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .notification-body {
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .notification-body::-webkit-scrollbar {
+            width: 5px;
+        }
+        .notification-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .notification-item {
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.18s;
+            text-align: left;
+        }
+
+        .notification-item:hover {
+            background: rgba(59, 130, 246, 0.14);
+            border-color: rgba(59, 130, 246, 0.45);
+            transform: translateX(2px);
+        }
+
+        .notification-item-title {
+            font-size: 13.5px;
             font-weight: 600;
             color: #ffffff;
+            line-height: 1.35;
         }
 
-        .urgent-task-meta {
-            font-size: 12px;
+        .notification-item-meta {
+            font-size: 11.5px;
             color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .notification-empty {
+            padding: 30px 16px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .notification-footer {
+            padding: 11px 16px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.5);
+            text-align: center;
+        }
+
+        .notification-view-all {
+            color: var(--accent-blue);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .notification-view-all:hover {
+            color: #93c5fd;
+            text-decoration: underline;
         }
 
         /* Chat Scroll Area */
@@ -721,37 +910,14 @@
                 font-size: 11px;
             }
 
-            .user-details {
-                display: none;
+            .bell-btn {
+                width: 38px;
+                height: 38px;
             }
 
-            .user-avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 13px;
-                border-radius: 8px;
-            }
-
-            .logout-btn {
-                padding: 5px 8px;
-                font-size: 11px;
-            }
-
-            .urgent-task-banner {
-                margin: 8px 10px 0;
-                padding: 10px 12px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .urgent-task-title {
-                font-size: 13px;
-            }
-
-            .urgent-task-meta {
-                font-size: 11.5px;
-                line-height: 1.4;
+            .notification-dropdown {
+                width: 310px;
+                right: -6px;
             }
 
             .chat-container {
@@ -1263,6 +1429,32 @@
 
         </div>
 
+        <!-- Sidebar Footer (Bottom Left): User Profile & Settings -->
+        @php
+            $roleClass = match(auth()->user()->position) {
+                'ผู้ดูแลระบบ' => 'role-admin',
+                'ผู้จัดการ' => 'role-manager',
+                'หัวหน้างาน' => 'role-supervisor',
+                default => 'role-staff',
+            };
+        @endphp
+        <div class="sidebar-footer">
+            <button type="button" class="user-footer-btn" onclick="openSettingsModal()" title="คลิกเพื่อแก้ไขข้อมูลส่วนตัวและการตั้งค่า">
+                <div class="user-avatar" style="width: 36px; height: 36px; font-size: 14px; border-radius: 9px; flex-shrink: 0;">
+                    {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                </div>
+                <div class="user-footer-meta">
+                    <span class="user-footer-name">{{ auth()->user()->name }}</span>
+                    <span class="role-pill {{ $roleClass }}" style="font-size: 10px; padding: 1px 6px; width: fit-content;">
+                        {{ auth()->user()->position ?? 'พนักงาน' }}
+                    </span>
+                </div>
+            </button>
+            <button type="button" class="settings-icon-btn" onclick="openSettingsModal()" title="การตั้งค่าและออกจากระบบ">
+                ⚙️
+            </button>
+        </div>
+
     </aside>
 
     <!-- Mobile Drawer Backdrop -->
@@ -1316,33 +1508,73 @@
                 </div>
             </div>
 
-            <!-- User Info & Logout -->
-            <div class="user-profile">
-                <div class="user-avatar" title="{{ auth()->user()->position }}">
-                    {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                </div>
+            <!-- Notification Bell (Top Right) -->
+            <div style="position: relative;" id="notificationContainer">
+                <button type="button"
+                        id="notificationBellBtn"
+                        class="bell-btn"
+                        title="แจ้งเตือนงานสำคัญ"
+                        aria-label="แจ้งเตือนงานสำคัญ"
+                        onclick="toggleNotificationDropdown(event)">
+                    <span style="font-size: 18px;">🔔</span>
+                    @if(isset($notifications) && $notifications > 0)
+                        <span class="bell-badge">{{ $notifications > 9 ? '9+' : $notifications }}</span>
+                    @endif
+                </button>
 
-                <div class="user-details">
-                    <span class="user-name">{{ auth()->user()->name }}</span>
-                    @php
-                        $roleClass = match(auth()->user()->position) {
-                            'ผู้ดูแลระบบ' => 'role-admin',
-                            'ผู้จัดการ' => 'role-manager',
-                            'หัวหน้างาน' => 'role-supervisor',
-                            default => 'role-staff',
-                        };
-                    @endphp
-                    <span class="role-pill {{ $roleClass }}">
-                        {{ auth()->user()->position ?? 'พนักงาน' }}
-                    </span>
-                </div>
+                <!-- Notification Dropdown Menu -->
+                <div id="notificationDropdown" class="notification-dropdown">
+                    <div class="notification-header">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span>🔔</span>
+                            <span style="font-weight: 700; font-size: 14px; color: #ffffff;">แจ้งเตือนงานสำคัญ</span>
+                        </div>
+                        @if(isset($notifications) && $notifications > 0)
+                            <span class="nav-badge badge-amber">{{ $notifications }} งาน</span>
+                        @endif
+                    </div>
 
-                <form method="POST" action="{{ route('logout') }}" style="margin-left: 8px;">
-                    @csrf
-                    <button class="logout-btn" type="submit">
-                        ออกจากระบบ
-                    </button>
-                </form>
+                    <div class="notification-body">
+                        @forelse($urgentTasks as $task)
+                            <div class="notification-item" onclick="openTaskFromNotification('{{ $task->id }}')">
+                                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+                                    <span class="notification-item-title">{{ $task->title }}</span>
+                                    @php
+                                        $pClass = match($task->priority) {
+                                            'ด่วน' => 'badge-red',
+                                            'สูง' => 'badge-amber',
+                                            default => 'badge-blue',
+                                        };
+                                    @endphp
+                                    <span class="nav-badge {{ $pClass }}" style="font-size: 10px; flex-shrink: 0;">{{ $task->priority }}</span>
+                                </div>
+                                <div class="notification-item-meta">
+                                    <span>👤 {{ $task->assignee?->name ?? 'ยังไม่ระบุ' }}</span>
+                                    @if($task->due_at)
+                                        <span>•</span>
+                                        @if($task->due_at->isPast())
+                                            <span style="color: #f87171; font-weight: 600;">🔴 เกินกำหนด</span>
+                                        @else
+                                            <span style="color: #fbbf24; font-weight: 500;">⏳ {{ $task->due_at->diffForHumans() }}</span>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                        @empty
+                            <div class="notification-empty">
+                                <div style="font-size: 26px; margin-bottom: 6px;">🎉</div>
+                                <div style="font-size: 13.5px; font-weight: 600; color: #fff;">ไม่มีงานสำคัญเร่งด่วนในขณะนี้</div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">คุณและทีมงานจัดการภารกิจได้อย่างยอดเยี่ยม!</div>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <div class="notification-footer">
+                        <a href="{{ url('/dashboard?view=my-tasks') }}" onclick="switchDashboardView('my-tasks', event); closeNotificationDropdown();" class="notification-view-all">
+                            ดูงานของฉันทั้งหมด →
+                        </a>
+                    </div>
+                </div>
             </div>
 
         </header>
@@ -1369,50 +1601,6 @@
 
         <!-- 1) VIEW: CHAT ROOM -->
         <div id="viewChat" style="{{ $currentView === 'chat' ? 'display:flex;' : 'display:none;' }} flex-direction: column; flex: 1; min-height: 0;">
-            {{-- Urgent / Important Task Floating Card --}}
-            @php
-                $priorityOrder = ['ด่วน' => 1, 'สูง' => 2, 'ปกติ' => 3, 'ต่ำ' => 4];
-                $importantTask = $tasks
-                    ->filter(fn($t) => $t->status !== 'เสร็จแล้ว')
-                    ->sort(function ($a, $b) use ($priorityOrder) {
-                        $now = now();
-                        $timeA = $a->due_at ? $now->diffInMinutes($a->due_at, false) : PHP_INT_MAX;
-                        $timeB = $b->due_at ? $now->diffInMinutes($b->due_at, false) : PHP_INT_MAX;
-                        if (($timeA < 0) !== ($timeB < 0)) return $timeA < 0 ? -1 : 1;
-                        $pA = $priorityOrder[$a->priority] ?? 99;
-                        $pB = $priorityOrder[$b->priority] ?? 99;
-                        return $pA <=> $pB ?: $timeA <=> $timeB;
-                    })
-                    ->first();
-            @endphp
-
-            @if($importantTask)
-                <div class="urgent-task-banner">
-                    <div class="urgent-task-content">
-                        <span class="urgent-task-label">⚡ งานสำคัญเร่งด่วน</span>
-                        <span class="urgent-task-title">{{ $importantTask->title }}</span>
-                        <span class="urgent-task-meta">
-                            👤 {{ $importantTask->assignee?->name ?? 'ยังไม่มอบหมาย' }} &nbsp;•&nbsp;
-                            สถานะ: <strong style="color: #93c5fd;">{{ $importantTask->status }}</strong> &nbsp;•&nbsp;
-                            ความสำคัญ: <strong style="color: #f87171;">{{ $importantTask->priority }}</strong>
-                            @if($importantTask->due_at)
-                                &nbsp;•&nbsp;
-                                @if($importantTask->due_at->isPast())
-                                    <span style="color: #f87171; font-weight: 600;">🔴 เกินกำหนด</span>
-                                @else
-                                    <span style="color: #fbbf24; font-weight: 600;">⏳ {{ $importantTask->due_at->diffForHumans() }}</span>
-                                @endif
-                            @endif
-                        </span>
-                    </div>
-
-                    <a href="{{ url('/dashboard?view=my-tasks') }}"
-                       onclick="switchDashboardView('my-tasks', event)"
-                       style="color: var(--accent-blue); text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 12px; background: rgba(59, 130, 246, 0.15); border-radius: 8px;">
-                        ดูงานนี้ →
-                    </a>
-                </div>
-            @endif
 
             <!-- Chat Container -->
             <div class="chat-container" id="chatContainer">
@@ -1748,6 +1936,120 @@
 
     </main>
 
+    <!-- Settings Modal (Account Profile & Password & Logout) -->
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-card" style="width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-title" style="justify-content: space-between; margin-bottom: 18px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">⚙️</span>
+                    <span>การตั้งค่าบัญชีผู้ใช้</span>
+                </div>
+                <button type="button" onclick="closeSettingsModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px; border-radius: 6px;" aria-label="ปิดหน้าต่าง">✕</button>
+            </div>
+
+            <!-- Profile Summary Card -->
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding: 14px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color);">
+                <div class="user-avatar" style="width: 46px; height: 46px; font-size: 18px; border-radius: 12px; flex-shrink: 0;">
+                    {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                </div>
+                <div style="display: flex; flex-direction: column; min-width: 0;">
+                    <span style="font-weight: 700; font-size: 15px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ auth()->user()->name }}</span>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                        <span class="role-pill {{ $roleClass }}" style="font-size: 11px; padding: 2px 8px; width: fit-content;">
+                            {{ auth()->user()->position ?? 'พนักงาน' }}
+                        </span>
+                        <span style="font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ auth()->user()->email }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <form method="POST" action="{{ route('profile.update') }}">
+                @csrf
+                @method('PUT')
+
+                <div style="margin-bottom: 14px;">
+                    <label class="form-label">ชื่อ-นามสกุล (ชื่อที่แสดงในระบบ)</label>
+                    <input type="text"
+                           name="name"
+                           class="form-input"
+                           value="{{ old('name', auth()->user()->name) }}"
+                           required
+                           placeholder="ชื่อ-นามสกุล">
+                </div>
+
+                <div style="margin-bottom: 14px;">
+                    <label class="form-label">อีเมล</label>
+                    <input type="email"
+                           name="email"
+                           class="form-input"
+                           value="{{ old('email', auth()->user()->email) }}"
+                           required
+                           placeholder="example@company.com">
+                </div>
+
+                <div style="padding-top: 12px; margin-top: 14px; border-top: 1px dashed var(--border-color);">
+                    <div style="font-size: 13px; font-weight: 600; color: #93c5fd; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                        <span>🔒</span>
+                        <span>เปลี่ยนรหัสผ่าน (เว้นว่างไว้หากไม่ต้องการเปลี่ยน)</span>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <label class="form-label">รหัสผ่านปัจจุบัน</label>
+                        <input type="password"
+                               name="current_password"
+                               class="form-input"
+                               placeholder="ระบุรหัสผ่านปัจจุบันหากต้องการเปลี่ยนรหัส">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label class="form-label">รหัสผ่านใหม่</label>
+                            <input type="password"
+                                   name="password"
+                                   class="form-input"
+                                   placeholder="อย่างน้อย 8 ตัวอักษร">
+                        </div>
+                        <div>
+                            <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
+                            <input type="password"
+                                   name="password_confirmation"
+                                   class="form-input"
+                                   placeholder="พิมพ์รหัสใหม่อีกครั้ง">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px;">
+                    <button type="button"
+                            onclick="closeSettingsModal()"
+                            style="padding: 9px 16px; border: 1px solid var(--border-color); background: transparent; color: #cbd5e1; border-radius: 8px; cursor: pointer; font-family: inherit;">
+                        ยกเลิก
+                    </button>
+                    <button type="submit"
+                            style="padding: 9px 22px; border: none; background: var(--accent-gradient); color: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: inherit; box-shadow: var(--accent-glow);">
+                        💾 บันทึกการเปลี่ยนแปลง
+                    </button>
+                </div>
+            </form>
+
+            <!-- Logout Section inside Settings Modal -->
+            <div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div>
+                    <div style="font-size: 13.5px; font-weight: 600; color: #f87171;">ออกจากระบบ (Sign Out)</div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">สิ้นสุดการใช้งานบัญชีของคุณบนอุปกรณ์นี้</div>
+                </div>
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="logout-btn" style="padding: 9px 18px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>🚪</span>
+                        <span>ออกจากระบบ</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Create Room Modal -->
     <div id="createRoomModal" class="modal-overlay">
         <div class="modal-card">
@@ -2058,6 +2360,76 @@
                 }
             });
         };
+
+        // Settings Modal Controls
+        window.openSettingsModal = function() {
+            const modal = document.getElementById('settingsModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        };
+
+        window.closeSettingsModal = function() {
+            const modal = document.getElementById('settingsModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        document.getElementById('settingsModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'settingsModal') {
+                closeSettingsModal();
+            }
+        });
+
+        // Notification Bell & Dropdown Controls
+        window.toggleNotificationDropdown = function(event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            const dropdown = document.getElementById('notificationDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        };
+
+        window.closeNotificationDropdown = function() {
+            const dropdown = document.getElementById('notificationDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+        };
+
+        window.openTaskFromNotification = function(taskId) {
+            closeNotificationDropdown();
+            window.switchDashboardView('my-tasks');
+            setTimeout(() => {
+                const taskCard = document.querySelector(`.task-card[data-task-id="${taskId}"]`) || 
+                                 document.querySelector(`.all-task-item[data-task-id="${taskId}"]`);
+                if (taskCard) {
+                    taskCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    taskCard.style.outline = '2px solid #3b82f6';
+                    taskCard.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+                    setTimeout(() => {
+                        taskCard.style.outline = '';
+                        taskCard.style.boxShadow = '';
+                    }, 2500);
+                }
+            }, 150);
+        };
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const container = document.getElementById('notificationContainer');
+            if (container && !container.contains(e.target)) {
+                closeNotificationDropdown();
+            }
+        });
+
+        // Auto-open settings modal if there are profile validation errors
+        @if($errors->has('name') || $errors->has('email') || $errors->has('current_password') || $errors->has('password'))
+            openSettingsModal();
+        @endif
 
         window.addEventListener('popstate', (e) => {
             const params = new URLSearchParams(window.location.search);

@@ -8,6 +8,8 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\MyTaskController;
 use App\Http\Controllers\DatabaseViewerController;
 
+use App\Http\Controllers\ProfileController;
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -16,13 +18,38 @@ Route::get('/dashboard', function () {
     $user = auth()->user();
     $rooms = \App\Models\ChatRoom::orderBy('name')->get();
 
-    // Urgent banner tasks
+    // All relevant tasks for current user
     $tasks = \App\Models\Task::with(['creator', 'assignee'])
         ->where(function ($query) use ($user) {
             $query->where('assigned_to', $user->id)
                 ->orWhere('created_by', $user->id);
         })
         ->latest()
+        ->get();
+
+    // Urgent & important tasks for the notification bell
+    $urgentTasks = \App\Models\Task::with(['creator', 'assignee'])
+        ->where(function ($query) use ($user) {
+            $query->where('assigned_to', $user->id)
+                ->orWhere('created_by', $user->id);
+        })
+        ->where('status', '!=', 'เสร็จแล้ว')
+        ->where(function ($query) {
+            $query->whereIn('priority', ['ด่วน', 'สูง'])
+                ->orWhere(function ($q) {
+                    $q->whereNotNull('due_at')
+                      ->where('due_at', '<=', now()->addDays(2));
+                });
+        })
+        ->orderByRaw("
+            CASE
+                WHEN priority = 'ด่วน' THEN 1
+                WHEN priority = 'สูง' THEN 2
+                WHEN priority = 'ปกติ' THEN 3
+                ELSE 4
+            END
+        ")
+        ->orderBy('due_at')
         ->get();
 
     // My tasks (for the embedded My Tasks view)
@@ -55,11 +82,7 @@ Route::get('/dashboard', function () {
 
     $allUsers = \App\Models\User::orderBy('name')->get();
 
-    $notifications = \App\Models\Task::where('assigned_to', $user->id)
-        ->where('status', '!=', 'เสร็จแล้ว')
-        ->whereNotNull('due_at')
-        ->where('due_at', '<=', now()->addDay())
-        ->count();
+    $notifications = $urgentTasks->count();
 
     $newTaskNotifications = \App\Models\Task::where('assigned_to', $user->id)
         ->where('status', 'ยังไม่เริ่ม')
@@ -92,6 +115,7 @@ Route::get('/dashboard', function () {
         'selectedRoom',
         'messages',
         'tasks',
+        'urgentTasks',
         'myTasks',
         'allTasks',
         'allUsers',
@@ -101,6 +125,10 @@ Route::get('/dashboard', function () {
         'currentView'
     ));
 })->middleware('auth')->name('dashboard');
+
+Route::put('/profile', [ProfileController::class, 'update'])
+    ->middleware('auth')
+    ->name('profile.update');
 
 Route::get('/messages', [MessageController::class, 'index'])
     ->middleware('auth')
