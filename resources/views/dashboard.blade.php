@@ -762,6 +762,12 @@
         const messageInput = document.getElementById('messageInput');
         const socketStatus = document.getElementById('socketStatus');
 
+        let highestMessageId = 0;
+        document.querySelectorAll('.message[data-message-id]').forEach(el => {
+            const id = parseInt(el.getAttribute('data-message-id'), 10);
+            if (id > highestMessageId) highestMessageId = id;
+        });
+
         function scrollToBottom() {
             if (chatContainer) {
                 chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -771,8 +777,11 @@
 
         function appendMessage(data) {
             if (!chatContainer) return;
-            if (data.id && document.querySelector(`.message[data-message-id="${data.id}"]`)) {
-                return;
+            if (data.id) {
+                if (data.id > highestMessageId) highestMessageId = data.id;
+                if (document.querySelector(`.message[data-message-id="${data.id}"]`)) {
+                    return;
+                }
             }
 
             const isMe = Number(data.user_id) === Number(currentUserId);
@@ -828,10 +837,15 @@
                             appendMessage(json.message);
                         }
                     } else {
-                        console.error('Send error:', await res.text());
+                        const err = await res.text();
+                        console.error('Send error:', err);
+                        messageInput.value = text;
+                        alert('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
                     }
                 } catch (err) {
                     console.error('Fetch error:', err);
+                    messageInput.value = text;
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่');
                 }
             });
         }
@@ -857,6 +871,27 @@
                     }
                 });
             }
+        }
+
+        // Background sync to ensure zero missed messages
+        if (currentRoomId) {
+            setInterval(async () => {
+                try {
+                    const res = await fetch(`{{ route('messages.index') }}?room_id=${currentRoomId}&after_id=${highestMessageId}`, {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (res.ok) {
+                        const newMsgs = await res.json();
+                        if (Array.isArray(newMsgs)) {
+                            newMsgs.forEach(msg => {
+                                appendMessage(msg);
+                            });
+                        }
+                    }
+                } catch (e) {
+                    // silently handle offline/network blips
+                }
+            }, 3000);
         }
     });
 </script>

@@ -8,6 +8,34 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
+    public function index(Request $request)
+    {
+        $roomId = $request->query('room_id');
+        $afterId = $request->query('after_id', 0);
+
+        if (!$roomId) {
+            return response()->json([]);
+        }
+
+        $messages = Message::with('user')
+            ->where('room_id', $roomId)
+            ->where('id', '>', $afterId)
+            ->oldest()
+            ->get()
+            ->map(function ($msg) {
+                return [
+                    'id' => $msg->id,
+                    'message' => $msg->message,
+                    'room_id' => $msg->room_id,
+                    'user_id' => $msg->user_id,
+                    'user_name' => $msg->user ? $msg->user->name : 'User',
+                    'created_at' => $msg->created_at ? $msg->created_at->format('H:i') : '',
+                ];
+            });
+
+        return response()->json($messages);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -24,7 +52,11 @@ class MessageController extends Controller
         $message->load('user');
 
         // Broadcast to WebSocket channel
-        broadcast(new MessageSent($message));
+        try {
+            broadcast(new MessageSent($message));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Broadcast error: ' . $e->getMessage());
+        }
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([

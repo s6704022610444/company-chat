@@ -58,6 +58,10 @@ Route::get('/dashboard', function () {
     ));
 })->middleware('auth')->name('dashboard');
 
+Route::get('/messages', [MessageController::class, 'index'])
+    ->middleware('auth')
+    ->name('messages.index');
+
 Route::post('/messages', [MessageController::class, 'store'])
     ->middleware('auth')
     ->name('messages.store');
