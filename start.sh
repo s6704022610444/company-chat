@@ -6,13 +6,27 @@ PORT=${PORT:-8080}
 sed -i "s/listen 8080;/listen $PORT;/g" /etc/nginx/nginx.conf
 
 # Prepare database
-if [ -z "$DATABASE_URL" ]; then
+if [ -n "$DATABASE_URL" ] || [ -n "$DB_URL" ]; then
+    echo "=========================================================="
+    echo "  DATABASE_URL detected! Switching to PostgreSQL database "
+    echo "=========================================================="
+    export DB_CONNECTION="pgsql"
+else
+    echo "=========================================================="
+    echo "  WARNING: DATABASE_URL not set! Using local SQLite file  "
+    echo "  (Note: SQLite in Docker will reset upon redeployment)   "
+    echo "=========================================================="
+    export DB_CONNECTION="sqlite"
     touch /var/www/database/database.sqlite
     chmod 777 /var/www/database/database.sqlite
 fi
 chmod -R 777 /var/www/storage /var/www/bootstrap/cache
 
+# Clear cached config so runtime environment variables are strictly loaded
+php artisan config:clear || true
+
 # Run migrations
+echo "Running database migrations..."
 php artisan migrate --force
 
 # Seed initial users if empty

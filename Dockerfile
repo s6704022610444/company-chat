@@ -35,7 +35,6 @@ ENV VITE_REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
     REVERB_SERVER_HOST="0.0.0.0" \
     REVERB_SERVER_PORT="8081" \
     BROADCAST_CONNECTION="reverb" \
-    DB_CONNECTION="sqlite" \
     SESSION_DRIVER="database" \
     QUEUE_CONNECTION="sync" \
     APP_ENV="production"
