@@ -9,7 +9,7 @@
     <script>
         (function() {
             try {
-                var theme = localStorage.getItem('companychat_theme') || 'light';
+                var theme = localStorage.getItem('companychat_theme') || 'dark';
                 document.documentElement.setAttribute('data-theme', theme);
             } catch (e) {}
         })();
@@ -609,6 +609,36 @@
         .settings-icon-btn:hover {
             background: var(--bg-surface-hover);
             transform: rotate(45deg);
+        }
+
+        /* Theme Toggle Button (Top-Right Header) */
+        .theme-toggle-btn {
+            position: relative;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: inherit;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--bg-surface-hover);
+            transform: scale(1.06);
+            border-color: #00C853;
+        }
+
+        .theme-toggle-btn:active {
+            transform: scale(0.96);
         }
 
         /* Notification Bell (Top-Right) */
@@ -1869,35 +1899,6 @@
             gap: 8px;
         }
 
-        /* Theme Choice Button in Settings */
-        .theme-choice-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 11px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.18s ease;
-            background: var(--bg-card);
-            border: 1.5px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .theme-choice-btn:hover {
-            background: var(--bg-surface-hover);
-            transform: translateY(-1px);
-        }
-
-        .theme-choice-btn.active {
-            border-color: var(--focus-border) !important;
-            background: var(--bg-active-pill) !important;
-            color: var(--text-primary) !important;
-            box-shadow: var(--focus-ring);
-        }
 
         /* Mobile Responsive Styles */
         .mobile-toggle-btn {
@@ -2077,6 +2078,16 @@
             .main {
                 width: 100vw;
                 min-width: 100vw;
+            }
+
+            .header-right {
+                gap: 8px;
+            }
+
+            .theme-toggle-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
             }
 
             .bell-btn {
@@ -2892,24 +2903,36 @@
             </div>
         </div>
 
-        <!-- Right: Notification Bell -->
-        <div class="header-right" style="position: relative;" id="notificationContainer">
-            <button type="button"
-                    id="notificationBellBtn"
-                    class="bell-btn"
-                    title="แจ้งเตือนงานสำคัญ"
-                    aria-label="แจ้งเตือนงานสำคัญ"
-                    onclick="toggleNotificationDropdown(event)">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <span class="bell-badge" id="headerBellBadge" style="{{ (isset($notifications) && $notifications > 0) ? '' : 'display:none;' }}">{{ ($notifications ?? 0) > 9 ? '9+' : ($notifications ?? 0) }}</span>
+        <!-- Right: Header Actions (Theme Toggle & Notification Bell) -->
+        <div class="header-right">
+            <!-- Theme Toggle Button (Login/Register Style) -->
+            <button type="button" 
+                    class="theme-toggle-btn" 
+                    id="themeToggleBtn" 
+                    onclick="toggleTheme()" 
+                    aria-label="สลับธีม" 
+                    title="สลับโหมดมืด/สว่าง">
+                <span id="themeIcon">☀️</span>
             </button>
 
-            <!-- Notification Dropdown Menu -->
-            <div id="notificationDropdown" class="notification-dropdown">
-                <div class="notification-header">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-weight: 700; font-size: 14px; color: var(--text-primary);">แจ้งเตือนงานสำคัญ</span>
-                    </div>
+            <!-- Notification Bell -->
+            <div style="position: relative;" id="notificationContainer">
+                <button type="button"
+                        id="notificationBellBtn"
+                        class="bell-btn"
+                        title="แจ้งเตือนงานสำคัญ"
+                        aria-label="แจ้งเตือนงานสำคัญ"
+                        onclick="toggleNotificationDropdown(event)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span class="bell-badge" id="headerBellBadge" style="{{ (isset($notifications) && $notifications > 0) ? '' : 'display:none;' }}">{{ ($notifications ?? 0) > 9 ? '9+' : ($notifications ?? 0) }}</span>
+                </button>
+
+                <!-- Notification Dropdown Menu -->
+                <div id="notificationDropdown" class="notification-dropdown">
+                    <div class="notification-header">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: 700; font-size: 14px; color: var(--text-primary);">แจ้งเตือนงานสำคัญ</span>
+                        </div>
                     <span class="nav-badge badge-amber" id="notificationDropdownCount" style="{{ (isset($notifications) && $notifications > 0) ? '' : 'display:none;' }}">{{ $notifications ?? 0 }} งาน</span>
                 </div>
 
@@ -3969,30 +3992,6 @@
                         </span>
                         <span style="font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ auth()->user()->email }}</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Theme Selector (YouTube Light & Dark) -->
-            <div style="margin-bottom: 20px; padding: 14px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color);">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                    <label style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin: 0;">
-                        รูปแบบธีม (Appearance)
-                    </label>
-                    <span id="currentThemeLabel" style="font-size: 11.5px; color: var(--text-secondary); font-weight: 500;"></span>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <button type="button" 
-                            id="themeBtnLight"
-                            class="theme-choice-btn"
-                            onclick="setTheme('light')">
-                        <span>โหมดสว่าง (สีขาว)</span>
-                    </button>
-                    <button type="button" 
-                            id="themeBtnDark"
-                            class="theme-choice-btn"
-                            onclick="setTheme('dark')">
-                        <span>โหมดมืด (สีดำ)</span>
-                    </button>
                 </div>
             </div>
 
@@ -5714,51 +5713,49 @@
 
         // Settings Modal Controls
 
-        // Theme Management (YouTube Light & Dark Mode)
-        window.setTheme = function(theme) {
+        // Theme Management (Top-Right Toggle & Global Theme Sync)
+        window.updateThemeIcon = function(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) {
+                btn.title = theme === 'dark' ? 'เปลี่ยนเป็นโหมดสว่าง (Light Mode)' : 'เปลี่ยนเป็นโหมดมืด (Dark Mode)';
+            }
+        };
+
+        window.toggleTheme = function() {
             try {
-                if (theme === 'dark') {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('companychat_theme', 'dark');
-                } else {
-                    document.documentElement.setAttribute('data-theme', 'light');
-                    localStorage.setItem('companychat_theme', 'light');
-                }
-                updateThemeSelectorUI(theme);
+                const current = document.documentElement.getAttribute('data-theme') || 'dark';
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('companychat_theme', next);
+                updateThemeIcon(next);
             } catch (err) {
                 console.error("Theme toggle error:", err);
             }
         };
 
-        window.updateThemeSelectorUI = function(theme) {
-            const lightBtn = document.getElementById('themeBtnLight');
-            const darkBtn = document.getElementById('themeBtnDark');
-            const label = document.getElementById('currentThemeLabel');
-            
-            if (lightBtn && darkBtn) {
-                if (theme === 'dark') {
-                    darkBtn.classList.add('active');
-                    lightBtn.classList.remove('active');
-                    if (label) label.textContent = 'โหมดปัจจุบัน: มืด (Dark)';
-                } else {
-                    lightBtn.classList.add('active');
-                    darkBtn.classList.remove('active');
-                    if (label) label.textContent = 'โหมดปัจจุบัน: สว่าง (Light)';
-                }
+        window.setTheme = function(theme) {
+            try {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('companychat_theme', theme);
+                updateThemeIcon(theme);
+            } catch (err) {
+                console.error("Theme set error:", err);
             }
         };
 
         // Initialize theme UI on load
         document.addEventListener('DOMContentLoaded', () => {
-            const currentTheme = localStorage.getItem('companychat_theme') || 'light';
-            updateThemeSelectorUI(currentTheme);
+            const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('companychat_theme') || 'dark';
+            updateThemeIcon(currentTheme);
         });
 
         window.openSettingsModal = function() {
             const modal = document.getElementById('settingsModal');
             if (modal) {
-                const currentTheme = localStorage.getItem('companychat_theme') || 'light';
-                updateThemeSelectorUI(currentTheme);
                 modal.style.display = 'flex';
             }
         };
