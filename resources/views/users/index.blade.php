@@ -20,6 +20,11 @@
             --text-primary: #0f0f0f;
             --text-secondary: #606060;
             --accent-gradient: #0f0f0f;
+            --btn-update-bg: #0f0f0f;
+            --btn-update-text: #ffffff;
+            --role-staff-text: #475569;
+            --role-staff-bg: rgba(148, 163, 184, 0.2);
+            --role-staff-border: rgba(148, 163, 184, 0.35);
         }
 
         [data-theme="dark"] {
@@ -31,6 +36,11 @@
             --text-primary: #f1f1f1;
             --text-secondary: #aaaaaa;
             --accent-gradient: #f1f1f1;
+            --btn-update-bg: #f1f1f1;
+            --btn-update-text: #0f0f0f;
+            --role-staff-text: #cbd5e1;
+            --role-staff-bg: rgba(148, 163, 184, 0.15);
+            --role-staff-border: rgba(148, 163, 184, 0.25);
         }
 
         * {
@@ -74,7 +84,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: #cbd5e1;
+            color: var(--text-primary);
             text-decoration: none;
             background: var(--bg-surface);
             padding: 8px 16px;
@@ -86,8 +96,8 @@
         }
 
         .btn-back:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: var(--border-color);
+            color: var(--text-primary);
         }
 
         .alert-success {
@@ -142,7 +152,7 @@
         .user-info-name {
             font-size: 16px;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--text-primary);
             margin-bottom: 2px;
         }
 
@@ -179,9 +189,9 @@
         }
 
         .role-staff {
-            background: rgba(148, 163, 184, 0.15);
-            color: #cbd5e1;
-            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: var(--role-staff-bg);
+            color: var(--role-staff-text);
+            border: 1px solid var(--role-staff-border);
         }
 
         .role-form {
@@ -195,7 +205,7 @@
             border-radius: 8px;
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
-            color: white;
+            color: var(--text-primary);
             font-family: inherit;
             font-size: 13.5px;
             outline: none;
@@ -204,21 +214,26 @@
             transition: all 0.2s;
         }
 
+        select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
         select:focus {
             border-color: #3b82f6;
         }
 
         .btn-update {
-            background: var(--accent-gradient);
+            background: var(--btn-update-bg);
             border: none;
-            color: white;
+            color: var(--btn-update-text);
             padding: 9px 18px;
             border-radius: 8px;
             font-size: 13.5px;
             font-weight: 600;
             cursor: pointer;
             font-family: inherit;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             transition: all 0.2s;
         }
 
@@ -238,7 +253,7 @@
         .role-guide h3 {
             font-size: 15px;
             margin-bottom: 12px;
-            color: #cbd5e1;
+            color: var(--text-primary);
         }
 
         .guide-grid {
@@ -257,7 +272,7 @@
         }
 
         .guide-item strong {
-            color: white;
+            color: var(--text-primary);
             display: block;
             margin-bottom: 4px;
         }
@@ -385,7 +400,7 @@
         <h3>สรุปโครงสร้างสิทธิ์การใช้งานทั้ง 4 ระดับ</h3>
         <div class="guide-grid">
             <div class="guide-item">
-                <strong style="color: #cbd5e1;">พนักงาน</strong>
+                <strong style="color: var(--role-staff-text);">พนักงาน</strong>
                 - ดูงานที่ได้รับมอบหมาย<br>
                 - อัปเดตสถานะงานตัวเอง<br>
                 - สนทนาในห้องแชต

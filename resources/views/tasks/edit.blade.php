@@ -156,7 +156,7 @@
             border-radius: 10px;
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
-            color: #cbd5e1;
+            color: var(--text-primary);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
@@ -164,8 +164,8 @@
         }
 
         .btn-cancel:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: var(--border-color);
+            color: var(--text-primary);
         }
     </style>
 </head>

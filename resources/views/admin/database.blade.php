@@ -30,6 +30,13 @@
             --accent-blue: #065fd4;
             --accent-indigo: #0f0f0f;
             --accent-gradient: #0f0f0f;
+            --tab-active-bg: #0f0f0f;
+            --tab-active-text: #ffffff;
+            --th-bg: #f5f5f5;
+            --th-color: #0f0f0f;
+            --td-border: #f0f0f0;
+            --role-staff-text: #475569;
+            --role-staff-bg: rgba(148, 163, 184, 0.2);
         }
 
         [data-theme="dark"] {
@@ -43,6 +50,13 @@
             --accent-blue: #3ea6ff;
             --accent-indigo: #f1f1f1;
             --accent-gradient: #f1f1f1;
+            --tab-active-bg: #f1f1f1;
+            --tab-active-text: #0f0f0f;
+            --th-bg: #1e1e1e;
+            --th-color: #f1f1f1;
+            --td-border: rgba(255, 255, 255, 0.05);
+            --role-staff-text: #cbd5e1;
+            --role-staff-bg: rgba(148, 163, 184, 0.15);
         }
 
         * {
@@ -86,7 +100,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: #cbd5e1;
+            color: var(--text-primary);
             text-decoration: none;
             background: var(--bg-surface);
             padding: 8px 16px;
@@ -98,8 +112,8 @@
         }
 
         .btn-back:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: var(--border-color);
+            color: var(--text-primary);
         }
 
         /* DB Info Banner */
@@ -157,7 +171,7 @@
         .stat-val {
             font-size: 22px;
             font-weight: 800;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .stat-lbl {
@@ -171,7 +185,7 @@
             border: 1px solid var(--border-color);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
         /* Table Tabs Header */
@@ -181,7 +195,7 @@
             justify-content: space-between;
             padding: 12px 18px;
             border-bottom: 1px solid var(--border-color);
-            background: rgba(30, 41, 59, 0.4);
+            background: var(--bg-surface);
             flex-wrap: wrap;
             gap: 12px;
         }
@@ -207,14 +221,14 @@
         }
 
         .tab-btn:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            background: var(--border-color);
         }
 
         .tab-btn.active {
-            background: var(--accent-gradient);
-            color: #fff;
-            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+            background: var(--tab-active-bg);
+            color: var(--tab-active-text);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
 
         /* Search Box */
@@ -227,7 +241,7 @@
         .search-input {
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
-            color: #fff;
+            color: var(--text-primary);
             padding: 7px 12px;
             border-radius: 8px;
             font-size: 13px;
@@ -252,8 +266,8 @@
         }
 
         th {
-            background: rgba(15, 23, 42, 0.7);
-            color: var(--text-secondary);
+            background: var(--th-bg);
+            color: var(--th-color);
             font-weight: 600;
             padding: 12px 16px;
             border-bottom: 1px solid var(--border-color);
@@ -262,13 +276,13 @@
 
         td {
             padding: 12px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            color: #cbd5e1;
+            border-bottom: 1px solid var(--td-border);
+            color: var(--text-primary);
             vertical-align: middle;
         }
 
         tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--bg-surface);
         }
 
         /* Badges */
@@ -283,11 +297,11 @@
         .badge-role-admin { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
         .badge-role-manager { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
         .badge-role-supervisor { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .badge-role-staff { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; }
+        .badge-role-staff { background: var(--role-staff-bg); color: var(--role-staff-text); border: 1px solid var(--border-color); }
 
         .badge-priority-urgent { background: rgba(239, 68, 68, 0.2); color: #f87171; }
         .badge-priority-high { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-        .badge-priority-normal { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-priority-normal { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
         .badge-priority-low { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
 
         .empty-state {
@@ -398,11 +412,11 @@
             <form method="GET" action="{{ route('admin.database') }}" class="search-form">
                 <input type="hidden" name="tab" value="{{ $tab }}">
                 <input type="text" name="q" value="{{ $q }}" placeholder="ค้นหาข้อมูล..." class="search-input">
-                <button type="submit" style="padding: 7px 12px; background: var(--bg-surface); border: 1px solid var(--border-color); color: #fff; border-radius: 8px; cursor: pointer; font-size: 13px;">
+                <button type="submit" style="padding: 7px 12px; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; cursor: pointer; font-size: 13px;">
                     🔍
                 </button>
                 @if($q)
-                    <a href="{{ route('admin.database', ['tab' => $tab]) }}" style="color: #94a3b8; font-size: 12px; text-decoration: none;">ล้างค้นหา</a>
+                    <a href="{{ route('admin.database', ['tab' => $tab]) }}" style="color: var(--text-secondary); font-size: 12px; text-decoration: none;">ล้างค้นหา</a>
                 @endif
             </form>
         </div>
@@ -424,14 +438,14 @@
                             <tr>
                                 <td><code>#{{ $msg->id }}</code></td>
                                 <td>
-                                    <strong style="color: #fff;">{{ $msg->user?->name ?? 'User #' . $msg->user_id }}</strong>
+                                    <strong style="color: var(--text-primary);">{{ $msg->user?->name ?? 'User #' . $msg->user_id }}</strong>
                                     <div style="font-size: 11px; color: var(--text-secondary);">{{ $msg->user?->email }}</div>
                                 </td>
-                                <td style="color: #f1f5f9; font-weight: 500;">
+                                <td style="color: var(--text-primary); font-weight: 500;">
                                     {{ $msg->message }}
                                 </td>
                                 <td>
-                                    <span style="background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 2px 8px; border-radius: 6px; font-size: 12px;">
+                                    <span style="background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 500;">
                                         Room #{{ $msg->room_id }}
                                     </span>
                                 </td>
@@ -467,13 +481,13 @@
                             <tr>
                                 <td><code>#{{ $t->id }}</code></td>
                                 <td>
-                                    <strong style="color: #fff;">{{ $t->title }}</strong>
+                                    <strong style="color: var(--text-primary);">{{ $t->title }}</strong>
                                     @if($t->description)
                                         <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">{{ Str::limit($t->description, 60) }}</div>
                                     @endif
                                 </td>
                                 <td>
-                                    <span style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; padding: 2px 8px; border-radius: 6px; font-size: 12px;">
+                                    <span style="background: rgba(99, 102, 241, 0.15); color: var(--accent-blue); padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 500;">
                                         {{ $t->status }}
                                     </span>
                                 </td>
@@ -481,7 +495,7 @@
                                     @php
                                         $pClass = match($t->priority) {
                                             'ด่วน' => 'badge-priority-urgent',
-                                            'สูง' => 'badge-priority-high',
+                                             'สูง' => 'badge-priority-high',
                                             'ปกติ' => 'badge-priority-normal',
                                             default => 'badge-priority-low'
                                         };
@@ -489,7 +503,7 @@
                                     <span class="badge {{ $pClass }}">{{ $t->priority }}</span>
                                 </td>
                                 <td>
-                                    <span style="color: #93c5fd;">{{ $t->assignee?->name ?? 'ยังไม่มอบหมาย' }}</span>
+                                    <span style="color: var(--accent-blue); font-weight: 500;">{{ $t->assignee?->name ?? 'ยังไม่มอบหมาย' }}</span>
                                 </td>
                                 <td>
                                     <span>{{ $t->creator?->name ?? '-' }}</span>
@@ -523,8 +537,8 @@
                         @forelse($records as $u)
                             <tr>
                                 <td><code>#{{ $u->id }}</code></td>
-                                <td><strong style="color: #fff;">{{ $u->name }}</strong></td>
-                                <td style="color: #93c5fd;">{{ $u->email }}</td>
+                                <td><strong style="color: var(--text-primary);">{{ $u->name }}</strong></td>
+                                <td style="color: var(--accent-blue); font-weight: 500;">{{ $u->email }}</td>
                                 <td>
                                     @php
                                         $rClass = match($u->position) {
@@ -564,7 +578,7 @@
                         @forelse($records as $r)
                             <tr>
                                 <td><code>#{{ $r->id }}</code></td>
-                                <td><strong style="color: #fff;"># {{ $r->name }}</strong></td>
+                                <td><strong style="color: var(--text-primary);"># {{ $r->name }}</strong></td>
                                 <td>{{ $r->description ?? '-' }}</td>
                                 <td style="font-size: 12px; color: var(--text-secondary);">
                                     {{ $r->created_at?->format('d/m/Y H:i') ?? '-' }}
@@ -595,8 +609,8 @@
                         @forelse($records as $h)
                             <tr>
                                 <td><code>#{{ $h->id }}</code></td>
-                                <td><strong style="color: #fff;">{{ $h->task?->title ?? 'Task #' . $h->task_id }}</strong></td>
-                                <td><span style="color: #93c5fd;">{{ $h->user?->name ?? 'User #' . $h->user_id }}</span></td>
+                                <td><strong style="color: var(--text-primary);">{{ $h->task?->title ?? 'Task #' . $h->task_id }}</strong></td>
+                                <td><span style="color: var(--accent-blue); font-weight: 500;">{{ $h->user?->name ?? 'User #' . $h->user_id }}</span></td>
                                 <td>
                                     <span style="color: var(--text-secondary);">{{ $h->old_status }}</span>
                                     <span> ➔ </span>
