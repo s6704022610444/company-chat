@@ -4428,14 +4428,7 @@
         const currentUserDisplayName = `${currentUserFirstName} (${currentUserPosition})`;
         const isAdminUser = @json(auth()->user()->position === 'ผู้ดูแลระบบ');
 
-        const mentionUsersList = @json($allUsers->map(fn($u) => [
-            'id' => $u->id,
-            'name' => $u->name,
-            'first_name' => $u->resolved_first_name ?? explode(' ', $u->name)[0],
-            'position' => $u->position ?? 'พนักงาน',
-            'position_color' => $u->position_color ?? '#00C853',
-            'avatar' => $u->avatar,
-        ]));
+        const mentionUsersList = @json($mentionUsers ?? []);
 
         function getPositionColor(position) {
             const pos = (position || '').toString().toLowerCase().trim();
@@ -6501,7 +6494,7 @@
         };
 
         // Auto-open settings modal if there are profile validation errors
-        @if($errors->has('name'))
+        @if(isset($errors) && $errors->has('name'))
             openSettingsModal();
         @endif
 

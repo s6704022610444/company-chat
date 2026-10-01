@@ -98,6 +98,18 @@ Route::get('/dashboard', function () {
 
         $allUsers = \App\Models\User::orderBy('name')->get();
 
+        $mentionUsers = $allUsers->map(function ($u) {
+            $firstName = $u->resolved_first_name ?? ($u->name ? explode(' ', $u->name)[0] : 'User');
+            return [
+                'id' => $u->id,
+                'name' => $u->name,
+                'first_name' => $firstName,
+                'position' => $u->position ?? 'พนักงาน',
+                'position_color' => $u->position_color ?? '#00C853',
+                'avatar' => $u->avatar,
+            ];
+        })->values();
+
         $notifications = $urgentTasks->count();
 
         $newTaskNotifications = \App\Models\Task::where('assigned_to', $user->id)
@@ -159,7 +171,7 @@ Route::get('/dashboard', function () {
             $currentView = 'chat';
         }
 
-        return view('dashboard', compact(
+        $viewHtml = view('dashboard', compact(
             'rooms',
             'dmRooms',
             'selectedRoom',
@@ -170,13 +182,16 @@ Route::get('/dashboard', function () {
             'myTasks',
             'allTasks',
             'allUsers',
+            'mentionUsers',
             'notifications',
             'newTaskNotifications',
             'myTasksCount',
             'newsList',
             'newsCount',
             'currentView'
-        ));
+        ))->render();
+
+        return response($viewHtml);
     } catch (\Throwable $e) {
         \Illuminate\Support\Facades\Log::error('Dashboard error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
         return response('<div style="font-family:sans-serif;padding:30px;background:#0f172a;color:#f8fafc;min-height:100vh;">' .
