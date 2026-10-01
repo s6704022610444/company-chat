@@ -35,7 +35,8 @@ ENV VITE_REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
     BROADCAST_CONNECTION="reverb" \
     DB_CONNECTION="sqlite" \
     SESSION_DRIVER="database" \
-    QUEUE_CONNECTION="sync"
+    QUEUE_CONNECTION="sync" \
+    APP_ENV="production"
 
 # Copy custom Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf

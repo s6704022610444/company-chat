@@ -818,7 +818,7 @@
                 messageInput.focus();
 
                 try {
-                    const res = await fetch("{{ route('messages.store') }}", {
+                    const res = await fetch('/messages', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -845,7 +845,7 @@
                 } catch (err) {
                     console.error('Fetch error:', err);
                     messageInput.value = text;
-                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่');
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + (err.message || err));
                 }
             });
         }
@@ -877,7 +877,7 @@
         if (currentRoomId) {
             setInterval(async () => {
                 try {
-                    const res = await fetch(`{{ route('messages.index') }}?room_id=${currentRoomId}&after_id=${highestMessageId}`, {
+                    const res = await fetch(`/messages?room_id=${currentRoomId}&after_id=${highestMessageId}`, {
                         headers: { 'Accept': 'application/json' }
                     });
                     if (res.ok) {
