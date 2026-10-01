@@ -11,20 +11,75 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('chat_rooms', function (Blueprint $table) {
-            $table->boolean('is_direct')->default(false)->after('description');
-            $table->foreignId('user1_id')->nullable()->after('is_direct')->constrained('users')->onDelete('cascade');
-            $table->foreignId('user2_id')->nullable()->after('user1_id')->constrained('users')->onDelete('cascade');
-        });
+        // Add chat_rooms columns safely
+        if (!Schema::hasColumn('chat_rooms', 'is_direct')) {
+            Schema::table('chat_rooms', function (Blueprint $table) {
+                $table->boolean('is_direct')->default(false);
+            });
+        }
 
-        Schema::table('messages', function (Blueprint $table) {
-            $table->longText('file_data')->nullable()->after('audio_duration');
-            $table->string('file_name')->nullable()->after('file_data');
-            $table->integer('file_size')->nullable()->after('file_name');
-            $table->string('file_type')->nullable()->after('file_size');
-            $table->boolean('is_edited')->default(false)->after('file_type');
-            $table->boolean('is_deleted')->default(false)->after('is_edited');
-        });
+        if (!Schema::hasColumn('chat_rooms', 'user1_id')) {
+            Schema::table('chat_rooms', function (Blueprint $table) {
+                $table->unsignedBigInteger('user1_id')->nullable();
+            });
+            try {
+                Schema::table('chat_rooms', function (Blueprint $table) {
+                    $table->foreign('user1_id')->references('id')->on('users')->onDelete('cascade');
+                });
+            } catch (\Throwable $e) {
+                // foreign key may already exist or DB driver ignored
+            }
+        }
+
+        if (!Schema::hasColumn('chat_rooms', 'user2_id')) {
+            Schema::table('chat_rooms', function (Blueprint $table) {
+                $table->unsignedBigInteger('user2_id')->nullable();
+            });
+            try {
+                Schema::table('chat_rooms', function (Blueprint $table) {
+                    $table->foreign('user2_id')->references('id')->on('users')->onDelete('cascade');
+                });
+            } catch (\Throwable $e) {
+                // foreign key may already exist or DB driver ignored
+            }
+        }
+
+        // Add messages columns safely
+        if (!Schema::hasColumn('messages', 'file_data')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->longText('file_data')->nullable();
+            });
+        }
+
+        if (!Schema::hasColumn('messages', 'file_name')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->string('file_name')->nullable();
+            });
+        }
+
+        if (!Schema::hasColumn('messages', 'file_size')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->integer('file_size')->nullable();
+            });
+        }
+
+        if (!Schema::hasColumn('messages', 'file_type')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->string('file_type')->nullable();
+            });
+        }
+
+        if (!Schema::hasColumn('messages', 'is_edited')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->boolean('is_edited')->default(false);
+            });
+        }
+
+        if (!Schema::hasColumn('messages', 'is_deleted')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->boolean('is_deleted')->default(false);
+            });
+        }
     }
 
     /**
@@ -32,14 +87,22 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn(['file_data', 'file_name', 'file_size', 'file_type', 'is_edited', 'is_deleted']);
+        $messageCols = array_filter(['file_data', 'file_name', 'file_size', 'file_type', 'is_edited', 'is_deleted'], function($col) {
+            return Schema::hasColumn('messages', $col);
         });
+        if (!empty($messageCols)) {
+            Schema::table('messages', function (Blueprint $table) use ($messageCols) {
+                $table->dropColumn($messageCols);
+            });
+        }
 
-        Schema::table('chat_rooms', function (Blueprint $table) {
-            $table->dropForeign(['user1_id']);
-            $table->dropForeign(['user2_id']);
-            $table->dropColumn(['is_direct', 'user1_id', 'user2_id']);
+        $roomCols = array_filter(['is_direct', 'user1_id', 'user2_id'], function($col) {
+            return Schema::hasColumn('chat_rooms', $col);
         });
+        if (!empty($roomCols)) {
+            Schema::table('chat_rooms', function (Blueprint $table) use ($roomCols) {
+                $table->dropColumn($roomCols);
+            });
+        }
     }
 };

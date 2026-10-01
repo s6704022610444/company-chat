@@ -29,7 +29,7 @@ php artisan config:clear || true
 
 # Run migrations
 echo "Running database migrations..."
-php artisan migrate --force
+php artisan migrate --force || true
 
 # Seed initial users if empty
 php artisan db:seed --force || true

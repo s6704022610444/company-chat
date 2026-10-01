@@ -17,149 +17,174 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $user = auth()->user();
-    $rooms = \App\Models\ChatRoom::orderBy('name')->get();
+    try {
+        $user = auth()->user();
 
-    // All relevant tasks for current user
-    $tasks = \App\Models\Task::with(['creator', 'assignee'])
-        ->where(function ($query) use ($user) {
-            $query->where('assigned_to', $user->id)
-                ->orWhere('created_by', $user->id);
-        })
-        ->latest()
-        ->get();
+        // Self-healing migration check: automatically migrate if columns are missing
+        $hasDirectCol = \Illuminate\Support\Facades\Schema::hasColumn('chat_rooms', 'is_direct');
+        $hasDeletedCol = \Illuminate\Support\Facades\Schema::hasColumn('messages', 'is_deleted');
 
-    // Urgent & important tasks for the notification bell
-    $urgentTasks = \App\Models\Task::with(['creator', 'assignee'])
-        ->where(function ($query) use ($user) {
-            $query->where('assigned_to', $user->id)
-                ->orWhere('created_by', $user->id);
-        })
-        ->where('status', '!=', 'เสร็จแล้ว')
-        ->where(function ($query) {
-            $query->whereIn('priority', ['ด่วน', 'สูง'])
-                ->orWhere(function ($q) {
-                    $q->whereNotNull('due_at')
-                      ->where('due_at', '<=', now()->addDays(2));
-                });
-        })
-        ->orderByRaw("
-            CASE
-                WHEN priority = 'ด่วน' THEN 1
-                WHEN priority = 'สูง' THEN 2
-                WHEN priority = 'ปกติ' THEN 3
-                ELSE 4
-            END
-        ")
-        ->orderBy('due_at')
-        ->get();
-
-    // My tasks (for the embedded My Tasks view)
-    $myTasks = \App\Models\Task::with(['creator', 'assignee', 'histories.user'])
-        ->where('assigned_to', $user->id)
-        ->where('status', '!=', 'เสร็จแล้ว')
-        ->orderByRaw("
-            CASE
-                WHEN priority = 'ด่วน' THEN 1
-                WHEN priority = 'สูง' THEN 2
-                WHEN priority = 'ปกติ' THEN 3
-                WHEN priority = 'ต่ำ' THEN 4
-                ELSE 5
-            END
-        ")
-        ->orderBy('due_at')
-        ->get();
-
-    // All tasks (for the embedded All Tasks view)
-    if (in_array($user->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])) {
-        $allTasks = \App\Models\Task::with(['creator', 'assignee', 'histories.user'])
-            ->latest()
-            ->get();
-    } else {
-        $allTasks = \App\Models\Task::with(['creator', 'assignee', 'histories.user'])
-            ->where('assigned_to', $user->id)
-            ->latest()
-            ->get();
-    }
-
-    $allUsers = \App\Models\User::orderBy('name')->get();
-
-    $notifications = $urgentTasks->count();
-
-    $newTaskNotifications = \App\Models\Task::where('assigned_to', $user->id)
-        ->where('status', 'ยังไม่เริ่ม')
-        ->count();
-
-    $myTasksCount = $myTasks->count();
-
-    // Company News & Announcements
-    $newsList = \App\Models\News::with(['user', 'likes'])
-        ->orderByDesc('is_pinned')
-        ->latest()
-        ->get();
-    $newsCount = $newsList->count();
-
-    // Only standard channels in public rooms list
-    $rooms = \App\Models\ChatRoom::where('is_direct', false)->orderBy('name')->get();
-
-    // Direct message rooms for the current user
-    $dmRooms = \App\Models\ChatRoom::with(['user1', 'user2'])
-        ->where('is_direct', true)
-        ->where(function ($q) use ($user) {
-            $q->where('user1_id', $user->id)->orWhere('user2_id', $user->id);
-        })
-        ->get();
-
-    $selectedRoom = request('room');
-
-    if (!$selectedRoom && $rooms->count() > 0) {
-        $selectedRoom = $rooms->first()->id;
-    }
-
-    $selectedRoomModel = null;
-    $messages = collect();
-
-    if ($selectedRoom) {
-        $selectedRoomModel = \App\Models\ChatRoom::with(['user1', 'user2'])->find($selectedRoom);
-        if ($selectedRoomModel && $selectedRoomModel->is_direct) {
-            $isAdmin = $user->position === 'ผู้ดูแลระบบ';
-            if ($user->id !== $selectedRoomModel->user1_id && $user->id !== $selectedRoomModel->user2_id && !$isAdmin) {
-                return redirect()->route('dashboard');
+        if (!$hasDirectCol || !$hasDeletedCol) {
+            try {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                $hasDirectCol = \Illuminate\Support\Facades\Schema::hasColumn('chat_rooms', 'is_direct');
+                $hasDeletedCol = \Illuminate\Support\Facades\Schema::hasColumn('messages', 'is_deleted');
+            } catch (\Throwable $migErr) {
+                \Illuminate\Support\Facades\Log::warning('Dashboard auto-migration notice: ' . $migErr->getMessage());
             }
         }
 
-        if ($selectedRoomModel) {
-            $messages = \App\Models\Message::with('user')
-                ->where('room_id', $selectedRoom)
-                ->where('is_deleted', false)
-                ->oldest()
+        // All relevant tasks for current user
+        $tasks = \App\Models\Task::with(['creator', 'assignee'])
+            ->where(function ($query) use ($user) {
+                $query->where('assigned_to', $user->id)
+                    ->orWhere('created_by', $user->id);
+            })
+            ->latest()
+            ->get();
+
+        // Urgent & important tasks for the notification bell
+        $urgentTasks = \App\Models\Task::with(['creator', 'assignee'])
+            ->where(function ($query) use ($user) {
+                $query->where('assigned_to', $user->id)
+                    ->orWhere('created_by', $user->id);
+            })
+            ->where('status', '!=', 'เสร็จแล้ว')
+            ->where(function ($query) {
+                $query->whereIn('priority', ['ด่วน', 'สูง'])
+                    ->orWhere(function ($q) {
+                        $q->whereNotNull('due_at')
+                          ->where('due_at', '<=', now()->addDays(2));
+                    });
+            })
+            ->orderByRaw("
+                CASE
+                    WHEN priority = 'ด่วน' THEN 1
+                    WHEN priority = 'สูง' THEN 2
+                    WHEN priority = 'ปกติ' THEN 3
+                    ELSE 4
+                END
+            ")
+            ->orderBy('due_at')
+            ->get();
+
+        // My tasks (for the embedded My Tasks view)
+        $myTasks = \App\Models\Task::with(['creator', 'assignee', 'histories.user'])
+            ->where('assigned_to', $user->id)
+            ->where('status', '!=', 'เสร็จแล้ว')
+            ->orderByRaw("
+                CASE
+                    WHEN priority = 'ด่วน' THEN 1
+                    WHEN priority = 'สูง' THEN 2
+                    WHEN priority = 'ปกติ' THEN 3
+                    WHEN priority = 'ต่ำ' THEN 4
+                    ELSE 5
+                END
+            ")
+            ->orderBy('due_at')
+            ->get();
+
+        // All tasks (for the embedded All Tasks view)
+        if (in_array($user->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])) {
+            $allTasks = \App\Models\Task::with(['creator', 'assignee', 'histories.user'])
+                ->latest()
+                ->get();
+        } else {
+            $allTasks = \App\Models\Task::with(['creator', 'assignee', 'histories.user'])
+                ->where('assigned_to', $user->id)
+                ->latest()
                 ->get();
         }
-    }
 
-    $currentView = request('view', 'chat');
-    if (!in_array($currentView, ['chat', 'my-tasks', 'all-tasks', 'news'])) {
-        $currentView = 'chat';
-    }
+        $allUsers = \App\Models\User::orderBy('name')->get();
 
-    return view('dashboard', compact(
-        'rooms',
-        'dmRooms',
-        'selectedRoom',
-        'selectedRoomModel',
-        'messages',
-        'tasks',
-        'urgentTasks',
-        'myTasks',
-        'allTasks',
-        'allUsers',
-        'notifications',
-        'newTaskNotifications',
-        'myTasksCount',
-        'newsList',
-        'newsCount',
-        'currentView'
-    ));
+        $notifications = $urgentTasks->count();
+
+        $newTaskNotifications = \App\Models\Task::where('assigned_to', $user->id)
+            ->where('status', 'ยังไม่เริ่ม')
+            ->count();
+
+        $myTasksCount = $myTasks->count();
+
+        // Company News & Announcements
+        $newsList = \App\Models\News::with(['user', 'likes'])
+            ->orderByDesc('is_pinned')
+            ->latest()
+            ->get();
+        $newsCount = $newsList->count();
+
+        // Public rooms list
+        if ($hasDirectCol) {
+            $rooms = \App\Models\ChatRoom::where('is_direct', false)->orderBy('name')->get();
+            $dmRooms = \App\Models\ChatRoom::with(['user1', 'user2'])
+                ->where('is_direct', true)
+                ->where(function ($q) use ($user) {
+                    $q->where('user1_id', $user->id)->orWhere('user2_id', $user->id);
+                })
+                ->get();
+        } else {
+            $rooms = \App\Models\ChatRoom::orderBy('name')->get();
+            $dmRooms = collect();
+        }
+
+        $selectedRoom = request('room');
+
+        if (!$selectedRoom && $rooms->count() > 0) {
+            $selectedRoom = $rooms->first()->id;
+        }
+
+        $selectedRoomModel = null;
+        $messages = collect();
+
+        if ($selectedRoom) {
+            $selectedRoomModel = \App\Models\ChatRoom::with(['user1', 'user2'])->find($selectedRoom);
+            if ($hasDirectCol && $selectedRoomModel && $selectedRoomModel->is_direct) {
+                $isAdmin = $user->position === 'ผู้ดูแลระบบ';
+                if ((int)$user->id !== (int)$selectedRoomModel->user1_id && (int)$user->id !== (int)$selectedRoomModel->user2_id && !$isAdmin) {
+                    return redirect()->route('dashboard');
+                }
+            }
+
+            if ($selectedRoomModel) {
+                $msgQuery = \App\Models\Message::with('user')->where('room_id', $selectedRoom);
+                if ($hasDeletedCol) {
+                    $msgQuery->where('is_deleted', false);
+                }
+                $messages = $msgQuery->oldest()->get();
+            }
+        }
+
+        $currentView = request('view', 'chat');
+        if (!in_array($currentView, ['chat', 'my-tasks', 'all-tasks', 'news'])) {
+            $currentView = 'chat';
+        }
+
+        return view('dashboard', compact(
+            'rooms',
+            'dmRooms',
+            'selectedRoom',
+            'selectedRoomModel',
+            'messages',
+            'tasks',
+            'urgentTasks',
+            'myTasks',
+            'allTasks',
+            'allUsers',
+            'notifications',
+            'newTaskNotifications',
+            'myTasksCount',
+            'newsList',
+            'newsCount',
+            'currentView'
+        ));
+    } catch (\Throwable $e) {
+        \Illuminate\Support\Facades\Log::error('Dashboard error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+        return response('<div style="font-family:sans-serif;padding:30px;background:#0f172a;color:#f8fafc;min-height:100vh;">' .
+            '<h2 style="color:#ef4444;">เกิดข้อผิดพลาดในการโหลดหน้าเว็บ</h2>' .
+            '<p style="font-size:14px;color:#cbd5e1;background:#1e293b;padding:15px;border-radius:8px;">' . e($e->getMessage()) . '</p>' .
+            '<a href="/dashboard" style="display:inline-block;margin-top:15px;padding:8px 16px;background:#3b82f6;color:#fff;text-decoration:none;border-radius:6px;font-size:13px;">รีเฟรชหน้าเว็บ</a>' .
+            '</div>', 500);
+    }
 })->middleware('auth')->name('dashboard');
 
 Route::post('/news', [NewsController::class, 'store'])

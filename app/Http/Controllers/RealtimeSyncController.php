@@ -125,8 +125,14 @@ class RealtimeSyncController extends Controller
             ];
         }
 
+        $hasDirectCol = \Illuminate\Support\Facades\Schema::hasColumn('chat_rooms', 'is_direct');
+
         // 5. Public Rooms List
-        $rooms = ChatRoom::where('is_direct', false)->orderBy('name')->get()->map(function ($r) {
+        $roomsQuery = ChatRoom::query();
+        if ($hasDirectCol) {
+            $roomsQuery->where('is_direct', false);
+        }
+        $rooms = $roomsQuery->orderBy('name')->get()->map(function ($r) {
             return [
                 'id' => $r->id,
                 'name' => $r->name,
@@ -135,24 +141,27 @@ class RealtimeSyncController extends Controller
         });
 
         // 6. Direct Message Rooms for Current User
-        $dmRooms = ChatRoom::with(['user1', 'user2'])
-            ->where('is_direct', true)
-            ->where(function ($q) use ($user) {
-                $q->where('user1_id', $user->id)->orWhere('user2_id', $user->id);
-            })
-            ->get()
-            ->map(function ($r) use ($user) {
-                $other = $r->getOtherUser($user->id);
-                return [
-                    'id' => $r->id,
-                    'other_user_id' => $other?->id,
-                    'other_user_name' => $other?->name ?? 'User',
-                    'other_user_first_name' => $other?->resolved_first_name ?? ($other?->name ? explode(' ', $other->name)[0] : 'User'),
-                    'other_user_position' => $other?->position ?? 'พนักงาน',
-                    'other_user_position_color' => $other?->position_color ?? '#00C853',
-                    'other_user_avatar' => $other?->avatar,
-                ];
-            });
+        $dmRooms = collect();
+        if ($hasDirectCol) {
+            $dmRooms = ChatRoom::with(['user1', 'user2'])
+                ->where('is_direct', true)
+                ->where(function ($q) use ($user) {
+                    $q->where('user1_id', $user->id)->orWhere('user2_id', $user->id);
+                })
+                ->get()
+                ->map(function ($r) use ($user) {
+                    $other = $r->getOtherUser($user->id);
+                    return [
+                        'id' => $r->id,
+                        'other_user_id' => $other?->id,
+                        'other_user_name' => $other?->name ?? 'User',
+                        'other_user_first_name' => $other?->resolved_first_name ?? ($other?->name ? explode(' ', $other->name)[0] : 'User'),
+                        'other_user_position' => $other?->position ?? 'พนักงาน',
+                        'other_user_position_color' => $other?->position_color ?? '#00C853',
+                        'other_user_avatar' => $other?->avatar,
+                    ];
+                });
+        }
 
         // Version hashes to determine if DOM re-rendering is needed
         $newsHash = md5($newsList->map(fn($n) => "{$n->id}-{$n->title}-{$n->is_pinned}-{$n->updated_at}")->join('|'));

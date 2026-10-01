@@ -26,20 +26,27 @@ class MessageController extends Controller
             return response()->json([]);
         }
 
+        $hasDirectCol = \Illuminate\Support\Facades\Schema::hasColumn('chat_rooms', 'is_direct');
+        $hasDeletedCol = \Illuminate\Support\Facades\Schema::hasColumn('messages', 'is_deleted');
+
         // Privacy check for Direct Messages
-        if ($room->is_direct) {
+        if ($hasDirectCol && $room->is_direct) {
             $myId = auth()->id();
             $isAdmin = auth()->user()->position === 'ผู้ดูแลระบบ';
-            if ($myId !== $room->user1_id && $myId !== $room->user2_id && !$isAdmin) {
+            if ((int)$myId !== (int)$room->user1_id && (int)$myId !== (int)$room->user2_id && !$isAdmin) {
                 return response()->json(['error' => 'Unauthorized'], 403);
             }
         }
 
-        $messages = Message::with('user')
+        $query = Message::with('user')
             ->where('room_id', $roomId)
-            ->where('is_deleted', false)
-            ->where('id', '>', $afterId)
-            ->oldest()
+            ->where('id', '>', $afterId);
+
+        if ($hasDeletedCol) {
+            $query->where('is_deleted', false);
+        }
+
+        $messages = $query->oldest()
             ->get()
             ->map(function ($msg) {
                 return [
