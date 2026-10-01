@@ -420,7 +420,7 @@
                 - ติดตาม Dashboard สรุปงาน
             </div>
             <div class="guide-item">
-                <strong style="color: #FF3D00;">4. แอดมิน / ผู้ดูแลระบบ</strong><br>
+                <strong style="color: #FF3D00;">4. ผู้ดูแลระบบ</strong><br>
                 - สิทธิ์สูงสุดทุกฟังก์ชัน<br>
                 - ปรับเปลี่ยนตำแหน่งผู้ใช้<br>
                 - ลบห้องสนทนาที่ไม่ใช้งาน
