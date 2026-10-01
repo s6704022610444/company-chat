@@ -925,8 +925,8 @@
         }
 
         .message-chat-image:hover {
-            opacity: 0.95;
-            transform: scale(1.01);
+            opacity: 0.92;
+            transform: scale(1.015);
         }
 
         .message-audio-wrap {
@@ -935,12 +935,201 @@
 
         .message-audio-player {
             width: 100%;
-            min-width: 200px;
-            max-width: 280px;
+            min-width: 220px;
+            max-width: 300px;
             height: 38px;
             border-radius: 20px;
             display: block;
             outline: none;
+        }
+
+        /* Chat Image Lightbox Modal */
+        .chat-image-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .chat-image-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .chat-image-modal-dialog {
+            position: relative;
+            z-index: 10;
+            max-width: 95vw;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            background: rgba(24, 28, 38, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            animation: zoom-in-image-modal 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes zoom-in-image-modal {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .chat-image-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 12px;
+        }
+
+        .chat-image-modal-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .chat-image-modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-image-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f1f5f9;
+            font-size: 12.5px;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            font-family: inherit;
+        }
+
+        .chat-image-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .chat-image-close-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.18s ease;
+            padding: 0;
+        }
+
+        .chat-image-close-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .chat-image-modal-body {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            max-height: calc(92vh - 60px);
+            overflow: auto;
+            background: #0b0f19;
+        }
+
+        .chat-modal-view-img {
+            max-width: 90vw;
+            max-height: calc(85vh - 70px);
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            user-select: none;
+        }
+
+        .chat-image-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 40px;
+            color: #cbd5e1;
+            font-size: 13.5px;
+        }
+
+        .chat-image-spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .chat-image-error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            padding: 40px 24px;
+            max-width: 380px;
+        }
+
+        .chat-image-error-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin: 0;
+        }
+
+        .chat-image-error-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            margin: 0 0 12px 0;
+            line-height: 1.4;
+        }
+
+        .chat-image-retry-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .chat-image-retry-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
         }
 
         .message-text {
@@ -2123,12 +2312,14 @@
                                 <div class="message-bubble">
                                     @if($message->image)
                                         <div class="message-image-wrap">
-                                            <img src="{{ $message->image }}" class="message-chat-image" onclick="window.open(this.src, '_blank')" alt="รูปภาพ">
+                                            <img src="{{ $message->image }}" class="message-chat-image" onclick="openChatImage(this.src)" alt="รูปภาพแชต">
                                         </div>
                                     @endif
                                     @if($message->audio)
                                         <div class="message-audio-wrap">
-                                            <audio controls class="message-audio-player" src="{{ $message->audio }}"></audio>
+                                            <audio controls class="message-audio-player" preload="metadata" src="{{ $message->audio }}">
+                                                เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
+                                            </audio>
                                         </div>
                                     @endif
                                     @if(!empty($message->message))
@@ -2159,12 +2350,14 @@
                                 <div class="message-bubble">
                                     @if($message->image)
                                         <div class="message-image-wrap">
-                                            <img src="{{ $message->image }}" class="message-chat-image" onclick="window.open(this.src, '_blank')" alt="รูปภาพ">
+                                            <img src="{{ $message->image }}" class="message-chat-image" onclick="openChatImage(this.src)" alt="รูปภาพแชต">
                                         </div>
                                     @endif
                                     @if($message->audio)
                                         <div class="message-audio-wrap">
-                                            <audio controls class="message-audio-player" src="{{ $message->audio }}"></audio>
+                                            <audio controls class="message-audio-player" preload="metadata" src="{{ $message->audio }}">
+                                                เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
+                                            </audio>
                                         </div>
                                     @endif
                                     @if(!empty($message->message))
@@ -2745,6 +2938,67 @@
         </div>
     </div>
 
+    <!-- Chat Image Lightbox Modal -->
+    <div id="chatImageModal" class="chat-image-modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-label="ดูรูปภาพ">
+        <div class="chat-image-modal-backdrop" onclick="closeChatImage()"></div>
+        <div class="chat-image-modal-dialog">
+            <div class="chat-image-modal-header">
+                <span class="chat-image-modal-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                        <circle cx="9" cy="9" r="2"/>
+                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                    </svg>
+                    <span>รูปภาพ</span>
+                </span>
+                <div class="chat-image-modal-actions">
+                    <button type="button" id="chatModalNewTabBtn" class="chat-image-action-btn" title="เปิดในแท็บใหม่">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <polyline points="15 3 21 3 21 9"/>
+                            <line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
+                        <span>เปิดในแท็บใหม่</span>
+                    </button>
+                    <button type="button" id="chatModalDownloadBtn" class="chat-image-action-btn" title="ดาวน์โหลดรูปภาพ">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>ดาวน์โหลด</span>
+                    </button>
+                    <button type="button" class="chat-image-close-btn" onclick="closeChatImage()" title="ปิด" aria-label="ปิด">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="chat-image-modal-body">
+                <!-- Loading Spinner -->
+                <div id="chatModalImageLoader" class="chat-image-loader" style="display: none;">
+                    <div class="chat-image-spinner"></div>
+                    <span>กำลังโหลดรูปภาพ...</span>
+                </div>
+                <!-- Error State -->
+                <div id="chatModalImageError" class="chat-image-error" style="display: none;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <p class="chat-image-error-title">ไม่สามารถเปิดดูรูปภาพนี้ได้</p>
+                    <p class="chat-image-error-subtitle">ไฟล์รูปภาพอาจเสียหาย ถูกลบ หรือรูปแบบไม่ถูกต้อง</p>
+                    <button type="button" class="chat-image-retry-btn" onclick="closeChatImage()">ปิดหน้าต่าง</button>
+                </div>
+                <!-- Main Image -->
+                <img id="chatModalImage" class="chat-modal-view-img" src="" alt="รูปภาพแชตขยายใหญ่" style="display: none;">
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -2846,14 +3100,16 @@
             if (data.image) {
                 bubbleContent += `
                     <div class="message-image-wrap">
-                        <img src="${data.image}" class="message-chat-image" onclick="window.open(this.src, '_blank')" alt="รูปภาพ">
+                        <img src="${data.image}" class="message-chat-image" onclick="openChatImage(this.src)" alt="รูปภาพแชต">
                     </div>
                 `;
             }
             if (data.audio) {
                 bubbleContent += `
                     <div class="message-audio-wrap">
-                        <audio controls class="message-audio-player" src="${data.audio}"></audio>
+                        <audio controls class="message-audio-player" preload="metadata" src="${data.audio}">
+                            เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
+                        </audio>
                     </div>
                 `;
             }
@@ -3021,49 +3277,203 @@
             }
         };
 
-        // Voice Message Recording Handlers
+        // Chat Image Modal View Handlers
+        window.openChatImage = function(src) {
+            if (!src || src === 'about:blank' || src === 'null' || src === 'undefined') {
+                alert('ไม่พบรูปภาพหรือลิงก์รูปภาพไม่ถูกต้อง');
+                return;
+            }
+
+            const modal = document.getElementById('chatImageModal');
+            const imgEl = document.getElementById('chatModalImage');
+            const errorEl = document.getElementById('chatModalImageError');
+            const loaderEl = document.getElementById('chatModalImageLoader');
+            const downloadBtn = document.getElementById('chatModalDownloadBtn');
+            const newTabBtn = document.getElementById('chatModalNewTabBtn');
+
+            if (!modal || !imgEl) return;
+
+            // Reset states
+            if (errorEl) errorEl.style.display = 'none';
+            if (loaderEl) loaderEl.style.display = 'flex';
+            imgEl.style.display = 'none';
+            imgEl.src = '';
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            imgEl.onload = function() {
+                if (loaderEl) loaderEl.style.display = 'none';
+                imgEl.style.display = 'block';
+            };
+
+            imgEl.onerror = function() {
+                if (loaderEl) loaderEl.style.display = 'none';
+                imgEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'flex';
+            };
+
+            imgEl.src = src;
+
+            if (newTabBtn) {
+                newTabBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    window.openImageInNewTab(src);
+                };
+            }
+
+            if (downloadBtn) {
+                downloadBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    window.downloadChatImage(src);
+                };
+            }
+        };
+
+        window.closeChatImage = function() {
+            const modal = document.getElementById('chatImageModal');
+            const imgEl = document.getElementById('chatModalImage');
+            if (modal) modal.style.display = 'none';
+            if (imgEl) imgEl.src = '';
+            document.body.style.overflow = '';
+        };
+
+        window.openImageInNewTab = function(src) {
+            if (!src || src === 'about:blank') {
+                alert('ไม่พบรูปภาพที่ต้องการเปิด');
+                return;
+            }
+
+            if (src.startsWith('data:')) {
+                try {
+                    const arr = src.split(',');
+                    const mimeMatch = arr[0].match(/:(.*?);/);
+                    const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+                    const bstr = atob(arr[1]);
+                    let n = bstr.length;
+                    const u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    const blob = new Blob([u8arr], { type: mime });
+                    const blobUrl = URL.createObjectURL(blob);
+                    const win = window.open(blobUrl, '_blank');
+                    if (!win) {
+                        alert('เบราว์เซอร์บล็อกหน้าต่างใหม่ กรุณาอนุญาตป๊อปอัป');
+                    }
+                } catch (e) {
+                    console.error('Error creating Blob URL for image:', e);
+                    const win = window.open('', '_blank');
+                    if (win) {
+                        win.document.write('<!DOCTYPE html><html><head><title>ดูรูปภาพ</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>body{margin:0;background:#0b0f19;display:flex;align-items:center;justify-content:center;min-height:100vh;}img{max-width:100%;max-height:100vh;object-fit:contain;}</style></head><body><img src="' + src + '"></body></html>');
+                        win.document.close();
+                    }
+                }
+            } else {
+                const win = window.open(src, '_blank');
+                if (!win) {
+                    alert('เบราว์เซอร์บล็อกหน้าต่างใหม่ กรุณาอนุญาตป๊อปอัป');
+                }
+            }
+        };
+
+        window.downloadChatImage = function(src) {
+            if (!src) return;
+            try {
+                const a = document.createElement('a');
+                a.href = src;
+                a.download = `chat-image-${Date.now()}.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (e) {
+                console.error('Download error:', e);
+            }
+        };
+
+        // Modal backdrop and ESC key listener for Chat Image
+        document.getElementById('chatImageModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'chatImageModal' || e.target.classList.contains('chat-image-modal-backdrop')) {
+                window.closeChatImage();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('chatImageModal');
+                if (modal && modal.style.display === 'flex') {
+                    window.closeChatImage();
+                }
+            }
+        });
+
+        // Voice Message Recording Handlers (Cross-browser & Robust)
         let mediaRecorder = null;
         let audioChunks = [];
         let voiceRecordingTimer = null;
         let recordingSeconds = 0;
         let isVoiceRecording = false;
         let audioStream = null;
+        let stopRecordingPromiseResolve = null;
 
         function getSupportedMimeType() {
+            if (typeof MediaRecorder === 'undefined') return '';
             const types = [
                 'audio/webm;codecs=opus',
                 'audio/webm',
                 'audio/mp4',
                 'audio/aac',
-                'audio/ogg'
+                'audio/ogg;codecs=opus',
+                'audio/wav'
             ];
             for (const t of types) {
-                if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) {
+                if (MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) {
                     return t;
                 }
             }
             return '';
         }
 
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
         window.toggleVoiceRecording = async function() {
             if (isVoiceRecording) {
-                window.stopVoiceRecording();
+                await window.stopVoiceRecording();
             } else {
-                window.startVoiceRecording();
+                await window.startVoiceRecording();
             }
         };
 
         window.startVoiceRecording = async function() {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                alert('เบราว์เซอร์ของคุณไม่รองรับการบันทึกเสียง หรือต้องใช้งานผ่าน HTTPS');
+                alert('เบราว์เซอร์ของคุณไม่รองรับการบันทึกเสียง หรือต้องเปิดใช้งานผ่าน HTTPS');
                 return;
             }
 
             try {
-                audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioStream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    }
+                });
             } catch (err) {
                 console.error('Microphone permission error:', err);
-                alert('ไม่สามารถเข้าถึงไมโครโฟนได้ กรุณาอนุญาตการเข้าถึงไมโครโฟน');
+                if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                    alert('คุณไม่อนุญาตให้ใช้งานไมโครโฟน กรุณาอนุญาตสิทธิ์ไมโครโฟนในการตั้งค่าเบราว์เซอร์');
+                } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+                    alert('ไม่พบอุปกรณ์ไมโครโฟนบนอุปกรณ์นี้ กรุณาเชื่อมต่อไมโครโฟน');
+                } else {
+                    alert('ไม่สามารถเข้าถึงไมโครโฟนได้: ' + (err.message || 'ข้อผิดพลาดไม่ทราบสาเหตุ'));
+                }
                 return;
             }
 
@@ -3075,7 +3485,13 @@
             try {
                 mediaRecorder = new MediaRecorder(audioStream, options);
             } catch (e) {
-                mediaRecorder = new MediaRecorder(audioStream);
+                try {
+                    mediaRecorder = new MediaRecorder(audioStream);
+                } catch (e2) {
+                    console.error('Cannot create MediaRecorder:', e2);
+                    alert('อุปกรณ์หรือเบราว์เซอร์นี้ไม่รองรับการบันทึกเสียง');
+                    return;
+                }
             }
 
             mediaRecorder.ondataavailable = (e) => {
@@ -3084,36 +3500,60 @@
                 }
             };
 
-            mediaRecorder.onstop = () => {
-                const actualMime = mediaRecorder.mimeType || mimeType || 'audio/webm';
-                const audioBlob = new Blob(audioChunks, { type: actualMime });
-                
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    const base64Audio = evt.target.result;
-                    const chatAudioData = document.getElementById('chatAudioData');
-                    const chatAudioDuration = document.getElementById('chatAudioDuration');
+            mediaRecorder.onstop = async () => {
+                try {
+                    const actualMime = (mediaRecorder && mediaRecorder.mimeType) || mimeType || 'audio/webm';
+                    const audioBlob = new Blob(audioChunks, { type: actualMime });
+
+                    if (audioBlob.size < 200) {
+                        alert('ไม่พบข้อมูลเสียงที่บันทึก กรุณาตรวจสอบไมโครโฟนและลองบันทึกใหม่อีกครั้ง');
+                        window.removeAttachedVoice();
+                        if (stopRecordingPromiseResolve) {
+                            stopRecordingPromiseResolve();
+                            stopRecordingPromiseResolve = null;
+                        }
+                        return;
+                    }
+
+                    // Create Blob URL for instant audio testing in preview
+                    const blobUrl = URL.createObjectURL(audioBlob);
                     const voicePreviewAudio = document.getElementById('voicePreviewAudio');
                     const voiceRecordingStatus = document.getElementById('voiceRecordingStatus');
                     const voicePlaybackWrap = document.getElementById('voicePlaybackWrap');
+                    const chatAudioDuration = document.getElementById('chatAudioDuration');
+                    const chatAudioData = document.getElementById('chatAudioData');
 
-                    if (chatAudioData) chatAudioData.value = base64Audio;
-                    if (chatAudioDuration) chatAudioDuration.value = recordingSeconds;
                     if (voicePreviewAudio) {
-                        voicePreviewAudio.src = URL.createObjectURL(audioBlob);
+                        voicePreviewAudio.src = blobUrl;
+                        voicePreviewAudio.load(); // Required for Safari / iOS
+                    }
+                    if (chatAudioDuration) {
+                        chatAudioDuration.value = Math.max(1, recordingSeconds);
                     }
                     if (voiceRecordingStatus) voiceRecordingStatus.style.display = 'none';
                     if (voicePlaybackWrap) voicePlaybackWrap.style.display = 'flex';
-                };
-                reader.readAsDataURL(audioBlob);
 
-                if (audioStream) {
-                    audioStream.getTracks().forEach(track => track.stop());
-                    audioStream = null;
+                    // Convert to Base64 data URL for sending
+                    const base64Audio = await blobToBase64(audioBlob);
+                    if (chatAudioData) {
+                        chatAudioData.value = base64Audio;
+                    }
+                } catch (err) {
+                    console.error('Error in mediaRecorder onstop:', err);
+                    alert('เกิดข้อผิดพลาดในการประมวลผลไฟล์เสียง');
+                } finally {
+                    if (audioStream) {
+                        audioStream.getTracks().forEach(track => track.stop());
+                        audioStream = null;
+                    }
+                    if (stopRecordingPromiseResolve) {
+                        stopRecordingPromiseResolve();
+                        stopRecordingPromiseResolve = null;
+                    }
                 }
             };
 
-            mediaRecorder.start(250);
+            mediaRecorder.start(100); // 100ms time slice for continuous data emission
             isVoiceRecording = true;
 
             const recordBtn = document.getElementById('recordVoiceBtn');
@@ -3130,7 +3570,7 @@
             if (voiceRecordingStatus) voiceRecordingStatus.style.display = 'flex';
             if (voicePlaybackWrap) voicePlaybackWrap.style.display = 'none';
 
-            if (timerText) timerText.textContent = 'กำลังบันทึกเสียง... 00:00';
+            if (timerText) timerText.textContent = '00:00';
 
             if (voiceRecordingTimer) clearInterval(voiceRecordingTimer);
             voiceRecordingTimer = setInterval(() => {
@@ -3138,7 +3578,7 @@
                 const mins = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
                 const secs = String(recordingSeconds % 60).padStart(2, '0');
                 if (timerText) {
-                    timerText.textContent = `กำลังบันทึกเสียง... ${mins}:${secs}`;
+                    timerText.textContent = `${mins}:${secs}`;
                 }
                 if (recordingSeconds >= 300) {
                     window.stopVoiceRecording();
@@ -3151,33 +3591,52 @@
                 clearInterval(voiceRecordingTimer);
                 voiceRecordingTimer = null;
             }
+
+            const recordBtn = document.getElementById('recordVoiceBtn');
+            if (recordBtn) recordBtn.classList.remove('active-recording');
+
+            if (!isVoiceRecording || !mediaRecorder) {
+                return Promise.resolve();
+            }
+
+            return new Promise((resolve) => {
+                isVoiceRecording = false;
+                stopRecordingPromiseResolve = resolve;
+
+                if (mediaRecorder.state !== 'inactive') {
+                    try {
+                        // Request any remaining buffered data
+                        mediaRecorder.requestData();
+                    } catch (e) {}
+                    mediaRecorder.stop();
+                } else {
+                    resolve();
+                }
+            });
+        };
+
+        window.stopVoiceRecordingPromise = function() {
+            return window.stopVoiceRecording();
+        };
+
+        window.removeAttachedVoice = function() {
+            if (voiceRecordingTimer) {
+                clearInterval(voiceRecordingTimer);
+                voiceRecordingTimer = null;
+            }
             isVoiceRecording = false;
 
             const recordBtn = document.getElementById('recordVoiceBtn');
             if (recordBtn) recordBtn.classList.remove('active-recording');
 
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop();
+                try { mediaRecorder.stop(); } catch(e) {}
             }
-        };
-
-        window.stopVoiceRecordingPromise = function() {
-            return new Promise((resolve) => {
-                if (!isVoiceRecording || !mediaRecorder || mediaRecorder.state === 'inactive') {
-                    resolve();
-                    return;
-                }
-                const originalOnStop = mediaRecorder.onstop;
-                mediaRecorder.onstop = function(e) {
-                    if (originalOnStop) originalOnStop.call(mediaRecorder, e);
-                    setTimeout(resolve, 150);
-                };
-                window.stopVoiceRecording();
-            });
-        };
-
-        window.removeAttachedVoice = function() {
-            window.stopVoiceRecording();
+            if (audioStream) {
+                audioStream.getTracks().forEach(track => track.stop());
+                audioStream = null;
+            }
+            stopRecordingPromiseResolve = null;
 
             const chatAudioData = document.getElementById('chatAudioData');
             const chatAudioDuration = document.getElementById('chatAudioDuration');
@@ -3192,7 +3651,8 @@
             if (chatAudioDuration) chatAudioDuration.value = '';
             if (voicePreviewAudio) {
                 voicePreviewAudio.pause();
-                voicePreviewAudio.src = '';
+                voicePreviewAudio.removeAttribute('src');
+                voicePreviewAudio.load();
             }
             if (voiceRecordingStatus) voiceRecordingStatus.style.display = 'none';
             if (voicePlaybackWrap) voicePlaybackWrap.style.display = 'none';
@@ -3230,7 +3690,7 @@
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                if (isVoiceRecording && mediaRecorder && mediaRecorder.state === 'recording') {
+                if (isVoiceRecording) {
                     await window.stopVoiceRecordingPromise();
                 }
 
