@@ -18,7 +18,7 @@
             --border-hover: rgba(255, 255, 255, 0.16);
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            --accent-gradient: linear-gradient(135deg, #094e2e 0%, #16a34a 100%);
         }
 
         * {

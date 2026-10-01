@@ -58,7 +58,7 @@
 
         input:focus {
             outline: none;
-            border-color: #2563eb;
+            border-color: #16a34a;
         }
 
         button {
@@ -66,14 +66,17 @@
             padding: 13px;
             border: none;
             border-radius: 8px;
-            background: #2563eb;
+            background: linear-gradient(135deg, #094e2e 0%, #16a34a 100%);
             color: white;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 4px 14px rgba(9, 78, 46, 0.25);
+            transition: all 0.2s;
         }
 
         button:hover {
-            background: #1d4ed8;
+            filter: brightness(1.1);
         }
 
         .links {
@@ -82,8 +85,9 @@
         }
 
         .links a {
-            color: #2563eb;
+            color: #0c683f;
             text-decoration: none;
+            font-weight: 600;
         }
 
         .error {
