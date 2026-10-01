@@ -4,135 +4,68 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\ChatRoom;
+use App\Models\Message;
+use App\Models\Task;
+use App\Models\TaskHistory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Seed the application's database for production use.
      */
     public function run(): void
     {
+        // 1. Create or ensure Primary Admin user
         $admin = User::firstOrCreate(
-            ['email' => 'test@gmail.com'],
+            ['email' => 'admin@company.com'],
             [
                 'name' => 'Admin ผู้ดูแลระบบ',
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('Admin@123456'),
                 'position' => 'ผู้ดูแลระบบ',
             ]
         );
 
-        $manager = User::firstOrCreate(
-            ['email' => 'manager@gmail.com'],
-            [
-                'name' => 'สมชาย ผู้จัดการ',
-                'password' => Hash::make('12345678'),
-                'position' => 'ผู้จัดการ',
-            ]
-        );
-
-        $supervisor = User::firstOrCreate(
-            ['email' => 'supervisor@gmail.com'],
-            [
-                'name' => 'สมศรี หัวหน้างาน',
-                'password' => Hash::make('12345678'),
-                'position' => 'หัวหน้างาน',
-            ]
-        );
-
-        $staff1 = User::firstOrCreate(
-            ['email' => 'test02@gmail.com'],
-            [
-                'name' => 'กิตติ พนักงาน (test02)',
-                'password' => Hash::make('12345678'),
-                'position' => 'พนักงาน',
-            ]
-        );
-
-        $staff2 = User::firstOrCreate(
-            ['email' => 'test03@gmail.com'],
-            [
-                'name' => 'วิภา พนักงาน (test03)',
-                'password' => Hash::make('12345678'),
-                'position' => 'พนักงาน',
-            ]
-        );
-
-        ChatRoom::firstOrCreate(
-            ['name' => 'ห้องทั่วไป (General)'],
-            [
-                'description' => 'ห้องสนทนากลางของบริษัท',
-                'created_by' => $admin->id,
-            ]
-        );
-
-        ChatRoom::firstOrCreate(
-            ['name' => 'Test01'],
-            [
-                'description' => 'ห้องทดสอบ 01 สำหรับงานโปรเจกต์',
-                'created_by' => $admin->id,
-            ]
-        );
-
-        ChatRoom::firstOrCreate(
-            ['name' => 'Test02'],
-            [
-                'description' => 'ห้องทดสอบ 02 ประสานงานด่วน',
-                'created_by' => $admin->id,
-            ]
-        );
-
-        // Seed Sample Tasks
-        $task1 = \App\Models\Task::firstOrCreate(
-            ['title' => 'เตรียมเอกสารสรุปยอดขายประจำไตรมาส'],
-            [
-                'description' => 'รวบรวมไฟล์ Excel ยอดขายทุกสาขาเพื่อนำเสนอในที่ประชุม',
-                'created_by' => $manager->id,
-                'assigned_to' => $staff1->id,
-                'status' => 'กำลังดำเนินการ',
-                'priority' => 'ด่วน',
-                'due_at' => now()->addHours(3),
-            ]
-        );
-
-        if ($task1->histories()->count() === 0) {
-            \App\Models\TaskHistory::create([
-                'task_id' => $task1->id,
-                'user_id' => $staff1->id,
-                'old_status' => 'ยังไม่เริ่ม',
-                'new_status' => 'รับงานแล้ว',
-            ]);
-            \App\Models\TaskHistory::create([
-                'task_id' => $task1->id,
-                'user_id' => $staff1->id,
-                'old_status' => 'รับงานแล้ว',
-                'new_status' => 'กำลังดำเนินการ',
-            ]);
+        if ($admin->position !== 'ผู้ดูแลระบบ') {
+            $admin->position = 'ผู้ดูแลระบบ';
+            $admin->save();
         }
 
-        \App\Models\Task::firstOrCreate(
-            ['title' => 'ตรวจสอบระบบความปลอดภัยประจำสัปดาห์'],
+        // 2. Create or ensure Default General Chat Room
+        $generalRoom = ChatRoom::firstOrCreate(
+            ['name' => 'ห้องทั่วไป (General)'],
             [
-                'description' => 'ตรวจสอบสิทธิ์การเข้าถึงฐานข้อมูลและบันทึก Log ของระบบ',
+                'description' => 'ห้องสนทนากลางของบริษัท สำหรับพนักงานทุกคน',
                 'created_by' => $admin->id,
-                'assigned_to' => $supervisor->id,
-                'status' => 'ยังไม่เริ่ม',
-                'priority' => 'สูง',
-                'due_at' => now()->addDay(),
             ]
         );
 
-        \App\Models\Task::firstOrCreate(
-            ['title' => 'ส่งรายงานสรุปผลการปฏิบัติงานรายวัน'],
-            [
-                'description' => 'สรุปงานประจำวันที่ได้ดำเนินการส่งผ่านระบบ',
-                'created_by' => $supervisor->id,
-                'assigned_to' => $staff1->id,
-                'status' => 'เสร็จแล้ว',
-                'priority' => 'ปกติ',
-                'due_at' => now()->subDay(),
-            ]
-        );
+        // 3. Clean up old test data from database
+        // Delete test rooms and their associated messages
+        $testRooms = ChatRoom::whereIn('name', ['Test01', 'Test02'])->get();
+        foreach ($testRooms as $room) {
+            $room->messages()->delete();
+            $room->delete();
+        }
+
+        // Clean up test tasks and history
+        TaskHistory::query()->delete();
+        Task::query()->delete();
+
+        // Clean up old mock user accounts
+        $testEmails = [
+            'test@gmail.com',
+            'manager@gmail.com',
+            'supervisor@gmail.com',
+            'test02@gmail.com',
+            'test03@gmail.com',
+        ];
+
+        $testUserIds = User::whereIn('email', $testEmails)->pluck('id');
+        if ($testUserIds->isNotEmpty()) {
+            Message::whereIn('user_id', $testUserIds)->delete();
+            User::whereIn('id', $testUserIds)->delete();
+        }
     }
 }
