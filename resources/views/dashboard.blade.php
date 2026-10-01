@@ -617,6 +617,174 @@
             border-color: var(--accent-blue);
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
+
+        /* Mobile Responsive Styles */
+        .mobile-toggle-btn {
+            display: none;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            font-size: 19px;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.18s;
+        }
+
+        .mobile-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-close-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 19px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-left: auto;
+        }
+
+        .sidebar-close-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 80;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle-btn {
+                display: inline-flex;
+            }
+
+            .sidebar-close-btn {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 82%;
+                max-width: 320px;
+                z-index: 90;
+                transform: translateX(-100%);
+                transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-backdrop.open {
+                display: block;
+            }
+
+            .main {
+                width: 100vw;
+                min-width: 100vw;
+            }
+
+            .top-header {
+                height: 60px;
+                padding: 0 12px;
+                gap: 8px;
+            }
+
+            .room-title-area h2 {
+                font-size: 15px;
+            }
+
+            .live-status {
+                font-size: 11px;
+            }
+
+            .user-details {
+                display: none;
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+                border-radius: 8px;
+            }
+
+            .logout-btn {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+
+            .urgent-task-banner {
+                margin: 8px 10px 0;
+                padding: 10px 12px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .urgent-task-title {
+                font-size: 13px;
+            }
+
+            .urgent-task-meta {
+                font-size: 11.5px;
+                line-height: 1.4;
+            }
+
+            .chat-container {
+                padding: 12px 10px;
+                gap: 10px;
+            }
+
+            .message-row {
+                max-width: 88%;
+            }
+
+            .message-bubble {
+                padding: 8px 13px;
+                font-size: 14px;
+            }
+
+            .input-bar {
+                padding: 10px 10px;
+            }
+
+            .input-form {
+                padding: 4px 4px 4px 12px;
+                border-radius: 12px;
+            }
+
+            .chat-input {
+                font-size: 13.5px;
+            }
+
+            .send-button {
+                padding: 8px 14px;
+                font-size: 13px;
+                border-radius: 8px;
+            }
+
+            .modal-card {
+                width: 92%;
+                padding: 20px 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -629,6 +797,7 @@
         <div class="sidebar-header">
             <div class="logo-icon">💬</div>
             <div class="logo-text">CompanyChat</div>
+            <button type="button" id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="ปิดเมนู">✕</button>
         </div>
 
         <div class="sidebar-scroll">
@@ -719,20 +888,28 @@
 
     </aside>
 
+    <!-- Mobile Drawer Backdrop -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
     <!-- Main Chat Workspace -->
     <main class="main">
 
         <!-- Top Header -->
         <header class="top-header">
 
-            <div class="room-title-area">
-                <h2>
-                    <span style="color: var(--accent-blue);">#</span>
-                    <span>{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
-                </h2>
-                <div class="live-status">
-                    <span class="live-dot"></span>
-                    <span id="socketStatus">Real-time WebSocket (Reverb)</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button type="button" id="sidebarToggle" class="mobile-toggle-btn" aria-label="เปิดเมนู">
+                    ☰
+                </button>
+                <div class="room-title-area">
+                    <h2>
+                        <span style="color: var(--accent-blue);">#</span>
+                        <span>{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
+                    </h2>
+                    <div class="live-status">
+                        <span class="live-dot"></span>
+                        <span id="socketStatus">Real-time WebSocket (Reverb)</span>
+                    </div>
                 </div>
             </div>
 
@@ -910,6 +1087,33 @@
         const chatForm = document.getElementById('chatForm');
         const messageInput = document.getElementById('messageInput');
         const socketStatus = document.getElementById('socketStatus');
+
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+        function toggleSidebar(open) {
+            if (open) {
+                sidebar?.classList.add('open');
+                sidebarBackdrop?.classList.add('open');
+            } else {
+                sidebar?.classList.remove('open');
+                sidebarBackdrop?.classList.remove('open');
+            }
+        }
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => toggleSidebar(true));
+        }
+
+        if (sidebarCloseBtn) {
+            sidebarCloseBtn.addEventListener('click', () => toggleSidebar(false));
+        }
+
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', () => toggleSidebar(false));
+        }
 
         let highestMessageId = 0;
         document.querySelectorAll('.message-row[data-message-id]').forEach(el => {

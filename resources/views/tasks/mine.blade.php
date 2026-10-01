@@ -203,6 +203,43 @@
             display: flex;
             justify-content: space-between;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                margin: 15px auto;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .task-card {
+                padding: 16px;
+            }
+
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .status-form {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>

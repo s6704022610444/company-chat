@@ -313,6 +313,49 @@
             display: flex;
             justify-content: space-between;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                margin: 15px auto;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-full {
+                grid-column: span 1;
+            }
+
+            .create-card {
+                padding: 16px;
+            }
+
+            .task-card {
+                padding: 16px;
+            }
+
+            .task-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .task-actions {
+                flex-wrap: wrap;
+            }
+        }
     </style>
 </head>
 <body>

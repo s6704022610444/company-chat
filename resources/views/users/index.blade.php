@@ -249,6 +249,43 @@
             display: block;
             margin-bottom: 4px;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                margin: 15px auto;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .user-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+                padding: 16px;
+            }
+
+            .role-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .btn-update {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
