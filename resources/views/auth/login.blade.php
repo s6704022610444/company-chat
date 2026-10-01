@@ -5,95 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CompanyChat</title>
 
+        <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('companychat_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch(e) {}
+        })();
+    </script>
     <style>
-        * {
-            box-sizing: border-box;
+        :root {
+            --bg-page: #f9f9f9;
+            --bg-card: #ffffff;
+            --border-card: #e5e5e5;
+            --text-title: #0f0f0f;
+            --text-muted: #606060;
+            --input-bg: #f8fafc;
+            --input-border: #cbd5e1;
+            --input-focus: #065fd4;
+            --btn-bg: #0f0f0f;
+            --btn-hover: #272727;
+            --btn-text: #ffffff;
+            --link-color: #065fd4;
         }
+
+        [data-theme="dark"] {
+            --bg-page: #0f0f0f;
+            --bg-card: #181818;
+            --border-card: #272727;
+            --text-title: #f1f1f1;
+            --text-muted: #aaaaaa;
+            --input-bg: #121212;
+            --input-border: #383838;
+            --input-focus: #3ea6ff;
+            --btn-bg: #f1f1f1;
+            --btn-hover: #ffffff;
+            --btn-text: #0f0f0f;
+            --link-color: #3ea6ff;
+        }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f3f4f6;
+            font-family: 'Prompt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-page);
+            color: var(--text-title);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.2s, color 0.2s;
         }
 
         .login-box {
             width: 400px;
-            background: white;
+            max-width: 90vw;
+            background: var(--bg-card);
             padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         }
 
         .logo {
             text-align: center;
-            font-size: 30px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-title);
         }
 
         .subtitle {
             text-align: center;
-            color: #777;
-            margin-bottom: 30px;
+            color: var(--text-muted);
+            margin-bottom: 26px;
+            font-size: 14px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
+            margin-bottom: 7px;
+            font-weight: 600;
+            font-size: 13.5px;
+            color: var(--text-title);
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 11px 14px;
+            margin-bottom: 18px;
+            border: 1px solid var(--input-border);
+            border-radius: 9px;
+            font-size: 14.5px;
+            background: var(--input-bg);
+            color: var(--text-title);
+            font-family: inherit;
+            outline: none;
+            transition: all 0.15s;
         }
 
         input:focus {
-            outline: none;
-            border-color: #16a34a;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 2px rgba(6, 95, 212, 0.2);
         }
 
         button {
             width: 100%;
-            padding: 13px;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #094e2e 0%, #16a34a 100%);
-            color: white;
-            font-size: 16px;
+            border-radius: 9px;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(9, 78, 46, 0.25);
-            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            transition: all 0.18s;
+            font-family: inherit;
         }
 
         button:hover {
-            filter: brightness(1.1);
+            background: var(--btn-hover);
+            transform: scale(1.01);
         }
 
         .links {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 22px;
+            font-size: 13.5px;
+            color: var(--text-muted);
         }
 
         .links a {
-            color: #0c683f;
+            color: var(--link-color);
             text-decoration: none;
             font-weight: 600;
         }
 
+        .links a:hover {
+            text-decoration: underline;
+        }
+
         .error {
-            color: #dc2626;
+            color: #ef4444;
             margin-bottom: 15px;
-            font-size: 14px;
+            font-size: 13.5px;
         }
     </style>
 </head>

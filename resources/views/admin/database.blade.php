@@ -9,18 +9,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('companychat_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch(e) {}
+        })();
+    </script>
+
     <style>
         :root {
-            --bg-primary: #0b0f19;
-            --bg-secondary: #111827;
-            --bg-surface: #1e293b;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.16);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-blue: #3b82f6;
-            --accent-indigo: #6366f1;
-            --accent-gradient: linear-gradient(135deg, #094e2e 0%, #16a34a 100%);
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9f9f9;
+            --bg-surface: #f2f2f2;
+            --border-color: #e5e5e5;
+            --border-hover: #cbd5e1;
+            --text-primary: #0f0f0f;
+            --text-secondary: #606060;
+            --accent-blue: #065fd4;
+            --accent-indigo: #0f0f0f;
+            --accent-gradient: #0f0f0f;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #181818;
+            --bg-surface: #212121;
+            --border-color: #272727;
+            --border-hover: #383838;
+            --text-primary: #f1f1f1;
+            --text-secondary: #aaaaaa;
+            --accent-blue: #3ea6ff;
+            --accent-indigo: #f1f1f1;
+            --accent-gradient: #f1f1f1;
         }
 
         * {

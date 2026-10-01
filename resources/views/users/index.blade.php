@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <script>(function(){try{var t=localStorage.getItem("companychat_theme")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>จัดการสิทธิ์ผู้ใช้ - CompanyChat</title>
@@ -11,14 +12,25 @@
 
     <style>
         :root {
-            --bg-primary: #0b0f19;
-            --bg-secondary: #111827;
-            --bg-surface: #1e293b;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.16);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-gradient: linear-gradient(135deg, #094e2e 0%, #16a34a 100%);
+            --bg-primary: #ffffff;
+            --bg-secondary: #ffffff;
+            --bg-surface: #f9f9f9;
+            --border-color: #e5e5e5;
+            --border-hover: #cbd5e1;
+            --text-primary: #0f0f0f;
+            --text-secondary: #606060;
+            --accent-gradient: #0f0f0f;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #181818;
+            --bg-surface: #212121;
+            --border-color: #272727;
+            --border-hover: #383838;
+            --text-primary: #f1f1f1;
+            --text-secondary: #aaaaaa;
+            --accent-gradient: #f1f1f1;
         }
 
         * {
