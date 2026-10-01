@@ -29,6 +29,7 @@ class MessageController extends Controller
                     'room_id' => $msg->room_id,
                     'user_id' => $msg->user_id,
                     'user_name' => $msg->user ? $msg->user->name : 'User',
+                    'user_avatar' => $msg->user ? $msg->user->avatar : null,
                     'created_at' => $msg->created_at ? $msg->created_at->format('H:i') : '',
                 ];
             });
@@ -67,6 +68,7 @@ class MessageController extends Controller
                     'room_id' => $message->room_id,
                     'user_id' => $message->user_id,
                     'user_name' => $message->user ? $message->user->name : 'User',
+                    'user_avatar' => $message->user ? $message->user->avatar : null,
                     'created_at' => $message->created_at ? $message->created_at->format('H:i') : '',
                 ],
             ]);

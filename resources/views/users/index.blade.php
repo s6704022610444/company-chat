@@ -328,9 +328,13 @@
     @foreach($users as $user)
         <div class="user-card">
             <div class="user-left">
-                <div class="user-avatar">
-                    {{ strtoupper(mb_substr($user->name, 0, 1)) }}
-                </div>
+                @if($user->avatar)
+                    <img src="{{ $user->avatar }}" style="width: 46px; height: 46px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border-color);" alt="{{ $user->name }}">
+                @else
+                    <div class="user-avatar">
+                        {{ strtoupper(mb_substr($user->name, 0, 1)) }}
+                    </div>
+                @endif
 
                 <div>
                     <div class="user-info-name">{{ $user->name }}</div>

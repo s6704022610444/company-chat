@@ -56,6 +56,7 @@ class MessageSent implements ShouldBroadcastNow
             'room_id' => $this->message->room_id,
             'user_id' => $this->message->user_id,
             'user_name' => $this->message->user ? $this->message->user->name : 'User',
+            'user_avatar' => $this->message->user ? $this->message->user->avatar : null,
             'created_at' => $this->message->created_at ? $this->message->created_at->format('H:i') : '',
         ];
     }

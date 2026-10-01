@@ -769,12 +769,14 @@
             border-radius: 10px;
         }
 
-        /* Messages */
+                /* Messages (Modern Chat Bubble with Avatar & Sender Name) */
         .message-row {
             display: flex;
-            flex-direction: column;
-            max-width: 68%;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 78%;
             animation: fadeIn 0.2s ease forwards;
+            margin-bottom: 14px;
         }
 
         @keyframes fadeIn {
@@ -784,20 +786,84 @@
 
         .message-row.my-message {
             align-self: flex-end;
-            align-items: flex-end;
+            flex-direction: row;
         }
 
         .message-row.other-message {
             align-self: flex-start;
+            flex-direction: row;
+        }
+
+        .message-avatar-wrap {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            margin-top: 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .chat-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 50%;
+        }
+
+        .chat-avatar-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            background: var(--nav-hover);
+            border-radius: 50%;
+        }
+
+        .message-content-wrap {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .my-message .message-content-wrap {
+            align-items: flex-end;
+        }
+
+        .other-message .message-content-wrap {
             align-items: flex-start;
         }
 
-        .message-sender {
+        .message-header-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            padding: 0 4px;
+        }
+
+        .my-message .message-header-line {
+            justify-content: flex-end;
+        }
+
+        .message-sender-name {
             font-size: 12.5px;
             font-weight: 600;
             color: var(--bubble-sender-color);
-            margin-bottom: 3px;
-            padding-left: 2px;
+        }
+
+        .my-message .message-sender-name {
+            color: var(--text-secondary);
         }
 
         .message-bubble {
@@ -827,8 +893,85 @@
         .message-time {
             font-size: 11px;
             color: var(--text-muted);
-            margin-top: 4px;
-            padding: 0 4px;
+        }
+
+        /* Settings Avatar Uploader Card */
+        .avatar-uploader-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .settings-avatar-preview-wrap {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            background: var(--nav-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-avatar-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .settings-avatar-fallback-text {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .btn-avatar-pick {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            border: none;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-avatar-pick:hover {
+            opacity: 0.9;
+        }
+
+        .btn-avatar-remove {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: transparent;
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-avatar-remove:hover {
+            background: rgba(239, 68, 68, 0.1);
         }
 
         /* Input Bar */
@@ -1671,9 +1814,13 @@
         @endphp
         <div class="sidebar-footer">
             <div class="user-footer-info">
-                <div class="user-avatar" style="width: 36px; height: 36px; font-size: 14px; border-radius: 9px; flex-shrink: 0;">
-                    {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                </div>
+                @if(auth()->user()->avatar)
+                    <img src="{{ auth()->user()->avatar }}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border-color);" alt="{{ auth()->user()->name }}">
+                @else
+                    <div class="user-avatar" style="width: 36px; height: 36px; font-size: 14px; border-radius: 50%; flex-shrink: 0;">
+                        {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                @endif
                 <div class="user-footer-meta">
                     <span class="user-footer-name">{{ auth()->user()->name }}</span>
                     <span class="role-pill {{ $roleClass }}" style="font-size: 10px; padding: 1px 6px; width: fit-content;">
@@ -1704,21 +1851,47 @@
                 @foreach($messages as $message)
                     @php
                         $isMe = $message->user_id === auth()->id();
+                        $sender = $message->user;
+                        $senderName = $sender?->name ?? 'User';
+                        $avatarUrl = $sender?->avatar;
+                        $initial = strtoupper(mb_substr($senderName, 0, 1));
                     @endphp
                     <div class="message-row {{ $isMe ? 'my-message' : 'other-message' }}" data-message-id="{{ $message->id }}">
-                        @if(!$isMe)
-                            <div class="message-sender">
-                                👤 {{ $message->user?->name ?? 'User' }}
+                        @if($isMe)
+                            <div class="message-content-wrap">
+                                <div class="message-header-line">
+                                    <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
+                                    <span class="message-sender-name">{{ $senderName }}</span>
+                                </div>
+                                <div class="message-bubble">
+                                    {{ $message->message }}
+                                </div>
+                            </div>
+                            <div class="message-avatar-wrap">
+                                @if($avatarUrl)
+                                    <img src="{{ $avatarUrl }}" class="chat-avatar-img" alt="{{ $senderName }}">
+                                @else
+                                    <div class="chat-avatar-fallback">{{ $initial }}</div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="message-avatar-wrap">
+                                @if($avatarUrl)
+                                    <img src="{{ $avatarUrl }}" class="chat-avatar-img" alt="{{ $senderName }}">
+                                @else
+                                    <div class="chat-avatar-fallback">{{ $initial }}</div>
+                                @endif
+                            </div>
+                            <div class="message-content-wrap">
+                                <div class="message-header-line">
+                                    <span class="message-sender-name">{{ $senderName }}</span>
+                                    <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
+                                </div>
+                                <div class="message-bubble">
+                                    {{ $message->message }}
+                                </div>
                             </div>
                         @endif
-
-                        <div class="message-bubble">
-                            {{ $message->message }}
-                        </div>
-
-                        <div class="message-time">
-                            {{ $message->created_at ? $message->created_at->format('H:i') : '' }}
-                        </div>
                     </div>
                 @endforeach
             </div>
@@ -2047,9 +2220,13 @@
 
             <!-- Profile Summary Card -->
             <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding: 14px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color);">
-                <div class="user-avatar" style="width: 46px; height: 46px; font-size: 18px; border-radius: 12px; flex-shrink: 0;">
-                    {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                </div>
+                @if(auth()->user()->avatar)
+                    <img src="{{ auth()->user()->avatar }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border-color);" alt="{{ auth()->user()->name }}">
+                @else
+                    <div class="user-avatar" style="width: 48px; height: 48px; font-size: 18px; border-radius: 50%; flex-shrink: 0;">
+                        {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                @endif
                 <div style="display: flex; flex-direction: column; min-width: 0;">
                     <span style="font-weight: 700; font-size: 15px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ auth()->user()->name }}</span>
                     <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
@@ -2088,9 +2265,54 @@
             </div>
 
             <!-- Edit Profile Form -->
-            <form method="POST" action="{{ route('profile.update') }}">
+            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+
+                <!-- Avatar Upload Section -->
+                <div class="avatar-uploader-card">
+                    <div class="settings-avatar-preview-wrap">
+                        @if(auth()->user()->avatar)
+                            <img id="settingsAvatarPreview" src="{{ auth()->user()->avatar }}" class="settings-avatar-preview-img" alt="Avatar">
+                            <div id="settingsAvatarFallback" class="settings-avatar-fallback-text" style="display: none;">
+                                {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                        @else
+                            <img id="settingsAvatarPreview" src="" class="settings-avatar-preview-img" style="display: none;" alt="Avatar">
+                            <div id="settingsAvatarFallback" class="settings-avatar-fallback-text">
+                                {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                        @endif
+                    </div>
+
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-size: 13.5px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px;">
+                            รูปภาพโปรไฟล์ (Profile Picture)
+                        </div>
+                        <div style="font-size: 11.5px; color: var(--text-secondary); margin-bottom: 10px;">
+                            เลือกรูปจากเครื่องหรือคลังรูปภาพในโทรศัพท์ (JPG, PNG)
+                        </div>
+                        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <button type="button" class="btn-avatar-pick" onclick="document.getElementById('avatarFileInput').click()">
+                                <span>📷</span>
+                                <span>เลือกรูปจากเครื่อง / คลังรูป</span>
+                            </button>
+                            <button type="button"
+                                    id="btnRemoveAvatar"
+                                    class="btn-avatar-remove"
+                                    onclick="removeAvatarPhoto()"
+                                    style="{{ auth()->user()->avatar ? 'display:inline-flex;' : 'display:none;' }}">
+                                <span>🗑️</span>
+                                <span>ลบรูป</span>
+                            </button>
+                        </div>
+                        <!-- Hidden File & Data Inputs -->
+                        <input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="handleAvatarFileSelect(event)">
+                        <input type="hidden" name="avatar" id="avatarDataInput">
+                        <input type="hidden" name="remove_avatar" id="removeAvatarInput" value="0">
+                        <input type="file" name="avatar_file" id="avatarFormFileInput" style="display: none;">
+                    </div>
+                </div>
 
                 <div style="margin-bottom: 14px;">
                     <label class="form-label">ชื่อ-นามสกุล (ชื่อที่แสดงในระบบ)</label>
@@ -2235,6 +2457,9 @@
         }
         scrollToBottom();
 
+        const currentUserAvatar = @json(auth()->user()->avatar);
+        const currentUserName = @json(auth()->user()->name);
+
         function appendMessage(data) {
             if (!chatContainer) return;
             if (data.id) {
@@ -2249,18 +2474,115 @@
             msgEl.className = `message-row ${isMe ? 'my-message' : 'other-message'}`;
             if (data.id) msgEl.setAttribute('data-message-id', data.id);
 
-            const nameHtml = !isMe ? `<div class="message-sender">👤 ${escapeHtml(data.user_name || 'User')}</div>` : '';
-            const timeHtml = data.created_at ? `<div class="message-time">${escapeHtml(data.created_at)}</div>` : '';
+            const userName = data.user_name || (isMe ? currentUserName : 'User');
+            const initial = userName.charAt(0).toUpperCase();
+            const time = data.created_at || '';
+            const avatarSrc = (isMe && currentUserAvatar) ? currentUserAvatar : (data.user_avatar || null);
 
-            msgEl.innerHTML = `
-                ${nameHtml}
-                <div class="message-bubble">${escapeHtml(data.message)}</div>
-                ${timeHtml}
+            const avatarHtml = `
+                <div class="message-avatar-wrap">
+                    ${avatarSrc 
+                        ? `<img src="${avatarSrc}" class="chat-avatar-img" alt="${escapeHtml(userName)}">` 
+                        : `<div class="chat-avatar-fallback">${escapeHtml(initial)}</div>`
+                    }
+                </div>
             `;
+
+            const headerLineHtml = `
+                <div class="message-header-line">
+                    ${isMe ? `<span class="message-time">${escapeHtml(time)}</span><span class="message-sender-name">${escapeHtml(userName)}</span>` 
+                           : `<span class="message-sender-name">${escapeHtml(userName)}</span><span class="message-time">${escapeHtml(time)}</span>`
+                    }
+                </div>
+            `;
+
+            const contentWrapHtml = `
+                <div class="message-content-wrap">
+                    ${headerLineHtml}
+                    <div class="message-bubble">${escapeHtml(data.message)}</div>
+                </div>
+            `;
+
+            if (isMe) {
+                msgEl.innerHTML = contentWrapHtml + avatarHtml;
+            } else {
+                msgEl.innerHTML = avatarHtml + contentWrapHtml;
+            }
 
             chatContainer.appendChild(msgEl);
             scrollToBottom();
         }
+
+        // Avatar Upload Handlers with Automatic Canvas Resizing
+        window.handleAvatarFileSelect = function(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            // Also attach to form input for native multipart fallback
+            try {
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                const formInput = document.getElementById('avatarFormFileInput');
+                if (formInput) formInput.files = dt.files;
+            } catch(e) {}
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // Resize to 300x300 square center-crop
+                    const canvas = document.createElement('canvas');
+                    const size = 300;
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+
+                    const minDim = Math.min(img.width, img.height);
+                    const sx = (img.width - minDim) / 2;
+                    const sy = (img.height - minDim) / 2;
+
+                    ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
+                    const preview = document.getElementById('settingsAvatarPreview');
+                    const fallback = document.getElementById('settingsAvatarFallback');
+                    const dataInput = document.getElementById('avatarDataInput');
+                    const removeInput = document.getElementById('removeAvatarInput');
+                    const removeBtn = document.getElementById('btnRemoveAvatar');
+
+                    if (preview) {
+                        preview.src = compressedDataUrl;
+                        preview.style.display = 'block';
+                    }
+                    if (fallback) {
+                        fallback.style.display = 'none';
+                    }
+                    if (dataInput) dataInput.value = compressedDataUrl;
+                    if (removeInput) removeInput.value = '0';
+                    if (removeBtn) removeBtn.style.display = 'inline-flex';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.removeAvatarPhoto = function() {
+            const dataInput = document.getElementById('avatarDataInput');
+            const removeInput = document.getElementById('removeAvatarInput');
+            const fileInput = document.getElementById('avatarFileInput');
+            const formInput = document.getElementById('avatarFormFileInput');
+            const preview = document.getElementById('settingsAvatarPreview');
+            const fallback = document.getElementById('settingsAvatarFallback');
+            const removeBtn = document.getElementById('btnRemoveAvatar');
+
+            if (dataInput) dataInput.value = '';
+            if (removeInput) removeInput.value = '1';
+            if (fileInput) fileInput.value = '';
+            if (formInput) formInput.value = '';
+            if (preview) preview.style.display = 'none';
+            if (fallback) fallback.style.display = 'flex';
+            if (removeBtn) removeBtn.style.display = 'none';
+        };
 
         function escapeHtml(text) {
             const div = document.createElement('div');
