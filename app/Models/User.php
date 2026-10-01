@@ -74,4 +74,24 @@ class User extends Authenticatable
         }
         return '#00C853';
     }
+
+    /**
+     * Check if user has permission to create, edit, or delete company news announcements.
+     * Restricted strictly to ผู้บริหาร / แอดมิน as requested.
+     */
+    public function canManageNews(): bool
+    {
+        $pos = mb_strtolower(trim($this->position ?? ''));
+        return str_contains($pos, 'แอดมิน') || 
+               str_contains($pos, 'ผู้ดูแลระบบ') || 
+               str_contains($pos, 'admin') || 
+               str_contains($pos, 'ผู้บริหาร') || 
+               str_contains($pos, 'ผู้จัดการ') || 
+               str_contains($pos, 'executive');
+    }
+
+    public function news(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\News::class);
+    }
 }

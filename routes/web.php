@@ -9,6 +9,7 @@ use App\Http\Controllers\MyTaskController;
 use App\Http\Controllers\DatabaseViewerController;
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NewsController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -90,6 +91,13 @@ Route::get('/dashboard', function () {
 
     $myTasksCount = $myTasks->count();
 
+    // Company News & Announcements
+    $newsList = \App\Models\News::with(['user', 'likes'])
+        ->orderByDesc('is_pinned')
+        ->latest()
+        ->get();
+    $newsCount = $newsList->count();
+
     $selectedRoom = request('room');
 
     if (!$selectedRoom && $rooms->count() > 0) {
@@ -106,7 +114,7 @@ Route::get('/dashboard', function () {
     }
 
     $currentView = request('view', 'chat');
-    if (!in_array($currentView, ['chat', 'my-tasks', 'all-tasks'])) {
+    if (!in_array($currentView, ['chat', 'my-tasks', 'all-tasks', 'news'])) {
         $currentView = 'chat';
     }
 
@@ -122,9 +130,31 @@ Route::get('/dashboard', function () {
         'notifications',
         'newTaskNotifications',
         'myTasksCount',
+        'newsList',
+        'newsCount',
         'currentView'
     ));
 })->middleware('auth')->name('dashboard');
+
+Route::post('/news', [NewsController::class, 'store'])
+    ->middleware('auth')
+    ->name('news.store');
+
+Route::put('/news/{news}', [NewsController::class, 'update'])
+    ->middleware('auth')
+    ->name('news.update');
+
+Route::delete('/news/{news}', [NewsController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('news.destroy');
+
+Route::post('/news/{news}/pin', [NewsController::class, 'togglePin'])
+    ->middleware('auth')
+    ->name('news.pin');
+
+Route::post('/news/{news}/like', [NewsController::class, 'toggleLike'])
+    ->middleware('auth')
+    ->name('news.like');
 
 Route::put('/profile', [ProfileController::class, 'update'])
     ->middleware('auth')

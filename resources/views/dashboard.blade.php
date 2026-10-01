@@ -2178,6 +2178,317 @@
                 padding: 18px 14px;
             }
         }
+
+        /* ========================================================
+           COMPANY NEWS & ANNOUNCEMENTS STYLES
+           ======================================================== */
+        .news-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            background: var(--bg-app);
+            padding: 24px 20px 60px;
+            scroll-behavior: smooth;
+        }
+
+        .news-container {
+            max-width: 860px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .news-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+
+        .news-filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .news-filter-chip {
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .news-filter-chip:hover {
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+        }
+
+        .news-filter-chip.active {
+            background: var(--text-primary);
+            color: var(--bg-app);
+            border-color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .news-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .news-card.is-pinned {
+            border-color: rgba(255, 179, 0, 0.45);
+            background: linear-gradient(180deg, rgba(255, 179, 0, 0.04) 0%, var(--bg-card) 24%);
+            box-shadow: 0 4px 20px rgba(255, 179, 0, 0.08);
+        }
+
+        .news-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .news-author-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .news-author-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1.5px solid var(--border-color);
+        }
+
+        .news-author-initial {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00C853, #009624);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .news-author-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+
+        .news-author-name {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .news-timestamp {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .news-title {
+            font-size: 18.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.4;
+            letter-spacing: -0.2px;
+            word-break: break-word;
+        }
+
+        .news-content {
+            font-size: 14.5px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            word-break: break-word;
+            opacity: 0.94;
+        }
+
+        .news-cover-wrap {
+            width: 100%;
+            max-height: 440px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .news-cover-img {
+            width: 100%;
+            max-height: 440px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .news-cover-wrap:hover .news-cover-img {
+            transform: scale(1.015);
+        }
+
+        .news-audio-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+
+        .news-audio-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(0, 200, 83, 0.15);
+            color: #00C853;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+
+        .news-audio-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .news-audio-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .news-audio-element {
+            width: 100%;
+            height: 34px;
+            outline: none;
+        }
+
+        .news-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .news-like-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .news-like-btn:hover {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.35);
+            background: rgba(239, 68, 68, 0.06);
+            transform: scale(1.02);
+        }
+
+        .news-like-btn.liked {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .news-badge-pinned {
+            background: rgba(255, 179, 0, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(255, 179, 0, 0.35);
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .news-admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-news-action {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            padding: 4px 9px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+        }
+
+        .btn-news-action:hover {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+        }
+
+        .btn-news-action.danger:hover {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -2231,6 +2542,17 @@
                 <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
                     <span>งานทั้งหมดในระบบ</span>
                     <span class="nav-badge" style="background: var(--bg-surface); color: var(--text-secondary); font-size: 10.5px;">{{ $allTasks->count() }} รายการ</span>
+                </div>
+            </div>
+
+            <!-- News & Announcements Title -->
+            <div id="titleNews" class="room-title-area" style="{{ $currentView === 'news' ? 'display:flex;' : 'display:none;' }}">
+                <h2>
+                    <span>ข่าวสารและประกาศ</span>
+                </h2>
+                <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                    <span>ข่าวสารองค์กร</span>
+                    <span class="nav-badge" style="background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.3); font-size: 10.5px;">{{ $newsCount }} รายการ</span>
                 </div>
             </div>
         </div>
@@ -2320,6 +2642,22 @@
             </div>
 
             <div class="sidebar-scroll">
+
+            <!-- News & Announcements Navigation -->
+            <div style="margin-bottom: 14px;">
+                <div class="nav-section-title">ข่าวสารและประกาศ</div>
+                <a href="{{ url('/dashboard?view=news') }}"
+                   id="navBtnNews"
+                   class="nav-button {{ $currentView === 'news' ? 'active' : '' }}"
+                   onclick="switchDashboardView('news', event)">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        📰 ข่าวสารองค์กร
+                    </span>
+                    @if(isset($newsCount) && $newsCount > 0)
+                        <span class="nav-badge" style="background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.3);">{{ $newsCount }}</span>
+                    @endif
+                </a>
+            </div>
 
             <!-- Tasks Navigation -->
             <div>
@@ -2907,6 +3245,189 @@
             </div>
         </div>
 
+        <!-- 4) VIEW: COMPANY NEWS & ANNOUNCEMENTS (ข่าวสารองค์กร) -->
+        <div id="viewNews" class="news-workspace" style="{{ $currentView === 'news' ? 'display:flex;' : 'display:none;' }}">
+            <div class="news-container">
+
+                <!-- Header Actions / Quick Creator Banner (For Executives / Admins) -->
+                @if(auth()->user()->canManageNews())
+                    <div style="background: linear-gradient(135deg, rgba(0, 200, 83, 0.12) 0%, rgba(0, 176, 255, 0.08) 100%); border: 1px solid rgba(0, 200, 83, 0.3); border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #00C853, #00a844); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; box-shadow: 0 4px 12px rgba(0,200,83,0.3); flex-shrink: 0;">
+                                📢
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px; color: var(--text-primary);">ศูนย์เผยแพร่ข่าวสารองค์กร (Executive Broadcast)</div>
+                                <div style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">คุณมีสิทธิ์ผู้บริหาร/ผู้ดูแลระบบ สามารถสร้างประกาศ แนบรูปภาพ และบันทึกเสียงแถลงการณ์ได้</div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="openCreateNewsModal()" class="btn-create-task" style="background: linear-gradient(135deg, #00C853 0%, #00a844 100%); font-weight: 600; padding: 9px 20px; border-radius: 10px; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(0, 200, 83, 0.35);">
+                            <span style="font-size: 16px;">＋</span>
+                            <span>เขียนประกาศข่าวใหม่</span>
+                        </button>
+                    </div>
+                @endif
+
+                <!-- Filter Chips -->
+                <div class="news-filter-bar">
+                    <button type="button" class="news-filter-chip active" onclick="filterNewsCategory('all', this)">
+                        ทั้งหมด ({{ $newsList->count() }})
+                    </button>
+                    <button type="button" class="news-filter-chip" onclick="filterNewsCategory('pinned', this)">
+                        📌 ปักหมุด ({{ $newsList->where('is_pinned', true)->count() }})
+                    </button>
+                    <button type="button" class="news-filter-chip" onclick="filterNewsCategory('ประกาศสำคัญ', this)">
+                        🚨 ประกาศสำคัญ
+                    </button>
+                    <button type="button" class="news-filter-chip" onclick="filterNewsCategory('กิจกรรม', this)">
+                        🎉 กิจกรรมบริษัท
+                    </button>
+                    <button type="button" class="news-filter-chip" onclick="filterNewsCategory('สวัสดิการ', this)">
+                        🎁 สวัสดิการ
+                    </button>
+                    <button type="button" class="news-filter-chip" onclick="filterNewsCategory('ทั่วไป', this)">
+                        💬 ข่าวทั่วไป
+                    </button>
+                </div>
+
+                <!-- News Cards Feed -->
+                <div id="newsFeedList" style="display: flex; flex-direction: column; gap: 18px;">
+                    @forelse($newsList as $item)
+                        @php
+                            $isLiked = $item->isLikedBy(auth()->user());
+                            $likesCount = $item->likes->count();
+                            $authorRoleClass = match($item->user?->position) {
+                                'ผู้บริหาร', 'ผู้จัดการ', 'Executive', 'Manager' => 'role-executive',
+                                'แอดมิน', 'ผู้ดูแลระบบ', 'Admin' => 'role-admin',
+                                'หัวหน้างาน', 'Supervisor' => 'role-supervisor',
+                                default => 'role-employee',
+                            };
+                        @endphp
+                        <article class="news-card {{ $item->is_pinned ? 'is-pinned' : '' }}" 
+                                 data-category="{{ $item->category }}" 
+                                 data-is-pinned="{{ $item->is_pinned ? '1' : '0' }}"
+                                 id="newsCard{{ $item->id }}">
+                            
+                            <div class="news-card-header">
+                                <div class="news-author-group">
+                                    @if($item->user?->avatar)
+                                        <img src="{{ $item->user->avatar }}" class="news-author-avatar" alt="{{ $item->user->name }}">
+                                    @else
+                                        <div class="news-author-initial" style="background: {{ $item->user?->position_color ?? '#00C853' }};">
+                                            {{ strtoupper(mb_substr($item->user?->name ?? 'U', 0, 1)) }}
+                                        </div>
+                                    @endif
+                                    <div class="news-author-meta">
+                                        <div class="news-author-name">
+                                            <span>{{ $item->user?->name ?? 'ผู้ดูแลระบบ' }}</span>
+                                            <span class="role-pill {{ $authorRoleClass }}" style="font-size: 10.5px; padding: 1px 8px;">
+                                                {{ $item->user?->position ?? 'ผู้บริหาร' }}
+                                            </span>
+                                            @if($item->is_pinned)
+                                                <span class="news-badge-pinned">📌 ปักหมุด</span>
+                                            @endif
+                                        </div>
+                                        <div class="news-timestamp">
+                                            <span>{{ $item->created_at->format('d/m/Y H:i') }} น.</span>
+                                            <span style="margin: 0 4px; opacity: 0.5;">•</span>
+                                            <span style="color: {{ $item->category_color }}; font-weight: 600;">{{ $item->category }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Management Actions for Executives / Admins --}}
+                                @if(auth()->user()->canManageNews())
+                                    <div class="news-admin-actions">
+                                        <form method="POST" action="{{ route('news.pin', $item->id) }}" style="display:inline; margin:0;">
+                                            @csrf
+                                            <button type="submit" class="btn-news-action" title="{{ $item->is_pinned ? 'ยกเลิกการปักหมุด' : 'ปักหมุดข่าวนี้' }}">
+                                                {{ $item->is_pinned ? '📌 เลิกปักหมุด' : '📍 ปักหมุด' }}
+                                            </button>
+                                        </form>
+
+                                        <button type="button" class="btn-news-action" onclick="openEditNewsModal({{ json_encode([
+                                            'id' => $item->id,
+                                            'title' => $item->title,
+                                            'category' => $item->category,
+                                            'content' => $item->content,
+                                            'is_pinned' => $item->is_pinned,
+                                            'has_cover' => !empty($item->cover_image),
+                                            'has_audio' => !empty($item->audio_file),
+                                        ]) }})" title="แก้ไขข่าว">
+                                            ✏️ แก้ไข
+                                        </button>
+
+                                        <form method="POST" action="{{ route('news.destroy', $item->id) }}" onsubmit="return confirm('ยืนยันที่จะลบประกาศข่าวนี้หรือไม่?')" style="display:inline; margin:0;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-news-action danger" title="ลบประกาศข่าว">
+                                                🗑️ ลบ
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- News Title -->
+                            <h2 class="news-title">{{ $item->title }}</h2>
+
+                            <!-- Cover Image (If exists) -->
+                            @if($item->cover_image)
+                                <div class="news-cover-wrap" onclick="openImageModal('{{ $item->cover_image }}')">
+                                    <img src="{{ $item->cover_image }}" class="news-cover-img" alt="{{ $item->title }}" loading="lazy">
+                                </div>
+                            @endif
+
+                            <!-- Audio Announcement Player (If exists) -->
+                            @if($item->audio_file)
+                                <div class="news-audio-player">
+                                    <div class="news-audio-icon">🎙️</div>
+                                    <div class="news-audio-info">
+                                        <div class="news-audio-title">🔊 คลิปเสียงแถลงการณ์ / ประกาศเสียง</div>
+                                        <audio controls class="news-audio-element" src="{{ $item->audio_file }}"></audio>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- News Content -->
+                            <div class="news-content">{!! nl2br(e($item->content)) !!}</div>
+
+                            <!-- Footer Reaction Bar -->
+                            <div class="news-footer">
+                                <button type="button" 
+                                        class="news-like-btn {{ $isLiked ? 'liked' : '' }}" 
+                                        onclick="toggleNewsLike({{ $item->id }}, this)">
+                                    <span class="like-icon">{{ $isLiked ? '❤️' : '🤍' }}</span>
+                                    <span class="like-label">{{ $isLiked ? 'ถูกใจแล้ว' : 'ถูกใจ' }}</span>
+                                    <span class="like-counter" style="margin-left: 2px;">({{ $likesCount }})</span>
+                                </button>
+
+                                <button type="button" 
+                                        class="btn-news-action" 
+                                        onclick="copyNewsLink({{ $item->id }})">
+                                    🔗 คัดลอกลิงก์
+                                </button>
+                            </div>
+
+                        </article>
+                    @empty
+                        <div style="background: var(--bg-card); padding: 70px 20px; text-align: center; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow);">
+                            <div style="font-size: 38px; margin-bottom: 10px;">📰</div>
+                            <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">ยังไม่มีข่าวสารหรือประกาศในขณะนี้</div>
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-top: 6px;">
+                                @if(auth()->user()->canManageNews())
+                                    คุณสามารถคลิกปุ่ม <strong>"เขียนประกาศข่าวใหม่"</strong> ด้านบนเพื่อเริ่มเผยแพร่ข่าวสาร ภาพ หรือเสียงให้กับองค์กรได้ทันที
+                                @else
+                                    เมื่อผู้บริหารหรือฝ่ายจัดการเผยแพร่ประกาศ ข้อมูลจะแสดงขึ้นที่นี่โดยอัตโนมัติ
+                                @endif
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+
+            </div>
+        </div>
+
     </main>
     </div>
 
@@ -3113,6 +3634,169 @@
             </form>
         </div>
     </div>
+
+    @if(auth()->user()->canManageNews())
+    <!-- Create News Modal -->
+    <div id="createNewsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card" style="width: 620px; max-width: 95vw; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-title" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 20px;">📢</span>
+                    <span>เขียนประกาศข่าวใหม่</span>
+                </div>
+                <button type="button" onclick="closeCreateNewsModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px;" aria-label="ปิด">✕</button>
+            </div>
+
+            <form method="POST" action="{{ route('news.store') }}" enctype="multipart/form-data" id="createNewsForm">
+                @csrf
+
+                <!-- Title -->
+                <div style="margin-bottom: 14px;">
+                    <label class="form-label" for="news_title">หัวข้อประกาศข่าว <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="news_title" name="title" class="form-input" placeholder="ระบุหัวข้อข่าว เช่น แจ้งกำหนดการวันหยุด, ประกาศผลงานประจำไตรมาส" required>
+                </div>
+
+                <!-- Category & Pin -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                    <div>
+                        <label class="form-label" for="news_category">หมวดหมู่</label>
+                        <select id="news_category" name="category" class="form-select">
+                            <option value="ประกาศสำคัญ">🚨 ประกาศสำคัญ</option>
+                            <option value="กิจกรรม">🎉 กิจกรรมบริษัท</option>
+                            <option value="สวัสดิการ">🎁 สวัสดิการ</option>
+                            <option value="ทั่วไป" selected>💬 ข่าวทั่วไป</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">การปักหมุด</label>
+                        <label style="display: flex; align-items: center; gap: 8px; height: 42px; cursor: pointer; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 12px;">
+                            <input type="checkbox" name="is_pinned" value="1" style="width: 16px; height: 16px; accent-color: #00C853;">
+                            <span style="font-size: 13px; font-weight: 500; color: var(--text-primary);">📌 ปักหมุดไว้บนสุด</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div style="margin-bottom: 14px;">
+                    <label class="form-label" for="news_content">เนื้อหาประกาศ <span style="color: #ef4444;">*</span></label>
+                    <textarea id="news_content" name="content" class="form-textarea" rows="5" placeholder="พิมพ์รายละเอียดเนื้อหาข่าวที่ต้องการแจ้งให้ทุกคนในบริษัททราบ..." required></textarea>
+                </div>
+
+                <!-- Cover Image Upload -->
+                <div style="margin-bottom: 16px; padding: 12px; border: 1px dashed var(--border-color); border-radius: 10px; background: var(--bg-surface);">
+                    <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>🖼️ รูปภาพหน้าปก / แบนเนอร์ (ถ้ามี)</span>
+                        <span style="font-size: 11px; color: var(--text-secondary);">JPG, PNG, WebP (สูงสุด 10MB)</span>
+                    </label>
+                    <input type="file" id="newsCoverInput" name="cover_file" accept="image/*" class="form-input" style="padding: 6px;" onchange="previewNewsCover(this, 'createNewsCoverPreview')">
+                    <div id="createNewsCoverPreview" style="display: none; margin-top: 10px; position: relative;">
+                        <img src="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <button type="button" onclick="clearNewsCover('newsCoverInput', 'createNewsCoverPreview')" style="position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.65); color: #fff; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer;">✕</button>
+                    </div>
+                </div>
+
+                <!-- Audio Announcement File -->
+                <div style="margin-bottom: 20px; padding: 12px; border: 1px dashed var(--border-color); border-radius: 10px; background: var(--bg-surface);">
+                    <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>🎙️ คลิปเสียงแถลงการณ์ / ประกาศเสียง (ถ้ามี)</span>
+                        <span style="font-size: 11px; color: var(--text-secondary);">MP3, WAV, M4A, WebM (สูงสุด 20MB)</span>
+                    </label>
+                    <input type="file" id="newsAudioInput" name="audio_upload" accept="audio/*" class="form-input" style="padding: 6px;">
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" onclick="closeCreateNewsModal()" style="padding: 9px 18px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 8px; cursor: pointer; font-size: 13.5px;">
+                        ยกเลิก
+                    </button>
+                    <button type="submit" style="padding: 9px 24px; border: none; background: linear-gradient(135deg, #00C853 0%, #00a844 100%); color: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13.5px; box-shadow: 0 4px 14px rgba(0, 200, 83, 0.35);">
+                        🚀 เผยแพร่ข่าวสาร
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit News Modal -->
+    <div id="editNewsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card" style="width: 620px; max-width: 95vw; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-title" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 20px;">✏️</span>
+                    <span>แก้ไขประกาศข่าว</span>
+                </div>
+                <button type="button" onclick="closeEditNewsModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px;" aria-label="ปิด">✕</button>
+            </div>
+
+            <form method="POST" action="" enctype="multipart/form-data" id="editNewsForm">
+                @csrf
+                @method('PUT')
+
+                <!-- Title -->
+                <div style="margin-bottom: 14px;">
+                    <label class="form-label" for="edit_news_title">หัวข้อประกาศข่าว <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="edit_news_title" name="title" class="form-input" required>
+                </div>
+
+                <!-- Category & Pin -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                    <div>
+                        <label class="form-label" for="edit_news_category">หมวดหมู่</label>
+                        <select id="edit_news_category" name="category" class="form-select">
+                            <option value="ประกาศสำคัญ">🚨 ประกาศสำคัญ</option>
+                            <option value="กิจกรรม">🎉 กิจกรรมบริษัท</option>
+                            <option value="สวัสดิการ">🎁 สวัสดิการ</option>
+                            <option value="ทั่วไป">💬 ข่าวทั่วไป</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">การปักหมุด</label>
+                        <label style="display: flex; align-items: center; gap: 8px; height: 42px; cursor: pointer; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 12px;">
+                            <input type="checkbox" id="edit_news_pinned" name="is_pinned" value="1" style="width: 16px; height: 16px; accent-color: #00C853;">
+                            <span style="font-size: 13px; font-weight: 500; color: var(--text-primary);">📌 ปักหมุดไว้บนสุด</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div style="margin-bottom: 14px;">
+                    <label class="form-label" for="edit_news_content">เนื้อหาประกาศ <span style="color: #ef4444;">*</span></label>
+                    <textarea id="edit_news_content" name="content" class="form-textarea" rows="5" required></textarea>
+                </div>
+
+                <!-- Cover Image Upload -->
+                <div style="margin-bottom: 16px; padding: 12px; border: 1px dashed var(--border-color); border-radius: 10px; background: var(--bg-surface);">
+                    <label class="form-label">🖼️ เปลี่ยนรูปภาพหน้าปก</label>
+                    <input type="file" id="editNewsCoverInput" name="cover_file" accept="image/*" class="form-input" style="padding: 6px;">
+                    <div id="editNewsCoverExisting" style="display: none; margin-top: 8px;">
+                        <label style="font-size: 12px; color: #ef4444; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="checkbox" name="remove_cover" value="1"> ลบรูปภาพหน้าปกเดิมออก
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Audio Announcement File -->
+                <div style="margin-bottom: 20px; padding: 12px; border: 1px dashed var(--border-color); border-radius: 10px; background: var(--bg-surface);">
+                    <label class="form-label">🎙️ เปลี่ยนคลิปเสียงประกาศ</label>
+                    <input type="file" id="editNewsAudioInput" name="audio_upload" accept="audio/*" class="form-input" style="padding: 6px;">
+                    <div id="editNewsAudioExisting" style="display: none; margin-top: 8px;">
+                        <label style="font-size: 12px; color: #ef4444; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="checkbox" name="remove_audio" value="1"> ลบคลิปเสียงเดิมออก
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" onclick="closeEditNewsModal()" style="padding: 9px 18px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 8px; cursor: pointer; font-size: 13.5px;">
+                        ยกเลิก
+                    </button>
+                    <button type="submit" style="padding: 9px 24px; border: none; background: linear-gradient(135deg, #00C853 0%, #00a844 100%); color: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13.5px;">
+                        บันทึกการแก้ไข
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
 
     <!-- Chat Image Lightbox Modal -->
     <div id="chatImageModal" class="chat-image-modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-label="ดูรูปภาพ">
@@ -4014,19 +4698,23 @@
             const viewChat = document.getElementById('viewChat');
             const viewMyTasks = document.getElementById('viewMyTasks');
             const viewAllTasks = document.getElementById('viewAllTasks');
+            const viewNews = document.getElementById('viewNews');
 
             // Header title containers
             const titleChat = document.getElementById('titleChat');
             const titleMyTasks = document.getElementById('titleMyTasks');
             const titleAllTasks = document.getElementById('titleAllTasks');
+            const titleNews = document.getElementById('titleNews');
 
             if (viewChat) viewChat.style.display = 'none';
             if (viewMyTasks) viewMyTasks.style.display = 'none';
             if (viewAllTasks) viewAllTasks.style.display = 'none';
+            if (viewNews) viewNews.style.display = 'none';
 
             if (titleChat) titleChat.style.display = 'none';
             if (titleMyTasks) titleMyTasks.style.display = 'none';
             if (titleAllTasks) titleAllTasks.style.display = 'none';
+            if (titleNews) titleNews.style.display = 'none';
 
             if (view === 'my-tasks') {
                 if (viewMyTasks) viewMyTasks.style.display = 'flex';
@@ -4040,6 +4728,12 @@
                 const btn = document.getElementById('navBtnAllTasks');
                 if (btn) btn.classList.add('active');
                 window.history.pushState({ view: 'all-tasks' }, '', '/dashboard?view=all-tasks');
+            } else if (view === 'news') {
+                if (viewNews) viewNews.style.display = 'flex';
+                if (titleNews) titleNews.style.display = 'flex';
+                const btn = document.getElementById('navBtnNews');
+                if (btn) btn.classList.add('active');
+                window.history.pushState({ view: 'news' }, '', '/dashboard?view=news');
             } else {
                 // chat
                 if (viewChat) viewChat.style.display = 'flex';
@@ -4190,6 +4884,143 @@
                 closeNotificationDropdown();
             }
         });
+
+        // ==========================================
+        // NEWS & ANNOUNCEMENTS JAVASCRIPT LOGIC
+        // ==========================================
+        window.openCreateNewsModal = function() {
+            const modal = document.getElementById('createNewsModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                const titleInput = document.getElementById('news_title');
+                if (titleInput) titleInput.focus();
+            }
+        };
+
+        window.closeCreateNewsModal = function() {
+            const modal = document.getElementById('createNewsModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.openEditNewsModal = function(data) {
+            const modal = document.getElementById('editNewsModal');
+            if (!modal) return;
+
+            const form = document.getElementById('editNewsForm');
+            if (form) form.action = `/news/${data.id}`;
+
+            const titleEl = document.getElementById('edit_news_title');
+            const catEl = document.getElementById('edit_news_category');
+            const contentEl = document.getElementById('edit_news_content');
+            const pinEl = document.getElementById('edit_news_pinned');
+            const coverExistEl = document.getElementById('editNewsCoverExisting');
+            const audioExistEl = document.getElementById('editNewsAudioExisting');
+
+            if (titleEl) titleEl.value = data.title || '';
+            if (catEl) catEl.value = data.category || 'ทั่วไป';
+            if (contentEl) contentEl.value = data.content || '';
+            if (pinEl) pinEl.checked = !!data.is_pinned;
+
+            if (coverExistEl) coverExistEl.style.display = data.has_cover ? 'block' : 'none';
+            if (audioExistEl) audioExistEl.style.display = data.has_audio ? 'block' : 'none';
+
+            modal.style.display = 'flex';
+        };
+
+        window.closeEditNewsModal = function() {
+            const modal = document.getElementById('editNewsModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.previewNewsCover = function(input, previewId) {
+            const previewWrap = document.getElementById(previewId);
+            if (!previewWrap) return;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = previewWrap.querySelector('img');
+                    if (img) img.src = e.target.result;
+                    previewWrap.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        window.clearNewsCover = function(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const previewWrap = document.getElementById(previewId);
+            if (input) input.value = '';
+            if (previewWrap) {
+                const img = previewWrap.querySelector('img');
+                if (img) img.src = '';
+                previewWrap.style.display = 'none';
+            }
+        };
+
+        window.filterNewsCategory = function(category, btnEl) {
+            document.querySelectorAll('.news-filter-chip').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+
+            const cards = document.querySelectorAll('#newsFeedList .news-card');
+            cards.forEach(card => {
+                const cat = card.getAttribute('data-category');
+                const isPinned = card.getAttribute('data-is-pinned') === '1';
+
+                if (category === 'all') {
+                    card.style.display = 'flex';
+                } else if (category === 'pinned') {
+                    card.style.display = isPinned ? 'flex' : 'none';
+                } else {
+                    card.style.display = (cat === category) ? 'flex' : 'none';
+                }
+            });
+        };
+
+        window.toggleNewsLike = function(newsId, btnEl) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                              '{{ csrf_token() }}';
+
+            fetch(`/news/${newsId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.liked !== undefined) {
+                    if (data.liked) {
+                        btnEl.classList.add('liked');
+                        btnEl.querySelector('.like-icon').textContent = '❤️';
+                        btnEl.querySelector('.like-label').textContent = 'ถูกใจแล้ว';
+                    } else {
+                        btnEl.classList.remove('liked');
+                        btnEl.querySelector('.like-icon').textContent = '🤍';
+                        btnEl.querySelector('.like-label').textContent = 'ถูกใจ';
+                    }
+                    const counter = btnEl.querySelector('.like-counter');
+                    if (counter) counter.textContent = `(${data.likes_count})`;
+                }
+            })
+            .catch(err => {
+                console.error('Error toggling like:', err);
+            });
+        };
+
+        window.copyNewsLink = function(newsId) {
+            const url = `${window.location.origin}/dashboard?view=news#newsCard${newsId}`;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('คัดลอกลิงก์ประกาศข่าวแล้ว! คุณสามารถนำไปวางในห้องแชตเพื่อแชร์ให้เพื่อนร่วมงานได้ทันที');
+                }).catch(() => {
+                    prompt('คัดลอกลิงก์ด้านล่าง:', url);
+                });
+            } else {
+                prompt('คัดลอกลิงก์ด้านล่าง:', url);
+            }
+        };
 
         // Auto-open settings modal if there are profile validation errors
         @if($errors->has('name'))
