@@ -2194,8 +2194,8 @@
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
                     <div class="nav-section-title" style="margin-bottom: 0;">ห้องแชต ({{ $rooms->count() }})</div>
 
-                    {{-- ปุ่มสร้างห้อง (ผู้จัดการ / ผู้ดูแลระบบ) --}}
-                    @if(in_array(auth()->user()->position, ['ผู้จัดการ', 'ผู้ดูแลระบบ']))
+                    {{-- ปุ่มสร้างห้อง (ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ) --}}
+                    @if(in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
                         <button type="button"
                                 onclick="document.getElementById('createRoomModal').style.display='flex'"
                                 style="background: transparent; border: none; color: var(--accent-blue); cursor: pointer; font-size: 13px; font-weight: 600; padding: 2px 8px; border-radius: 4px;"
@@ -2252,7 +2252,7 @@
         @php
             $roleClass = match(auth()->user()->position) {
                 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin' => 'role-admin',
-                'ผู้จัดการ', 'Manager' => 'role-manager',
+                'ผู้บริหาร', 'ผู้จัดการ', 'Manager', 'Executive' => 'role-manager',
                 'หัวหน้างาน', 'Supervisor' => 'role-supervisor',
                 default => 'role-staff',
             };
@@ -2547,8 +2547,8 @@
         <div id="viewAllTasks" class="task-workspace" style="{{ $currentView === 'all-tasks' ? 'display:flex;' : 'display:none;' }}">
             <div class="task-content-inner">
 
-                {{-- Create Task Form (Supervisor, Manager, Admin only) --}}
-                @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้จัดการ', 'ผู้ดูแลระบบ']))
+                {{-- Create Task Form (Supervisor, Executive, Manager, Admin only) --}}
+                @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
                     <div class="create-card">
                         <div class="card-header-title">
                             <span>สร้างงานและมอบหมาย</span>
@@ -2676,7 +2676,7 @@
                             @php
                                 $canChangeStatus =
                                     $task->assigned_to == auth()->id() ||
-                                    in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้จัดการ', 'ผู้ดูแลระบบ']);
+                                    in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']);
                             @endphp
 
                             <div class="task-actions">
@@ -2695,7 +2695,7 @@
                                 @endif
 
                                 <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-                                    @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้จัดการ', 'ผู้ดูแลระบบ']))
+                                    @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
                                         <a href="{{ route('tasks.edit', $task->id) }}" class="btn-action-edit">
                                             แก้ไข
                                         </a>
@@ -3064,7 +3064,7 @@
             if (pos.includes('แอดมิน') || pos.includes('ผู้ดูแลระบบ') || pos.includes('admin')) {
                 return '#FF3D00';
             }
-            if (pos.includes('ผู้จัดการ') || pos.includes('manager')) {
+            if (pos.includes('ผู้บริหาร') || pos.includes('ผู้จัดการ') || pos.includes('manager') || pos.includes('executive')) {
                 return '#FFB300';
             }
             if (pos.includes('หัวหน้างาน') || pos.includes('supervisor')) {

@@ -543,7 +543,7 @@
                                     @php
                                         $rClass = match($u->position) {
                                             'ผู้ดูแลระบบ', 'แอดมิน', 'Admin' => 'badge-role-admin',
-                                            'ผู้จัดการ', 'Manager' => 'badge-role-manager',
+                                            'ผู้บริหาร', 'ผู้จัดการ', 'Manager', 'Executive' => 'badge-role-manager',
                                             'หัวหน้างาน', 'Supervisor' => 'badge-role-supervisor',
                                             default => 'badge-role-staff'
                                         };

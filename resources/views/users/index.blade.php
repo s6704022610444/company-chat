@@ -357,7 +357,7 @@
                         @php
                             $roleClass = match($user->position) {
                                 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin' => 'role-admin',
-                                'ผู้จัดการ', 'Manager' => 'role-manager',
+                                'ผู้บริหาร', 'ผู้จัดการ', 'Manager', 'Executive' => 'role-manager',
                                 'หัวหน้างาน', 'Supervisor' => 'role-supervisor',
                                 default => 'role-staff',
                             };
@@ -380,8 +380,8 @@
                     <option value="หัวหน้างาน" {{ $user->position === 'หัวหน้างาน' ? 'selected' : '' }}>
                         หัวหน้างาน
                     </option>
-                    <option value="ผู้จัดการ" {{ $user->position === 'ผู้จัดการ' ? 'selected' : '' }}>
-                        ผู้จัดการ
+                    <option value="ผู้บริหาร" {{ in_array($user->position, ['ผู้บริหาร', 'ผู้จัดการ', 'Manager', 'Executive']) ? 'selected' : '' }}>
+                        ผู้บริหาร
                     </option>
                     <option value="ผู้ดูแลระบบ" {{ in_array($user->position, ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin']) ? 'selected' : '' }}>
                         ผู้ดูแลระบบ
@@ -412,7 +412,7 @@
                 - แก้ไข/ลบงานที่ดูแล
             </div>
             <div class="guide-item">
-                <strong style="color: #FFB300;">3. ผู้จัดการ</strong><br>
+                <strong style="color: #FFB300;">3. ผู้บริหาร</strong><br>
                 - จัดการงานทั้งหมดในระบบ<br>
                 - สร้างห้องสนทนาใหม่<br>
                 - ติดตาม Dashboard สรุปงาน

@@ -9,8 +9,8 @@ class ChatRoomController extends Controller
 {
     public function store(Request $request)
     {
-        // ผู้จัดการและผู้ดูแลระบบเท่านั้นที่สร้างห้องได้
-        if (!in_array(auth()->user()->position, ['ผู้จัดการ', 'ผู้ดูแลระบบ'])) {
+        // ผู้บริหาร ผู้จัดการ และผู้ดูแลระบบเท่านั้นที่สร้างห้องได้
+        if (!in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin', 'Executive', 'Manager'])) {
             abort(403, 'คุณไม่มีสิทธิ์สร้างห้องแชต');
         }
 

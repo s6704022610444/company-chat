@@ -16,11 +16,14 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        // เฉพาะหัวหน้างาน ผู้จัดการ และผู้ดูแลระบบ
+        // เฉพาะหัวหน้างาน ผู้บริหาร ผู้จัดการ และผู้ดูแลระบบ
         if (!in_array(auth()->user()->position, [
             'หัวหน้างาน',
+            'ผู้บริหาร',
             'ผู้จัดการ',
-            'ผู้ดูแลระบบ'
+            'ผู้ดูแลระบบ',
+            'แอดมิน',
+            'Admin'
         ])) {
             abort(403, 'คุณไม่มีสิทธิ์สร้างงาน');
         }
@@ -41,7 +44,7 @@ class TaskController extends Controller
                     }
 
                     // ไม่อนุญาตให้มอบหมายงานให้ผู้ดูแลระบบ
-                    if ($user->position === 'ผู้ดูแลระบบ') {
+                    if (in_array($user->position, ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])) {
                         $fail('ไม่สามารถมอบหมายงานให้ผู้ดูแลระบบได้');
                     }
                 },
@@ -67,13 +70,16 @@ class TaskController extends Controller
     {
         if (!in_array(auth()->user()->position, [
             'หัวหน้างาน',
+            'ผู้บริหาร',
             'ผู้จัดการ',
-            'ผู้ดูแลระบบ'
+            'ผู้ดูแลระบบ',
+            'แอดมิน',
+            'Admin'
         ])) {
             abort(403, 'คุณไม่มีสิทธิ์แก้ไขงาน');
         }
 
-        $users = User::where('position', '!=', 'ผู้ดูแลระบบ')
+        $users = User::whereNotIn('position', ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])
             ->orderBy('name')
             ->get();
 
@@ -84,8 +90,11 @@ class TaskController extends Controller
     {
         if (!in_array(auth()->user()->position, [
             'หัวหน้างาน',
+            'ผู้บริหาร',
             'ผู้จัดการ',
-            'ผู้ดูแลระบบ'
+            'ผู้ดูแลระบบ',
+            'แอดมิน',
+            'Admin'
         ])) {
             abort(403, 'คุณไม่มีสิทธิ์แก้ไขงาน');
         }
@@ -99,7 +108,7 @@ class TaskController extends Controller
                 function ($attribute, $value, $fail) {
                     $user = User::find($value);
 
-                    if ($user && $user->position === 'ผู้ดูแลระบบ') {
+                    if ($user && in_array($user->position, ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])) {
                         $fail('ไม่สามารถมอบหมายงานให้ผู้ดูแลระบบได้');
                     }
                 },
@@ -130,8 +139,11 @@ class TaskController extends Controller
             $task->assigned_to == $user->id ||
             in_array($user->position, [
                 'หัวหน้างาน',
+                'ผู้บริหาร',
                 'ผู้จัดการ',
-                'ผู้ดูแลระบบ'
+                'ผู้ดูแลระบบ',
+                'แอดมิน',
+                'Admin'
             ]);
 
         if (!$canUpdate) {
@@ -167,8 +179,11 @@ class TaskController extends Controller
     {
         if (!in_array(auth()->user()->position, [
             'หัวหน้างาน',
+            'ผู้บริหาร',
             'ผู้จัดการ',
-            'ผู้ดูแลระบบ'
+            'ผู้ดูแลระบบ',
+            'แอดมิน',
+            'Admin'
         ])) {
             abort(403, 'คุณไม่มีสิทธิ์ลบงาน');
         }

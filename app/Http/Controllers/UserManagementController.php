@@ -25,7 +25,7 @@ class UserManagementController extends Controller
         }
 
         $request->validate([
-            'position' => 'required|in:พนักงาน,หัวหน้างาน,ผู้จัดการ,ผู้ดูแลระบบ,แอดมิน',
+            'position' => 'required|in:พนักงาน,หัวหน้างาน,ผู้บริหาร,ผู้จัดการ,ผู้ดูแลระบบ,แอดมิน',
         ]);
 
         $user->update([

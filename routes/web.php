@@ -69,7 +69,7 @@ Route::get('/dashboard', function () {
         ->get();
 
     // All tasks (for the embedded All Tasks view)
-    if (in_array($user->position, ['หัวหน้างาน', 'ผู้จัดการ', 'ผู้ดูแลระบบ'])) {
+    if (in_array($user->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])) {
         $allTasks = \App\Models\Task::with(['creator', 'assignee', 'histories.user'])
             ->latest()
             ->get();

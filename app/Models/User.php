@@ -57,7 +57,7 @@ class User extends Authenticatable
      * Get the hex color corresponding to the user's position/role:
      * 1. พนักงาน: เขียวสด (#00C853)
      * 2. หัวหน้างาน: ฟ้าสว่าง (#00B0FF)
-     * 3. ผู้จัดการ: เหลืองทองเข้ม (#FFB300)
+     * 3. ผู้บริหาร / ผู้จัดการ: เหลืองทองเข้ม (#FFB300)
      * 4. แอดมิน / ผู้ดูแลระบบ: แดงนีออน/สว่าง (#FF3D00)
      */
     public function getPositionColorAttribute(): string
@@ -66,7 +66,7 @@ class User extends Authenticatable
         if (str_contains($pos, 'แอดมิน') || str_contains($pos, 'ผู้ดูแลระบบ') || str_contains($pos, 'admin')) {
             return '#FF3D00';
         }
-        if (str_contains($pos, 'ผู้จัดการ') || str_contains($pos, 'manager')) {
+        if (str_contains($pos, 'ผู้บริหาร') || str_contains($pos, 'ผู้จัดการ') || str_contains($pos, 'manager') || str_contains($pos, 'executive')) {
             return '#FFB300';
         }
         if (str_contains($pos, 'หัวหน้างาน') || str_contains($pos, 'supervisor')) {
