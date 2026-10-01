@@ -1,10 +1,8 @@
 FROM php:8.4-cli-alpine
 
-# Install system dependencies, Nginx, Node.js, and PHP extensions
+# Install system dependencies, Nginx, and PHP extensions
 RUN apk add --no-cache \
     nginx \
-    nodejs \
-    npm \
     sqlite-dev \
     sqlite-libs \
     icu-dev \
@@ -18,7 +16,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy application files
+# Copy application files (including prebuilt assets)
 COPY . .
 
 # Install PHP dependencies
@@ -33,9 +31,6 @@ ENV VITE_REVERB_APP_KEY="btadnryd37zz0juhuqkq" \
     DB_CONNECTION="sqlite" \
     SESSION_DRIVER="database" \
     QUEUE_CONNECTION="sync"
-
-# Install NPM dependencies and build assets
-RUN npm install && npm run build
 
 # Copy custom Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
