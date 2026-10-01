@@ -2651,7 +2651,7 @@
                    class="nav-button {{ $currentView === 'news' ? 'active' : '' }}"
                    onclick="switchDashboardView('news', event)">
                     <span style="display: flex; align-items: center; gap: 8px;">
-                        📰 ข่าวสารองค์กร
+                        ข่าวสารองค์กร
                     </span>
                     @if(isset($newsCount) && $newsCount > 0)
                         <span class="nav-badge" style="background: rgba(0, 200, 83, 0.15); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.3);">{{ $newsCount }}</span>
@@ -3274,19 +3274,19 @@
                         ทั้งหมด ({{ $newsList->count() }})
                     </button>
                     <button type="button" class="news-filter-chip" onclick="filterNewsCategory('pinned', this)">
-                        📌 ปักหมุด ({{ $newsList->where('is_pinned', true)->count() }})
+                        ปักหมุด ({{ $newsList->where('is_pinned', true)->count() }})
                     </button>
                     <button type="button" class="news-filter-chip" onclick="filterNewsCategory('ประกาศสำคัญ', this)">
-                        🚨 ประกาศสำคัญ
+                        ประกาศสำคัญ
                     </button>
                     <button type="button" class="news-filter-chip" onclick="filterNewsCategory('กิจกรรม', this)">
-                        🎉 กิจกรรมบริษัท
+                        กิจกรรมบริษัท
                     </button>
                     <button type="button" class="news-filter-chip" onclick="filterNewsCategory('สวัสดิการ', this)">
-                        🎁 สวัสดิการ
+                        สวัสดิการ
                     </button>
                     <button type="button" class="news-filter-chip" onclick="filterNewsCategory('ทั่วไป', this)">
-                        💬 ข่าวทั่วไป
+                        ข่าวทั่วไป
                     </button>
                 </div>
 
