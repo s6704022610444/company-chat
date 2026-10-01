@@ -6,6 +6,7 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\MyTaskController;
+use App\Http\Controllers\DatabaseViewerController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -116,6 +117,10 @@ Route::get('/users', [UserManagementController::class, 'index'])
 Route::put('/users/{user}/position', [UserManagementController::class, 'updatePosition'])
     ->middleware('auth')
     ->name('users.position');
+
+Route::get('/admin/database', [DatabaseViewerController::class, 'index'])
+    ->middleware('auth')
+    ->name('admin.database');
 
 Route::post('/rooms', [ChatRoomController::class, 'store'])
     ->middleware('auth')

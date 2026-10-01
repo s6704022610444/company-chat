@@ -1254,6 +1254,10 @@
                         <span>🔐 จัดการสิทธิ์ผู้ใช้</span>
                         <span style="font-size: 11px; color: #a5b4fc;">Admin</span>
                     </a>
+                    <a href="{{ route('admin.database') }}" class="nav-button" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35);">
+                        <span>🗄️ ดูข้อมูลสด (Database)</span>
+                        <span style="font-size: 11px; color: #6ee7b7;">DB</span>
+                    </a>
                 </div>
             @endif
 
