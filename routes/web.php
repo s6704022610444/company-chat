@@ -99,19 +99,42 @@ Route::get('/dashboard', function () {
         ->get();
     $newsCount = $newsList->count();
 
+    // Only standard channels in public rooms list
+    $rooms = \App\Models\ChatRoom::where('is_direct', false)->orderBy('name')->get();
+
+    // Direct message rooms for the current user
+    $dmRooms = \App\Models\ChatRoom::with(['user1', 'user2'])
+        ->where('is_direct', true)
+        ->where(function ($q) use ($user) {
+            $q->where('user1_id', $user->id)->orWhere('user2_id', $user->id);
+        })
+        ->get();
+
     $selectedRoom = request('room');
 
     if (!$selectedRoom && $rooms->count() > 0) {
         $selectedRoom = $rooms->first()->id;
     }
 
+    $selectedRoomModel = null;
     $messages = collect();
 
     if ($selectedRoom) {
-        $messages = \App\Models\Message::with('user')
-            ->where('room_id', $selectedRoom)
-            ->oldest()
-            ->get();
+        $selectedRoomModel = \App\Models\ChatRoom::with(['user1', 'user2'])->find($selectedRoom);
+        if ($selectedRoomModel && $selectedRoomModel->is_direct) {
+            $isAdmin = $user->position === 'ผู้ดูแลระบบ';
+            if ($user->id !== $selectedRoomModel->user1_id && $user->id !== $selectedRoomModel->user2_id && !$isAdmin) {
+                return redirect()->route('dashboard');
+            }
+        }
+
+        if ($selectedRoomModel) {
+            $messages = \App\Models\Message::with('user')
+                ->where('room_id', $selectedRoom)
+                ->where('is_deleted', false)
+                ->oldest()
+                ->get();
+        }
     }
 
     $currentView = request('view', 'chat');
@@ -121,7 +144,9 @@ Route::get('/dashboard', function () {
 
     return view('dashboard', compact(
         'rooms',
+        'dmRooms',
         'selectedRoom',
+        'selectedRoomModel',
         'messages',
         'tasks',
         'urgentTasks',
@@ -172,6 +197,18 @@ Route::get('/messages', [MessageController::class, 'index'])
 Route::post('/messages', [MessageController::class, 'store'])
     ->middleware('auth')
     ->name('messages.store');
+
+Route::put('/messages/{message}', [MessageController::class, 'update'])
+    ->middleware('auth')
+    ->name('messages.update');
+
+Route::delete('/messages/{message}', [MessageController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('messages.destroy');
+
+Route::get('/direct-chat/{user}', [MessageController::class, 'directChat'])
+    ->middleware('auth')
+    ->name('messages.directChat');
 
 Route::get('/users', [UserManagementController::class, 'index'])
     ->middleware('auth')

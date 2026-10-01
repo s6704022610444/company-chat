@@ -2513,6 +2513,303 @@
         .my-message .chat-link {
             color: #a5f3fc;
         }
+
+        /* Level 1 Feature Styles: File Cards, Mentions, Message Actions, DMs */
+        .chat-file-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            transition: all 0.2s ease;
+            max-width: 380px;
+        }
+        .chat-file-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        .chat-file-icon {
+            font-size: 26px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-file-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .chat-file-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+        .chat-file-size {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .chat-file-download-btn {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .chat-file-download-btn:hover {
+            background: #3b82f6;
+            color: #ffffff;
+        }
+
+        /* Mention styles */
+        .mention-badge {
+            background: rgba(56, 189, 248, 0.18);
+            color: #38bdf8;
+            font-weight: 600;
+            padding: 1px 6px;
+            border-radius: 5px;
+            display: inline-block;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            margin: 0 1px;
+        }
+        .mention-badge.mention-all {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+        .message-row.is-mentioned .message-bubble {
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+            background: rgba(245, 158, 11, 0.06);
+        }
+
+        /* Mention autocomplete dropdown */
+        .mention-autocomplete-dropdown {
+            position: absolute;
+            bottom: 74px;
+            left: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 280px;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 1000;
+            padding: 6px;
+            display: none;
+        }
+        .mention-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+        .mention-item:hover, .mention-item.selected {
+            background: var(--bg-hover);
+        }
+        .mention-item-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .mention-item-fallback {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Message Action Toolbar (Edit / Delete) */
+        .message-row {
+            position: relative;
+        }
+        .message-action-toolbar {
+            position: absolute;
+            top: -12px;
+            display: none;
+            align-items: center;
+            gap: 2px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2px 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .message-row.my-message .message-action-toolbar {
+            right: 48px;
+        }
+        .message-row.other-message .message-action-toolbar {
+            left: 48px;
+        }
+        .message-row:hover .message-action-toolbar {
+            display: flex;
+        }
+        .btn-msg-tool {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 5px;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .btn-msg-tool:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        .btn-msg-tool.danger:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.12);
+        }
+        .message-edited-badge {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            margin-left: 5px;
+            font-style: italic;
+        }
+
+        /* Inline Message Editor */
+        .msg-edit-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            min-width: 250px;
+        }
+        .msg-edit-textarea {
+            width: 100%;
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13.5px;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .msg-edit-textarea:focus {
+            border-color: #3b82f6;
+        }
+        .msg-edit-btn-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+        .btn-save-edit {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-cancel-edit {
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Direct Messages Sidebar items */
+        .dm-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+        .dm-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        .dm-item.active {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            font-weight: 600;
+        }
+        .dm-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .dm-avatar-fallback {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+        }
+        .dm-name {
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+        .dm-role-tag {
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -2537,10 +2834,24 @@
         <div class="header-center">
             <!-- Chat Room Title -->
             <div id="titleChat" class="room-title-area" style="{{ $currentView === 'chat' ? 'display:flex;' : 'display:none;' }}">
-                <h2>
-                    <span style="color: var(--text-secondary); opacity: 0.7;">#</span>
-                    <span>{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
-                </h2>
+                @if(isset($selectedRoomModel) && $selectedRoomModel->is_direct)
+                    @php
+                        $dmOther = $selectedRoomModel->getOtherUser(auth()->id());
+                        $dmOtherName = $dmOther?->name ?? 'แชตส่วนตัว';
+                        $dmOtherPos = $dmOther?->position ?? 'พนักงาน';
+                        $dmOtherColor = $dmOther?->position_color ?? '#38bdf8';
+                    @endphp
+                    <h2>
+                        <span style="color: #38bdf8;">💬</span>
+                        <span id="chatRoomHeaderTitle">แชตส่วนตัว: {{ $dmOtherName }}</span>
+                        <span class="role-pill" id="chatRoomHeaderRole" style="font-size: 10.5px; margin-left: 6px; padding: 1px 7px; vertical-align: middle; color: {{ $dmOtherColor }};">{{ $dmOtherPos }}</span>
+                    </h2>
+                @else
+                    <h2>
+                        <span style="color: var(--text-secondary); opacity: 0.7;">#</span>
+                        <span id="chatRoomHeaderTitle">{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
+                    </h2>
+                @endif
                 <div class="live-status">
                     <span class="live-dot"></span>
                     <span id="socketStatus">Real-time (เชื่อมต่อแล้ว)</span>
@@ -2761,6 +3072,41 @@
                 </div>
             </div>
 
+            <!-- Direct Messages Section (แชตส่วนตัว 1-ต่อ-1) -->
+            <div style="margin-top: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                    <div class="nav-section-title" id="sidebarDmCountTitle" style="margin-bottom: 0;">ข้อความส่วนตัว ({{ $allUsers->where('id', '!=', auth()->id())->count() }})</div>
+                </div>
+
+                <div id="sidebarDmList">
+                    @foreach($allUsers->where('id', '!=', auth()->id()) as $u)
+                        @php
+                            $uDmRoom = $dmRooms->first(function($dm) use ($u) {
+                                return ($dm->user1_id == $u->id || $dm->user2_id == $u->id);
+                            });
+                            $dmHref = $uDmRoom ? url('/dashboard?room=' . $uDmRoom->id) : route('messages.directChat', $u->id);
+                            $isActiveDm = ($currentView === 'chat' && $uDmRoom && $selectedRoom == $uDmRoom->id);
+                            $uFirst = $u->resolved_first_name ?? explode(' ', $u->name)[0];
+                        @endphp
+                        <a href="{{ $dmHref }}"
+                           class="dm-item {{ $isActiveDm ? 'active' : '' }}"
+                           data-dm-user-id="{{ $u->id }}"
+                           data-dm-room-id="{{ $uDmRoom?->id ?? '' }}"
+                           title="แชตส่วนตัวกับ {{ $u->name }}">
+                            @if($u->avatar)
+                                <img src="{{ $u->avatar }}" class="dm-avatar" alt="{{ $u->name }}">
+                            @else
+                                <div class="dm-avatar-fallback" style="color: {{ $u->position_color ?? '#00C853' }};">
+                                    {{ strtoupper(mb_substr($uFirst, 0, 1)) }}
+                                </div>
+                            @endif
+                            <span class="dm-name">{{ $uFirst }}</span>
+                            <span class="dm-role-tag" style="color: {{ $u->position_color ?? '#00C853' }};">{{ $u->position ?? 'พนักงาน' }}</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
             <!-- Admin Area -->
             @if(auth()->user()->position === 'ผู้ดูแลระบบ')
                 <div>
@@ -2823,9 +3169,15 @@
 
             <!-- Chat Container -->
             <div class="chat-container" id="chatContainer">
+                @php
+                    $myUserId = auth()->id();
+                    $myFullName = auth()->user()->name;
+                    $myFirstName = auth()->user()->resolved_first_name ?? explode(' ', $myFullName)[0];
+                    $isAdmin = auth()->user()->position === 'ผู้ดูแลระบบ';
+                @endphp
                 @foreach($messages as $message)
                     @php
-                        $isMe = $message->user_id === auth()->id();
+                        $isMe = $message->user_id === $myUserId;
                         $sender = $message->user;
                         $firstName = $sender?->resolved_first_name ?? 'User';
                         $position = $sender?->position ?? 'พนักงาน';
@@ -2833,8 +3185,22 @@
                         $positionColor = $sender?->position_color ?? '#00C853';
                         $avatarUrl = $sender?->avatar;
                         $initial = strtoupper(mb_substr($firstName, 0, 1));
+
+                        $text = $message->message ?? '';
+                        $isMentioned = str_contains($text, '@ทุกคน') || str_contains($text, '@' . $myFirstName) || str_contains($text, '@' . $myFullName);
                     @endphp
-                    <div class="message-row {{ $isMe ? 'my-message' : 'other-message' }}" data-message-id="{{ $message->id }}">
+                    <div class="message-row {{ $isMe ? 'my-message' : 'other-message' }} {{ $isMentioned ? 'is-mentioned' : '' }}" data-message-id="{{ $message->id }}">
+                        
+                        {{-- Hover Action Toolbar (Edit / Delete) --}}
+                        @if($isMe || $isAdmin)
+                            <div class="message-action-toolbar">
+                                @if($isMe)
+                                    <button type="button" class="btn-msg-tool" onclick="startEditMessage({{ $message->id }}, this)" title="แก้ไขข้อความ">✏️ แก้ไข</button>
+                                @endif
+                                <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax({{ $message->id }})" title="ลบข้อความ">🗑️ ลบ</button>
+                            </div>
+                        @endif
+
                         @if($isMe)
                             <div class="message-content-wrap">
                                 <div class="message-header-line">
@@ -2854,16 +3220,44 @@
                                             </audio>
                                         </div>
                                     @endif
+                                    @if(!empty($message->file_data))
+                                        @php
+                                            $fExt = strtolower(pathinfo($message->file_name ?? '', PATHINFO_EXTENSION));
+                                            $fIcon = match(true) {
+                                                $fExt === 'pdf' => '📄',
+                                                in_array($fExt, ['xls', 'xlsx', 'csv']) => '📊',
+                                                in_array($fExt, ['doc', 'docx', 'txt']) => '📝',
+                                                in_array($fExt, ['zip', 'rar', '7z', 'tar', 'gz']) => '🗜️',
+                                                in_array($fExt, ['ppt', 'pptx']) => '📑',
+                                                default => '📁',
+                                            };
+                                        @endphp
+                                        <div class="chat-file-card">
+                                            <div class="chat-file-icon">{{ $fIcon }}</div>
+                                            <div class="chat-file-info">
+                                                <span class="chat-file-name" title="{{ $message->file_name }}">{{ $message->file_name }}</span>
+                                                <span class="chat-file-size">{{ $message->formatted_file_size ?? 'เอกสาร' }}</span>
+                                            </div>
+                                            <a href="{{ $message->file_data }}" download="{{ $message->file_name }}" class="chat-file-download-btn">
+                                                <span>📥 ดาวน์โหลด</span>
+                                            </a>
+                                        </div>
+                                    @endif
                                     @if(!empty($message->message))
                                         @php
-                                            $text = $message->message;
-                                            $hasNewsLink = preg_match('/view=news#newsCard(\d+)/i', $text, $matches);
+                                            $msgRaw = $message->message;
+                                            $hasNewsLink = preg_match('/view=news#newsCard(\d+)/i', $msgRaw, $matches);
                                             $newsId = $hasNewsLink ? $matches[1] : null;
-                                            $escaped = e($text);
+                                            $escaped = e($msgRaw);
+                                            $escaped = preg_replace('/@ทุกคน/', '<span class="mention-badge mention-all">@ทุกคน</span>', $escaped);
+                                            $escaped = preg_replace('/@([^\s<]+)/', '<span class="mention-badge">@$1</span>', $escaped);
                                             $linked = preg_replace('/(https?:\/\/[^\s]+)/', '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>', $escaped);
                                         @endphp
-                                        <div class="message-text">
+                                        <div class="message-text" id="msgText{{ $message->id }}">
                                             {!! $linked !!}
+                                            @if($message->is_edited)
+                                                <span class="message-edited-badge">(แก้ไขแล้ว)</span>
+                                            @endif
                                             @if($newsId)
                                                 <div class="chat-news-card" onclick="window.switchDashboardView('news'); setTimeout(() => { const c = document.getElementById('newsCard{{ $newsId }}'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);">
                                                     <div style="font-weight: 700; font-size: 13px; color: #00C853; display: flex; align-items: center; gap: 6px;">
@@ -2911,16 +3305,44 @@
                                             </audio>
                                         </div>
                                     @endif
+                                    @if(!empty($message->file_data))
+                                        @php
+                                            $fExt = strtolower(pathinfo($message->file_name ?? '', PATHINFO_EXTENSION));
+                                            $fIcon = match(true) {
+                                                $fExt === 'pdf' => '📄',
+                                                in_array($fExt, ['xls', 'xlsx', 'csv']) => '📊',
+                                                in_array($fExt, ['doc', 'docx', 'txt']) => '📝',
+                                                in_array($fExt, ['zip', 'rar', '7z', 'tar', 'gz']) => '🗜️',
+                                                in_array($fExt, ['ppt', 'pptx']) => '📑',
+                                                default => '📁',
+                                            };
+                                        @endphp
+                                        <div class="chat-file-card">
+                                            <div class="chat-file-icon">{{ $fIcon }}</div>
+                                            <div class="chat-file-info">
+                                                <span class="chat-file-name" title="{{ $message->file_name }}">{{ $message->file_name }}</span>
+                                                <span class="chat-file-size">{{ $message->formatted_file_size ?? 'เอกสาร' }}</span>
+                                            </div>
+                                            <a href="{{ $message->file_data }}" download="{{ $message->file_name }}" class="chat-file-download-btn">
+                                                <span>📥 ดาวน์โหลด</span>
+                                            </a>
+                                        </div>
+                                    @endif
                                     @if(!empty($message->message))
                                         @php
-                                            $text = $message->message;
-                                            $hasNewsLink = preg_match('/view=news#newsCard(\d+)/i', $text, $matches);
+                                            $msgRaw = $message->message;
+                                            $hasNewsLink = preg_match('/view=news#newsCard(\d+)/i', $msgRaw, $matches);
                                             $newsId = $hasNewsLink ? $matches[1] : null;
-                                            $escaped = e($text);
+                                            $escaped = e($msgRaw);
+                                            $escaped = preg_replace('/@ทุกคน/', '<span class="mention-badge mention-all">@ทุกคน</span>', $escaped);
+                                            $escaped = preg_replace('/@([^\s<]+)/', '<span class="mention-badge">@$1</span>', $escaped);
                                             $linked = preg_replace('/(https?:\/\/[^\s]+)/', '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>', $escaped);
                                         @endphp
-                                        <div class="message-text">
+                                        <div class="message-text" id="msgText{{ $message->id }}">
                                             {!! $linked !!}
+                                            @if($message->is_edited)
+                                                <span class="message-edited-badge">(แก้ไขแล้ว)</span>
+                                            @endif
                                             @if($newsId)
                                                 <div class="chat-news-card" onclick="window.switchDashboardView('news'); setTimeout(() => { const c = document.getElementById('newsCard{{ $newsId }}'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);">
                                                     <div style="font-weight: 700; font-size: 13px; color: #00C853; display: flex; align-items: center; gap: 6px;">
@@ -2941,7 +3363,11 @@
             </div>
 
             <!-- Input Bar -->
-            <div class="input-bar">
+            <div class="input-bar" style="position: relative;">
+
+                <!-- Mention Autocomplete Popup -->
+                <div id="mentionAutocomplete" class="mention-autocomplete-dropdown"></div>
+
                 <!-- Attached Media Preview Bar (Floating above input) -->
                 <div id="chatMediaPreview" class="chat-media-preview-bar">
                     <!-- Image Preview Item -->
@@ -2952,6 +3378,16 @@
                             <span class="media-preview-subtitle">พร้อมส่ง</span>
                         </div>
                         <button type="button" class="media-preview-close" onclick="removeAttachedImage()" aria-label="ลบรูปภาพ" title="ลบรูปภาพ">✕</button>
+                    </div>
+
+                    <!-- Document Preview Item -->
+                    <div id="documentPreviewItem" class="media-preview-card" style="display: none;">
+                        <div id="docPreviewIcon" style="font-size: 24px; margin-right: 6px;">📄</div>
+                        <div class="media-preview-meta">
+                            <span id="docPreviewName" class="media-preview-title" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">เอกสาร</span>
+                            <span id="docPreviewSubtitle" class="media-preview-subtitle">พร้อมส่ง</span>
+                        </div>
+                        <button type="button" class="media-preview-close" onclick="removeAttachedDocument()" aria-label="ลบไฟล์" title="ลบไฟล์">✕</button>
                     </div>
 
                     <!-- Voice Recording / Recorded Item -->
@@ -2981,12 +3417,27 @@
                 <form id="chatForm" method="POST" action="/messages" class="input-form">
                     @csrf
                     <input type="hidden" id="roomIdInput" name="room_id" value="{{ $selectedRoom }}">
+                    
+                    <!-- Hidden File Inputs -->
                     <input type="file" id="chatFileInput" accept="image/*" style="display:none;" onchange="handleChatImageSelect(event)">
+                    <input type="file" id="chatDocumentInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar,.7z,.csv" style="display:none;" onchange="handleChatDocumentSelect(event)">
+                    
                     <input type="hidden" id="chatImageData" name="image" value="">
                     <input type="hidden" id="chatAudioData" name="audio" value="">
                     <input type="hidden" id="chatAudioDuration" name="audio_duration" value="">
+                    <input type="hidden" id="chatFileData" name="file_data" value="">
+                    <input type="hidden" id="chatFileName" name="file_name" value="">
+                    <input type="hidden" id="chatFileSize" name="file_size" value="">
+                    <input type="hidden" id="chatFileType" name="file_type" value="">
 
-                    <!-- Attach Image Button -->
+                    <!-- Attach Document Button (📎) -->
+                    <button type="button" class="chat-tool-btn" id="attachDocumentBtn" title="แนบไฟล์เอกสาร (PDF, Word, Excel, ZIP)" onclick="document.getElementById('chatDocumentInput').click()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                        </svg>
+                    </button>
+
+                    <!-- Attach Image Button (🖼️) -->
                     <button type="button" class="chat-tool-btn" id="attachImageBtn" title="แนบรูปภาพ" onclick="document.getElementById('chatFileInput').click()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
@@ -2995,7 +3446,7 @@
                         </svg>
                     </button>
 
-                    <!-- Record Voice Button -->
+                    <!-- Record Voice Button (🎙️) -->
                     <button type="button" class="chat-tool-btn" id="recordVoiceBtn" title="บันทึกเสียง" onclick="toggleVoiceRecording()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
@@ -3009,7 +3460,7 @@
                         id="messageInput"
                         name="message"
                         class="chat-input"
-                        placeholder="พิมพ์ข้อความในห้องนี้... (กด Enter เพื่อส่งทันที)"
+                        placeholder="พิมพ์ข้อความ... หรือพิมพ์ @ เพื่อแท็กเพื่อนร่วมงาน (Enter เพื่อส่ง)"
                         autocomplete="off"
                     >
 
@@ -3975,6 +4426,16 @@
         const currentUserPosition = @json(auth()->user()->position ?? 'พนักงาน');
         const currentUserPositionColor = @json(auth()->user()->position_color ?? '#00C853');
         const currentUserDisplayName = `${currentUserFirstName} (${currentUserPosition})`;
+        const isAdminUser = @json(auth()->user()->position === 'ผู้ดูแลระบบ');
+
+        const mentionUsersList = @json($allUsers->map(fn($u) => [
+            'id' => $u->id,
+            'name' => $u->name,
+            'first_name' => $u->resolved_first_name ?? explode(' ', $u->name)[0],
+            'position' => $u->position ?? 'พนักงาน',
+            'position_color' => $u->position_color ?? '#00C853',
+            'avatar' => $u->avatar,
+        ]));
 
         function getPositionColor(position) {
             const pos = (position || '').toString().toLowerCase().trim();
@@ -3990,10 +4451,14 @@
             return '#00C853';
         }
 
-        function formatChatMessage(text) {
+        function formatChatMessage(text, isEdited = false) {
             if (!text) return '';
-            const escaped = escapeHtml(text);
+            let escaped = escapeHtml(text);
             
+            // Mentions highlighting
+            escaped = escaped.replace(/@ทุกคน/g, '<span class="mention-badge mention-all">@ทุกคน</span>');
+            escaped = escaped.replace(/@([^\s<]+)/g, '<span class="mention-badge">@$1</span>');
+
             const newsMatch = text.match(/(https?:\/\/[^\s]+view=news#newsCard(\d+)[^\s]*)/i);
             let newsPreview = '';
             if (newsMatch) {
@@ -4013,7 +4478,8 @@
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const linked = escaped.replace(urlRegex, url => `<a href="${url}" target="_blank" rel="noopener noreferrer" class="chat-link">${url}</a>`);
             
-            return linked + newsPreview;
+            const editedHtml = isEdited ? '<span class="message-edited-badge">(แก้ไขแล้ว)</span>' : '';
+            return linked + editedHtml + newsPreview;
         }
 
         function appendMessage(data) {
@@ -4027,7 +4493,14 @@
 
             const isMe = Number(data.user_id) === Number(currentUserId);
             const msgEl = document.createElement('div');
-            msgEl.className = `message-row ${isMe ? 'my-message' : 'other-message'}`;
+            
+            // Check if current user is mentioned
+            const textContent = data.message || '';
+            const isMentioned = textContent.includes('@ทุกคน') || 
+                                textContent.includes('@' + currentUserFirstName) || 
+                                textContent.includes('@' + currentUserName);
+
+            msgEl.className = `message-row ${isMe ? 'my-message' : 'other-message'} ${isMentioned ? 'is-mentioned' : ''}`;
             if (data.id) msgEl.setAttribute('data-message-id', data.id);
 
             const senderDisplay = data.user_display_name || (data.user_first_name 
@@ -4040,6 +4513,17 @@
             const initial = firstName.charAt(0).toUpperCase();
             const time = data.created_at || '';
             const avatarSrc = (isMe && currentUserAvatar) ? currentUserAvatar : (data.user_avatar || null);
+
+            // Message Action Toolbar (Edit / Delete)
+            let actionsToolbarHtml = '';
+            if (data.id && (isMe || isAdminUser)) {
+                actionsToolbarHtml = `
+                    <div class="message-action-toolbar">
+                        ${isMe ? `<button type="button" class="btn-msg-tool" onclick="startEditMessage(${data.id}, this)" title="แก้ไขข้อความ">✏️ แก้ไข</button>` : ''}
+                        <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax(${data.id})" title="ลบข้อความ">🗑️ ลบ</button>
+                    </div>
+                `;
+            }
 
             const avatarHtml = `
                 <div class="message-avatar-wrap">
@@ -4075,8 +4559,31 @@
                     </div>
                 `;
             }
+            if (data.file_data) {
+                const ext = (data.file_name || '').split('.').pop().toLowerCase();
+                let fIcon = '📁';
+                if (ext === 'pdf') fIcon = '📄';
+                else if (['xls', 'xlsx', 'csv'].includes(ext)) fIcon = '📊';
+                else if (['doc', 'docx', 'txt'].includes(ext)) fIcon = '📝';
+                else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) fIcon = '🗜️';
+                else if (['ppt', 'pptx'].includes(ext)) fIcon = '📑';
+
+                const fSize = data.file_formatted_size || (data.file_size ? (data.file_size < 1048576 ? `${Math.round(data.file_size / 1024)} KB` : `${(data.file_size / 1048576).toFixed(1)} MB`) : 'เอกสาร');
+                bubbleContent += `
+                    <div class="chat-file-card">
+                        <div class="chat-file-icon">${fIcon}</div>
+                        <div class="chat-file-info">
+                            <span class="chat-file-name" title="${escapeHtml(data.file_name)}">${escapeHtml(data.file_name)}</span>
+                            <span class="chat-file-size">${escapeHtml(fSize)}</span>
+                        </div>
+                        <a href="${data.file_data}" download="${escapeHtml(data.file_name)}" class="chat-file-download-btn">
+                            <span>📥 ดาวน์โหลด</span>
+                        </a>
+                    </div>
+                `;
+            }
             if (data.message && data.message.trim()) {
-                bubbleContent += `<div class="message-text">${formatChatMessage(data.message)}</div>`;
+                bubbleContent += `<div class="message-text" id="msgText${data.id}">${formatChatMessage(data.message, data.is_edited)}</div>`;
             }
 
             const contentWrapHtml = `
@@ -4087,14 +4594,317 @@
             `;
 
             if (isMe) {
-                msgEl.innerHTML = contentWrapHtml + avatarHtml;
+                msgEl.innerHTML = actionsToolbarHtml + contentWrapHtml + avatarHtml;
             } else {
-                msgEl.innerHTML = avatarHtml + contentWrapHtml;
+                msgEl.innerHTML = actionsToolbarHtml + avatarHtml + contentWrapHtml;
             }
 
             chatContainer.appendChild(msgEl);
             scrollToBottom();
         }
+
+        // ==========================================
+        // LEVEL 1: DOCUMENT ATTACHMENT HANDLERS
+        // ==========================================
+        window.handleChatDocumentSelect = function(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 20 * 1024 * 1024) {
+                alert('ขนาดไฟล์เอกสารเกิน 20MB กรุณาเลือกไฟล์ที่มีขนาดไม่เกิน 20MB');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const chatFileData = document.getElementById('chatFileData');
+                const chatFileName = document.getElementById('chatFileName');
+                const chatFileSize = document.getElementById('chatFileSize');
+                const chatFileType = document.getElementById('chatFileType');
+                const docPreviewName = document.getElementById('docPreviewName');
+                const docPreviewSubtitle = document.getElementById('docPreviewSubtitle');
+                const docPreviewIcon = document.getElementById('docPreviewIcon');
+                const documentPreviewItem = document.getElementById('documentPreviewItem');
+                const chatMediaPreview = document.getElementById('chatMediaPreview');
+
+                if (chatFileData) chatFileData.value = e.target.result;
+                if (chatFileName) chatFileName.value = file.name;
+                if (chatFileSize) chatFileSize.value = file.size;
+                if (chatFileType) chatFileType.value = file.type || '';
+
+                const ext = file.name.split('.').pop().toLowerCase();
+                let icon = '📁';
+                if (ext === 'pdf') icon = '📄';
+                else if (['xls', 'xlsx', 'csv'].includes(ext)) icon = '📊';
+                else if (['doc', 'docx', 'txt'].includes(ext)) icon = '📝';
+                else if (['zip', 'rar', '7z'].includes(ext)) icon = '🗜️';
+                else if (['ppt', 'pptx'].includes(ext)) icon = '📑';
+
+                if (docPreviewIcon) docPreviewIcon.textContent = icon;
+                if (docPreviewName) docPreviewName.textContent = file.name;
+                if (docPreviewSubtitle) {
+                    const sz = file.size < 1048576 ? `${Math.round(file.size / 1024)} KB` : `${(file.size / 1048576).toFixed(1)} MB`;
+                    docPreviewSubtitle.textContent = `ขนาด ${sz}`;
+                }
+
+                if (documentPreviewItem) documentPreviewItem.style.display = 'flex';
+                if (chatMediaPreview) chatMediaPreview.style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.removeAttachedDocument = function() {
+            const chatFileData = document.getElementById('chatFileData');
+            const chatFileName = document.getElementById('chatFileName');
+            const chatFileSize = document.getElementById('chatFileSize');
+            const chatFileType = document.getElementById('chatFileType');
+            const chatDocumentInput = document.getElementById('chatDocumentInput');
+            const documentPreviewItem = document.getElementById('documentPreviewItem');
+            const chatMediaPreview = document.getElementById('chatMediaPreview');
+            const imagePreviewItem = document.getElementById('imagePreviewItem');
+            const voicePreviewItem = document.getElementById('voicePreviewItem');
+
+            if (chatFileData) chatFileData.value = '';
+            if (chatFileName) chatFileName.value = '';
+            if (chatFileSize) chatFileSize.value = '';
+            if (chatFileType) chatFileType.value = '';
+            if (chatDocumentInput) chatDocumentInput.value = '';
+            if (documentPreviewItem) documentPreviewItem.style.display = 'none';
+
+            const hasImage = imagePreviewItem && imagePreviewItem.style.display !== 'none';
+            const hasVoice = voicePreviewItem && voicePreviewItem.style.display !== 'none';
+            if (chatMediaPreview && !hasImage && !hasVoice) {
+                chatMediaPreview.style.display = 'none';
+            }
+        };
+
+        // ==========================================
+        // LEVEL 1: @MENTION AUTOCOMPLETE SYSTEM
+        // ==========================================
+        const mentionPopup = document.getElementById('mentionAutocomplete');
+        let mentionSelectedIndex = 0;
+        let mentionActiveMatches = [];
+
+        window.closeMentionPopup = function() {
+            if (mentionPopup) {
+                mentionPopup.style.display = 'none';
+                mentionPopup.innerHTML = '';
+                mentionActiveMatches = [];
+                mentionSelectedIndex = 0;
+            }
+        };
+
+        window.insertMention = function(name) {
+            if (!messageInput) return;
+            const val = messageInput.value;
+            const caret = messageInput.selectionStart;
+            const lastAt = val.lastIndexOf('@', caret - 1);
+            if (lastAt !== -1) {
+                const before = val.substring(0, lastAt);
+                const after = val.substring(caret);
+                messageInput.value = `${before}@${name} ${after}`;
+                const nextCaret = before.length + name.length + 2;
+                messageInput.setSelectionRange(nextCaret, nextCaret);
+            }
+            window.closeMentionPopup();
+            messageInput.focus();
+        };
+
+        if (messageInput) {
+            messageInput.addEventListener('input', () => {
+                const val = messageInput.value;
+                const caret = messageInput.selectionStart;
+                const lastAt = val.lastIndexOf('@', caret - 1);
+
+                if (lastAt !== -1 && (lastAt === 0 || /\s/.test(val[lastAt - 1]))) {
+                    const query = val.substring(lastAt + 1, caret).toLowerCase().trim();
+                    
+                    mentionActiveMatches = [];
+                    if ('ทุกคน'.includes(query) || query === '') {
+                        mentionActiveMatches.push({ name: 'ทุกคน', first_name: 'ทุกคน', position: 'สมาชิกทุกคนในห้อง', isAll: true });
+                    }
+                    mentionUsersList.forEach(u => {
+                        if (u.id === currentUserId) return;
+                        if (u.name.toLowerCase().includes(query) || u.first_name.toLowerCase().includes(query)) {
+                            mentionActiveMatches.push(u);
+                        }
+                    });
+
+                    if (mentionActiveMatches.length > 0) {
+                        mentionSelectedIndex = 0;
+                        renderMentionPopup();
+                        mentionPopup.style.display = 'block';
+                    } else {
+                        window.closeMentionPopup();
+                    }
+                } else {
+                    window.closeMentionPopup();
+                }
+            });
+
+            messageInput.addEventListener('keydown', (e) => {
+                if (!mentionPopup || mentionPopup.style.display === 'none' || mentionActiveMatches.length === 0) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    mentionSelectedIndex = (mentionSelectedIndex + 1) % mentionActiveMatches.length;
+                    renderMentionPopup();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    mentionSelectedIndex = (mentionSelectedIndex - 1 + mentionActiveMatches.length) % mentionActiveMatches.length;
+                    renderMentionPopup();
+                } else if (e.key === 'Enter' || e.key === 'Tab') {
+                    e.preventDefault();
+                    const selected = mentionActiveMatches[mentionSelectedIndex];
+                    if (selected) {
+                        window.insertMention(selected.first_name || selected.name);
+                    }
+                } else if (e.key === 'Escape') {
+                    window.closeMentionPopup();
+                }
+            });
+        }
+
+        function renderMentionPopup() {
+            if (!mentionPopup) return;
+            let html = '';
+            mentionActiveMatches.forEach((item, idx) => {
+                const isSel = idx === mentionSelectedIndex;
+                const isAll = item.isAll;
+                const avatarHtml = isAll 
+                    ? `<div class="mention-item-fallback" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">📢</div>`
+                    : (item.avatar ? `<img src="${item.avatar}" class="mention-item-avatar">` : `<div class="mention-item-fallback" style="background: ${item.position_color || '#3b82f6'};">${item.first_name.charAt(0).toUpperCase()}</div>`);
+
+                html += `
+                    <div class="mention-item ${isSel ? 'selected' : ''}" onmousedown="window.insertMention('${escapeHtml(item.first_name || item.name)}')">
+                        ${avatarHtml}
+                        <div style="flex: 1; min-width: 0;">
+                            <span style="font-weight: 600; font-size: 13px;">@${escapeHtml(item.first_name || item.name)}</span>
+                            <span style="font-size: 11px; color: var(--text-muted); margin-left: 6px;">${escapeHtml(item.position || '')}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            mentionPopup.innerHTML = html;
+        }
+
+        // Close mention popup if clicking outside
+        document.addEventListener('click', (e) => {
+            if (mentionPopup && !mentionPopup.contains(e.target) && e.target !== messageInput) {
+                window.closeMentionPopup();
+            }
+        });
+
+        // ==========================================
+        // LEVEL 1: EDIT & DELETE MESSAGE HANDLERS
+        // ==========================================
+        window.startEditMessage = function(msgId, btn) {
+            const row = document.querySelector(`.message-row[data-message-id="${msgId}"]`);
+            if (!row) return;
+            const msgTextEl = row.querySelector('.message-text');
+            if (!msgTextEl) return;
+
+            if (msgTextEl.querySelector('.msg-edit-box')) return;
+
+            const clone = msgTextEl.cloneNode(true);
+            clone.querySelectorAll('.chat-news-card, .message-edited-badge, .chat-file-card').forEach(e => e.remove());
+            const rawText = clone.textContent.trim();
+
+            msgTextEl.setAttribute('data-original-html', msgTextEl.innerHTML);
+            msgTextEl.innerHTML = `
+                <div class="msg-edit-box">
+                    <textarea class="msg-edit-textarea" rows="2" id="editInput${msgId}">${escapeHtml(rawText)}</textarea>
+                    <div class="msg-edit-btn-row">
+                        <button type="button" class="btn-cancel-edit" onclick="cancelEditMessage(${msgId})">ยกเลิก</button>
+                        <button type="button" class="btn-save-edit" onclick="saveEditMessage(${msgId})">บันทึก</button>
+                    </div>
+                </div>
+            `;
+            const ta = document.getElementById(`editInput${msgId}`);
+            if (ta) {
+                ta.focus();
+                ta.setSelectionRange(ta.value.length, ta.value.length);
+            }
+        };
+
+        window.cancelEditMessage = function(msgId) {
+            const row = document.querySelector(`.message-row[data-message-id="${msgId}"]`);
+            if (!row) return;
+            const msgTextEl = row.querySelector('.message-text');
+            if (!msgTextEl) return;
+            const orig = msgTextEl.getAttribute('data-original-html');
+            if (orig) {
+                msgTextEl.innerHTML = orig;
+            }
+        };
+
+        window.saveEditMessage = async function(msgId) {
+            const ta = document.getElementById(`editInput${msgId}`);
+            if (!ta) return;
+            const newText = ta.value.trim();
+            if (!newText) {
+                alert('ข้อความไม่สามารถเว้นว่างได้');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/messages/${msgId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ message: newText })
+                });
+
+                if (res.ok) {
+                    const json = await res.json();
+                    if (json.success) {
+                        const row = document.querySelector(`.message-row[data-message-id="${msgId}"]`);
+                        if (row) {
+                            const msgTextEl = row.querySelector('.message-text');
+                            if (msgTextEl) {
+                                msgTextEl.innerHTML = formatChatMessage(newText, true);
+                            }
+                        }
+                    }
+                } else {
+                    alert('ไม่สามารถแก้ไขข้อความได้');
+                }
+            } catch (err) {
+                alert('เกิดข้อผิดพลาดในการแก้ไข: ' + err.message);
+            }
+        };
+
+        window.deleteMessageAjax = async function(msgId) {
+            if (!confirm('ต้องการลบข้อความนี้ใช่หรือไม่?')) return;
+
+            try {
+                const res = await fetch(`/messages/${msgId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+
+                if (res.ok) {
+                    const row = document.querySelector(`.message-row[data-message-id="${msgId}"]`);
+                    if (row) {
+                        row.style.transition = 'opacity 0.25s, transform 0.25s';
+                        row.style.opacity = '0';
+                        row.style.transform = 'scale(0.95)';
+                        setTimeout(() => row.remove(), 260);
+                    }
+                } else {
+                    alert('ไม่สามารถลบข้อความได้');
+                }
+            } catch (err) {
+                alert('เกิดข้อผิดพลาดในการลบ: ' + err.message);
+            }
+        };
 
         // Avatar Upload Handlers with Automatic Canvas Resizing
         window.handleAvatarFileSelect = function(event) {
@@ -4659,13 +5469,21 @@
                 const chatImageData = document.getElementById('chatImageData');
                 const chatAudioData = document.getElementById('chatAudioData');
                 const chatAudioDuration = document.getElementById('chatAudioDuration');
+                const chatFileData = document.getElementById('chatFileData');
+                const chatFileName = document.getElementById('chatFileName');
+                const chatFileSize = document.getElementById('chatFileSize');
+                const chatFileType = document.getElementById('chatFileType');
 
                 const text = messageInput.value.trim();
                 const image = chatImageData ? chatImageData.value : '';
                 const audio = chatAudioData ? chatAudioData.value : '';
                 const audioDuration = chatAudioDuration ? (parseInt(chatAudioDuration.value, 10) || null) : null;
+                const fileData = chatFileData ? chatFileData.value : '';
+                const fileName = chatFileName ? chatFileName.value : '';
+                const fileSize = chatFileSize ? (parseInt(chatFileSize.value, 10) || null) : null;
+                const fileType = chatFileType ? chatFileType.value : '';
 
-                if (!text && !image && !audio) {
+                if (!text && !image && !audio && !fileData) {
                     messageInput.focus();
                     return;
                 }
@@ -4678,10 +5496,15 @@
                 const oldImage = image;
                 const oldAudio = audio;
                 const oldAudioDuration = audioDuration;
+                const oldFileData = fileData;
+                const oldFileName = fileName;
+                const oldFileSize = fileSize;
+                const oldFileType = fileType;
 
                 messageInput.value = '';
                 window.removeAttachedImage();
                 window.removeAttachedVoice();
+                window.removeAttachedDocument();
 
                 try {
                     const res = await fetch('/messages', {
@@ -4696,7 +5519,11 @@
                             message: oldText || null,
                             image: oldImage || null,
                             audio: oldAudio || null,
-                            audio_duration: oldAudioDuration
+                            audio_duration: oldAudioDuration,
+                            file_data: oldFileData || null,
+                            file_name: oldFileName || null,
+                            file_size: oldFileSize || null,
+                            file_type: oldFileType || null
                         })
                     });
 
@@ -4725,6 +5552,28 @@
             });
         }
 
+        window.handleMessageUpdatedRealtime = function(data) {
+            if (!data || !data.id) return;
+            const row = document.querySelector(`.message-row[data-message-id="${data.id}"]`);
+            if (row) {
+                const msgTextEl = document.getElementById(`msgText${data.id}`) || row.querySelector('.message-text');
+                if (msgTextEl) {
+                    msgTextEl.innerHTML = formatChatMessage(data.message || '', true);
+                }
+            }
+        };
+
+        window.handleMessageDeletedRealtime = function(data) {
+            if (!data || !data.id) return;
+            const row = document.querySelector(`.message-row[data-message-id="${data.id}"]`);
+            if (row) {
+                row.style.transition = 'opacity 0.25s, transform 0.25s';
+                row.style.opacity = '0';
+                row.style.transform = 'scale(0.95)';
+                setTimeout(() => row.remove(), 260);
+            }
+        };
+
         if (window.Echo && currentRoomId) {
             const channel = window.Echo.channel(`chat.${currentRoomId}`);
             
@@ -4732,6 +5581,14 @@
                 appendMessage(e);
             }).listen('MessageSent', (e) => {
                 appendMessage(e);
+            }).listen('.MessageUpdated', (e) => {
+                window.handleMessageUpdatedRealtime(e);
+            }).listen('MessageUpdated', (e) => {
+                window.handleMessageUpdatedRealtime(e);
+            }).listen('.MessageDeleted', (e) => {
+                window.handleMessageDeletedRealtime(e);
+            }).listen('MessageDeleted', (e) => {
+                window.handleMessageDeletedRealtime(e);
             });
 
             if (window.Echo.connector && window.Echo.connector.pusher) {
@@ -5253,6 +6110,7 @@
         // ==========================================
         let lastNewsHash = null;
         let lastRoomsHash = null;
+        let lastDmHash = null;
         let isSyncing = false;
 
         window.escapeHtml = function(text) {
@@ -5598,6 +6456,23 @@
                             });
                             roomsList.innerHTML = rHtml;
                         }
+                    }
+                }
+
+                // 5. Direct Message Rooms live sync
+                if (data.dm_hash && data.dm_hash !== lastDmHash) {
+                    lastDmHash = data.dm_hash;
+                    if (data.dm_rooms && Array.isArray(data.dm_rooms)) {
+                        data.dm_rooms.forEach(dm => {
+                            const item = document.querySelector(`.dm-item[data-dm-user-id="${dm.other_user_id}"]`);
+                            if (item) {
+                                item.setAttribute('data-dm-room-id', dm.id);
+                                item.href = `/dashboard?room=${dm.id}`;
+                                if (window.currentRoomId && window.currentRoomId == dm.id) {
+                                    item.classList.add('active');
+                                }
+                            }
+                        });
                     }
                 }
 
