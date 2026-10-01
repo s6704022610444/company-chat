@@ -32,8 +32,11 @@ Route::get('/dashboard', function () {
         ->where('status', 'ยังไม่เริ่ม')
         ->count();
 
-    $selectedRoom = request('room');
+    $myTasksCount = \App\Models\Task::where('assigned_to', auth()->id())
+        ->where('status', '!=', 'เสร็จแล้ว')
+        ->count();
 
+    $selectedRoom = request('room');
 
     if (!$selectedRoom && $rooms->count() > 0) {
         $selectedRoom = $rooms->first()->id;
@@ -54,7 +57,8 @@ Route::get('/dashboard', function () {
         'messages',
         'tasks',
         'notifications',
-        'newTaskNotifications'
+        'newTaskNotifications',
+        'myTasksCount'
     ));
 })->middleware('auth')->name('dashboard');
 

@@ -3,12 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompanyChat - ระบบแชตและจัดการงานองค์กร</title>
 
-    <title>CompanyChat</title>
+    <!-- Google Fonts: Plus Jakarta Sans & Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --bg-surface: #1e293b;
+            --bg-card: #1f293d;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-indigo: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            --accent-glow: 0 4px 20px rgba(59, 130, 246, 0.35);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,171 +36,230 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f3f4f6;
+            font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .app {
             display: flex;
             height: 100vh;
+            background: var(--bg-primary);
         }
 
         /* Sidebar */
         .sidebar {
-            width: 260px;
-            background: #1f2937;
+            width: 290px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .sidebar-header {
+            padding: 20px 20px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--accent-glow);
+        }
+
+        .logo-text {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 40%, #93c5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding-left: 8px;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 9px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            margin-bottom: 6px;
+        }
+
+        .nav-button:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateX(2px);
+        }
+
+        .nav-badge {
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .badge-red {
+            background: #ef4444;
             color: white;
-            padding: 25px 15px;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            padding-left: 10px;
+        .badge-blue {
+            background: #3b82f6;
+            color: white;
         }
 
-        .section-title {
-            font-size: 12px;
-            color: #9ca3af;
-            margin: 20px 10px 10px;
+        .badge-amber {
+            background: #f59e0b;
+            color: #111827;
         }
 
-        .room {
-            padding: 12px;
+        /* Room list items */
+        .room-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
             border-radius: 8px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            transition: all 0.18s ease;
+            border: 1px solid transparent;
+        }
+
+        .room-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-color);
+        }
+
+        .room-item.active {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.22) 0%, rgba(99, 102, 241, 0.08) 100%);
+            border-color: rgba(59, 130, 246, 0.45);
+        }
+
+        .room-link {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .room-item.active .room-link {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .room-hash {
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        .room-delete-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
             cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 6px;
+            opacity: 0.6;
+            transition: all 0.15s;
         }
 
-        .room:hover,
-        .room.active {
-            background: #374151;
+        .room-delete-btn:hover {
+            opacity: 1;
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.15);
         }
 
-        /* Main */
+        /* Main View */
         .main {
             flex: 1;
             display: flex;
             flex-direction: column;
+            background: var(--bg-primary);
+            position: relative;
+            min-width: 0;
         }
 
-        .header {
-            height: 70px;
-            background: white;
-            border-bottom: 1px solid #ddd;
+        /* Top Header */
+        .top-header {
+            height: 68px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 25px;
+            padding: 0 24px;
+            z-index: 10;
         }
 
-        .header h2 {
-            font-size: 20px;
-        }
-
-        .user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #2563eb;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .logout {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .logout:hover {
-            background: #dc2626;
-        }
-
-        /* Chat */
-        .chat {
-            flex: 1;
-            padding: 25px;
-            overflow-y: auto;
+        .room-title-area {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            scroll-behavior: smooth;
+            gap: 2px;
         }
 
-        .message {
-            margin-bottom: 4px;
-            max-width: 65%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message.my-message {
-            align-self: flex-end;
-            align-items: flex-end;
-        }
-
-        .message.my-message .message-name {
-            display: none;
-        }
-
-        .message.my-message .message-text {
-            background: #2563eb;
-            color: white;
-            border-radius: 18px 18px 4px 18px;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-        }
-
-        .message.other-message {
-            align-self: flex-start;
-            align-items: flex-start;
-        }
-
-        .message.other-message .message-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: #4b5563;
-            margin-bottom: 4px;
+        .room-title-area h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
             display: flex;
             align-items: center;
-            gap: 4px;
-        }
-
-        .message.other-message .message-text {
-            background: white;
-            color: #111827;
-            border: 1px solid #e5e7eb;
-            border-radius: 18px 18px 18px 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .message-text {
-            display: inline-block;
-            padding: 10px 16px;
-            font-size: 15px;
-            line-height: 1.5;
-            word-break: break-word;
-        }
-
-        .message-time {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 3px;
-            padding: 0 4px;
+            gap: 8px;
         }
 
         .live-status {
@@ -188,287 +267,564 @@
             align-items: center;
             gap: 6px;
             font-size: 12px;
-            color: #10b981;
-            background: #ecfdf5;
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid #a7f3d0;
+            color: #34d399;
             font-weight: 500;
         }
 
         .live-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             background-color: #10b981;
             border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.8; }
         }
 
-        /* Input */
-        .input-area {
-            background: white;
-            border-top: 1px solid #ddd;
-            padding: 15px 25px;
+        /* User badge & profile */
+        .user-profile {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 12px;
         }
 
-        .input-area input {
-            flex: 1;
-            padding: 13px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-        }
-
-        .send {
-            background: #2563eb;
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--accent-gradient);
             color: white;
-            border: none;
-            padding: 0 25px;
-            border-radius: 8px;
-            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
             font-size: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
         }
 
-        .send:hover {
-            background: #1d4ed8;
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .role-pill {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 6px;
+            margin-top: 2px;
+        }
+
+        .role-admin {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(236, 72, 153, 0.2));
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+        }
+
+        .role-manager {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+        }
+
+        .role-supervisor {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(20, 184, 166, 0.2));
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.35);
+        }
+
+        .role-staff {
+            background: rgba(148, 163, 184, 0.15);
+            color: #cbd5e1;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 6px 12px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            font-family: inherit;
+        }
+
+        .logout-btn:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        /* Important Task Banner */
+        .urgent-task-banner {
+            margin: 14px 24px 0;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .urgent-task-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .urgent-task-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #fbbf24;
+            letter-spacing: 0.5px;
+        }
+
+        .urgent-task-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .urgent-task-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Chat Scroll Area */
+        .chat-container {
+            flex: 1;
+            padding: 20px 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Messages */
+        .message-row {
+            display: flex;
+            flex-direction: column;
+            max-width: 68%;
+            animation: fadeIn 0.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-row.my-message {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .message-row.other-message {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 3px;
+            padding-left: 2px;
+        }
+
+        .message-bubble {
+            padding: 10px 16px;
+            font-size: 14.5px;
+            line-height: 1.5;
+            word-break: break-word;
+            position: relative;
+        }
+
+        .my-message .message-bubble {
+            background: var(--accent-gradient);
+            color: #ffffff;
+            border-radius: 18px 18px 4px 18px;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+        }
+
+        .other-message .message-bubble {
+            background: var(--bg-surface);
+            color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 18px 18px 18px 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
+            padding: 0 4px;
+        }
+
+        /* Input Area */
+        .input-bar {
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .input-form {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 5px 6px 5px 16px;
+            transition: all 0.2s ease;
+        }
+
+        .input-form:focus-within {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .chat-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 14.5px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .chat-input::placeholder {
+            color: #64748b;
+        }
+
+        .send-button {
+            background: var(--accent-gradient);
+            border: none;
+            color: white;
+            padding: 9px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: var(--accent-glow);
+            transition: all 0.18s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .send-button:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .send-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Modern Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-card {
+            width: 440px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-hover);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            outline: none;
+            transition: all 0.15s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
     </style>
 </head>
-
 <body>
 
 <div class="app">
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <aside class="sidebar">
 
-        <div class="logo">
-            💬 CompanyChat
+        <div class="sidebar-header">
+            <div class="logo-icon">💬</div>
+            <div class="logo-text">CompanyChat</div>
         </div>
 
-        @if($notifications > 0)
+        <div class="sidebar-scroll">
 
-            <div style="
-                margin: 15px 0;
-                padding: 12px;
-                background: #7f1d1d;
-                border-radius: 8px;
-            ">
+            <!-- Tasks Navigation -->
+            <div>
+                <div class="nav-section-title">งานและภารกิจ</div>
 
-                <a href="{{ route('my.tasks') }}"
-                    style="
-                        display:block;
-                        color:white;
-                        text-decoration:none;
-                    ">
-
-                    🔔 มีงานใกล้ครบกำหนด
-                    <b>{{ $notifications }}</b>
-                    งาน
-
+                <!-- งานของฉัน (My Tasks) -->
+                <a href="{{ route('my.tasks') }}" class="nav-button">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        📌 งานของฉัน
+                    </span>
+                    @if(isset($myTasksCount) && $myTasksCount > 0)
+                        <span class="nav-badge badge-blue">{{ $myTasksCount }}</span>
+                    @endif
                 </a>
 
+                <!-- งานทั้งหมด (All Tasks) -->
+                <a href="{{ route('tasks.index') }}" class="nav-button">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        📋 จัดการงานทั้งหมด
+                    </span>
+                </a>
+
+                @if($notifications > 0)
+                    <a href="{{ route('my.tasks') }}" class="nav-button" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35);">
+                        <span style="color: #fbbf24; font-size: 13px;">
+                            ⏰ ใกล้ครบกำหนด
+                        </span>
+                        <span class="nav-badge badge-amber">{{ $notifications }}</span>
+                    </a>
+                @endif
             </div>
 
+            <!-- Chat Rooms Section -->
+            <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                    <div class="nav-section-title" style="margin-bottom: 0;">ห้องแชต ({{ $rooms->count() }})</div>
+
+                    {{-- ปุ่มสร้างห้อง (ผู้จัดการ / ผู้ดูแลระบบ) --}}
+                    @if(in_array(auth()->user()->position, ['ผู้จัดการ', 'ผู้ดูแลระบบ']))
+                        <button type="button"
+                                onclick="document.getElementById('createRoomModal').style.display='flex'"
+                                style="background: transparent; border: none; color: var(--accent-blue); cursor: pointer; font-size: 13px; font-weight: 600; padding: 2px 8px; border-radius: 4px;"
+                                title="เพิ่มห้องแชตใหม่">
+                            ＋ สร้าง
+                        </button>
+                    @endif
+                </div>
+
+                @foreach($rooms as $room)
+                    <div class="room-item {{ $selectedRoom == $room->id ? 'active' : '' }}">
+                        <a href="{{ url('/dashboard?room=' . $room->id) }}" class="room-link">
+                            <span class="room-hash">#</span>
+                            <span>{{ $room->name }}</span>
+                        </a>
+
+                        {{-- ลบห้อง (ผู้ดูแลระบบเท่านั้น) --}}
+                        @if(auth()->user()->position === 'ผู้ดูแลระบบ')
+                            <form method="POST"
+                                  action="{{ route('rooms.destroy', $room->id) }}"
+                                  onsubmit="return confirm('ต้องการลบห้อง {{ $room->name }} ใช่หรือไม่?')"
+                                  style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
+                                    🗑️
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Admin Area -->
+            @if(auth()->user()->position === 'ผู้ดูแลระบบ')
+                <div>
+                    <div class="nav-section-title">การจัดการระบบ</div>
+                    <a href="{{ route('users.index') }}" class="nav-button" style="background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.35);">
+                        <span>🔐 จัดการสิทธิ์ผู้ใช้</span>
+                        <span style="font-size: 11px; color: #a5b4fc;">Admin</span>
+                    </a>
+                </div>
             @endif
 
-        @if($newTaskNotifications > 0)
-            <div style="
-                margin: 15px 0;
-                padding: 12px;
-                background: #1e3a8a;
-                border-radius: 8px;
-            ">
-                <a href="{{ route('my.tasks') }}"
-                style="
-                    display: block;
-                    color: white;
-                    text-decoration: none;
-                ">
-                    📋 มีงานใหม่ที่ยังไม่ได้เริ่ม
-                    <b>{{ $newTaskNotifications }}</b>
-                    งาน
-                </a>
-            </div>
-        @endif
-
-        <div class="section-title">
-            ห้องแชต
         </div>
 
-        {{-- งานทั้งหมด --}}
-        <div style="margin-bottom: 15px;">
+    </aside>
 
-            <a href="{{ route('tasks.index') }}"
-            style="
-                display: block;
-                padding: 12px 15px;
-                color: white;
-                text-decoration: none;
-                border-radius: 6px;
-                background: #2563eb;
-                font-weight: bold;
-            ">
-                📋 งานทั้งหมด
-            </a>
+    <!-- Main Chat Workspace -->
+    <main class="main">
 
-        </div>
+        <!-- Top Header -->
+        <header class="top-header">
 
-        {{-- รายการห้องแชต --}}
-        @foreach($rooms as $room)
-            <div style="
-                display: flex;
-                align-items: center;
-                margin-bottom: 5px;
-            ">
-
-                <a href="{{ url('/dashboard?room=' . $room->id) }}"
-                style="
-                    flex: 1;
-                    padding: 12px 15px;
-                    color: white;
-                    text-decoration: none;
-                    cursor: pointer;
-                    border-radius: 6px;
-                    background: {{ $selectedRoom == $room->id ? '#374151' : 'transparent' }};
-                ">
-                    # {{ $room->name }}
-                </a>
-
-                {{-- ลบห้องได้เฉพาะผู้ดูแลระบบ --}}
-                @if(auth()->user()->position === 'ผู้ดูแลระบบ')
-                    <form method="POST"
-                        action="{{ route('rooms.destroy', $room->id) }}"
-                        onsubmit="return confirm('ต้องการลบห้อง {{ $room->name }} ใช่หรือไม่?')"
-                        style="margin-left: 5px;">
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit"
-                                style="
-                                    border: none;
-                                    background: #dc2626;
-                                    color: white;
-                                    padding: 8px 10px;
-                                    border-radius: 6px;
-                                    cursor: pointer;
-                                ">
-                            🗑️
-                        </button>
-                    </form>
-                @endif
-
-            </div>
-        @endforeach
-
-        {{-- ปุ่มเพิ่มห้อง สำหรับผู้จัดการและผู้ดูแลระบบ --}}
-        @if(in_array(auth()->user()->position, ['ผู้จัดการ', 'ผู้ดูแลระบบ']))
-            <button
-                type="button"
-                onclick="document.getElementById('createRoomModal').style.display='flex'"
-                style="
-                    width: 100%;
-                    margin-top: 15px;
-                    padding: 10px;
-                    border: none;
-                    border-radius: 8px;
-                    background: #2563eb;
-                    color: white;
-                    cursor: pointer;
-                "
-            >
-                ＋ เพิ่มห้อง
-            </button>
-        @endif
-
-        {{-- ปุ่มจัดการสิทธิ์ สำหรับผู้ดูแลระบบเท่านั้น --}}
-        @if(auth()->user()->position === 'ผู้ดูแลระบบ')
-            <a
-                href="{{ route('users.index') }}"
-                style="
-                    display: block;
-                    margin-top: 10px;
-                    padding: 10px;
-                    border-radius: 8px;
-                    background: #374151;
-                    color: white;
-                    text-decoration: none;
-                    text-align: center;
-                "
-            >
-                🔐 จัดการสิทธิ์
-            </a>
-        @endif
-
-    </div>
-
-
-    <!-- Main -->
-    <div class="main">
-
-        <!-- Header -->
-        <div class="header">
-
-            <div>
+            <div class="room-title-area">
                 <h2>
-                    # {{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}
+                    <span style="color: var(--accent-blue);">#</span>
+                    <span>{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
                 </h2>
-                <div style="margin-top: 4px;">
-                    <span class="live-status">
-                        <span class="live-dot"></span>
-                        <span id="socketStatus">Real-time WebSocket (Reverb)</span>
+                <div class="live-status">
+                    <span class="live-dot"></span>
+                    <span id="socketStatus">Real-time WebSocket (Reverb)</span>
+                </div>
+            </div>
+
+            <!-- User Info & Logout -->
+            <div class="user-profile">
+                <div class="user-avatar" title="{{ auth()->user()->position }}">
+                    {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                </div>
+
+                <div class="user-details">
+                    <span class="user-name">{{ auth()->user()->name }}</span>
+                    @php
+                        $roleClass = match(auth()->user()->position) {
+                            'ผู้ดูแลระบบ' => 'role-admin',
+                            'ผู้จัดการ' => 'role-manager',
+                            'หัวหน้างาน' => 'role-supervisor',
+                            default => 'role-staff',
+                        };
+                    @endphp
+                    <span class="role-pill {{ $roleClass }}">
+                        {{ auth()->user()->position ?? 'พนักงาน' }}
                     </span>
                 </div>
-            </div>
 
-            <div class="user">
-
-                <div class="avatar" title="{{ auth()->user()->position ?? 'สมาชิก' }}">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                </div>
-
-                <div>
-                    <div style="font-weight: bold; font-size: 15px;">
-                        {{ auth()->user()->name }}
-                    </div>
-                    <div style="font-size: 12px; color: #6b7280;">
-                        {{ auth()->user()->position ?? 'สมาชิก' }}
-                    </div>
-                </div>
-
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" style="margin-left: 8px;">
                     @csrf
-                    <button class="logout" type="submit">
+                    <button class="logout-btn" type="submit">
                         ออกจากระบบ
                     </button>
                 </form>
-
             </div>
 
-        </div>
+        </header>
 
+        {{-- Urgent / Important Task Floating Card --}}
+        @php
+            $priorityOrder = ['ด่วน' => 1, 'สูง' => 2, 'ปกติ' => 3, 'ต่ำ' => 4];
+            $importantTask = $tasks
+                ->filter(fn($t) => $t->status !== 'เสร็จแล้ว')
+                ->sort(function ($a, $b) use ($priorityOrder) {
+                    $now = now();
+                    $timeA = $a->due_at ? $now->diffInMinutes($a->due_at, false) : PHP_INT_MAX;
+                    $timeB = $b->due_at ? $now->diffInMinutes($b->due_at, false) : PHP_INT_MAX;
+                    if (($timeA < 0) !== ($timeB < 0)) return $timeA < 0 ? -1 : 1;
+                    $pA = $priorityOrder[$a->priority] ?? 99;
+                    $pB = $priorityOrder[$b->priority] ?? 99;
+                    return $pA <=> $pB ?: $timeA <=> $timeB;
+                })
+                ->first();
+        @endphp
 
-        <!-- Chat -->
-        <div class="chat" id="chatContainer">
+        @if($importantTask)
+            <div class="urgent-task-banner">
+                <div class="urgent-task-content">
+                    <span class="urgent-task-label">⚡ งานสำคัญเร่งด่วน</span>
+                    <span class="urgent-task-title">{{ $importantTask->title }}</span>
+                    <span class="urgent-task-meta">
+                        👤 {{ $importantTask->assignee?->name ?? 'ยังไม่มอบหมาย' }} &nbsp;•&nbsp;
+                        สถานะ: <strong style="color: #93c5fd;">{{ $importantTask->status }}</strong> &nbsp;•&nbsp;
+                        ความสำคัญ: <strong style="color: #f87171;">{{ $importantTask->priority }}</strong>
+                        @if($importantTask->due_at)
+                            &nbsp;•&nbsp;
+                            @if($importantTask->due_at->isPast())
+                                <span style="color: #f87171; font-weight: 600;">🔴 เกินกำหนด</span>
+                            @else
+                                <span style="color: #fbbf24; font-weight: 600;">⏳ {{ $importantTask->due_at->diffForHumans() }}</span>
+                            @endif
+                        @endif
+                    </span>
+                </div>
 
+                <a href="{{ route('tasks.index') }}"
+                   style="color: var(--accent-blue); text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 12px; background: rgba(59, 130, 246, 0.15); border-radius: 8px;">
+                    ดูรายละเอียด →
+                </a>
+            </div>
+        @endif
+
+        <!-- Chat Container -->
+        <div class="chat-container" id="chatContainer">
             @foreach($messages as $message)
                 @php
                     $isMe = $message->user_id === auth()->id();
                 @endphp
-                <div class="message {{ $isMe ? 'my-message' : 'other-message' }}" data-message-id="{{ $message->id }}">
-                    <div class="message-name">
-                        👤 {{ $message->user?->name ?? 'User' }}
-                    </div>
+                <div class="message-row {{ $isMe ? 'my-message' : 'other-message' }}" data-message-id="{{ $message->id }}">
+                    @if(!$isMe)
+                        <div class="message-sender">
+                            👤 {{ $message->user?->name ?? 'User' }}
+                        </div>
+                    @endif
 
-                    <div class="message-text">
+                    <div class="message-bubble">
                         {{ $message->message }}
                     </div>
 
@@ -479,278 +835,71 @@
             @endforeach
         </div>
 
-        {{-- งานที่ต้องทำ --}}
-        @php
-            $priorityOrder = [
-                'ด่วน' => 1,
-                'สูง' => 2,
-                'ปกติ' => 3,
-                'ต่ำ' => 4,
-            ];
-
-           $importantTask = $tasks
-            ->filter(function ($task) {
-                return $task->status !== 'เสร็จแล้ว';
-            })
-            ->sort(function ($a, $b) use ($priorityOrder) {
-
-                $now = now();
-
-                // เวลาที่เหลือ
-                $timeA = $a->due_at
-                    ? $now->diffInMinutes($a->due_at, false)
-                    : PHP_INT_MAX;
-
-                $timeB = $b->due_at
-                    ? $now->diffInMinutes($b->due_at, false)
-                    : PHP_INT_MAX;
-
-                /*
-                * 1. เกินกำหนด
-                */
-                $overdueA = $timeA < 0;
-                $overdueB = $timeB < 0;
-
-                if ($overdueA !== $overdueB) {
-                    return $overdueA ? -1 : 1;
-                }
-
-                /*
-                * 2. เหลือไม่เกิน 1 ชั่วโมง
-                */
-                $urgentTimeA = $timeA >= 0 && $timeA <= 60;
-                $urgentTimeB = $timeB >= 0 && $timeB <= 60;
-
-                if ($urgentTimeA !== $urgentTimeB) {
-                    return $urgentTimeA ? -1 : 1;
-                }
-
-                /*
-                * 3. เหลือไม่เกิน 24 ชั่วโมง
-                */
-                $soonA = $timeA >= 0 && $timeA <= 1440;
-                $soonB = $timeB >= 0 && $timeB <= 1440;
-
-                if ($soonA !== $soonB) {
-                    return $soonA ? -1 : 1;
-                }
-
-                /*
-                * 4. ความสำคัญ
-                */
-                $priorityA = $priorityOrder[$a->priority] ?? 99;
-                $priorityB = $priorityOrder[$b->priority] ?? 99;
-
-                if ($priorityA !== $priorityB) {
-                    return $priorityA <=> $priorityB;
-                }
-
-                /*
-                * 5. กำหนดส่งเร็วกว่าอยู่ก่อน
-                */
-                return $timeA <=> $timeB;
-            })
-            ->first();
-        @endphp
-
-        @if($importantTask)
-
-            <div style="
-                margin: 15px;
-                padding: 15px;
-                background: #1f2937;
-                border-radius: 10px;
-            ">
-
-                <div style="
-                    font-size: 13px;
-                    color: #9ca3af;
-                    margin-bottom: 8px;
-                ">
-                    📌 งานที่ควรจัดการก่อน
-                </div>
-
-                <div style="
-                    font-size: 18px;
-                    font-weight: bold;
-                    margin-bottom: 8px;
-                ">
-                    {{ $importantTask->title }}
-                </div>
-
-                <div style="
-                    font-size: 13px;
-                    color: #d1d5db;
-                ">
-                    👤 {{ $importantTask->assignee?->name ?? 'ยังไม่มอบหมาย' }}
-                    &nbsp; | &nbsp;
-                    📌 {{ $importantTask->status }}
-                    &nbsp; | &nbsp;
-                    🔥 {{ $importantTask->priority }}
-                </div>
-
-                @if($importantTask->due_at)
-
-                    @if($importantTask->due_at->isPast())
-
-                        <div style="
-                            margin-top: 8px;
-                            color: #f87171;
-                        ">
-                            🔴 เกินกำหนดแล้ว
-                        </div>
-
-                    @else
-
-                        <div style="
-                            margin-top: 8px;
-                            color: #fbbf24;
-                        ">
-                            ⏳ {{ $importantTask->due_at->diffForHumans() }}
-                        </div>
-
-                    @endif
-
-                @endif
-
-            </div>
-
-        @endif
-
-        <!-- Input -->
-        <div class="input-area">
-
-            <form id="chatForm" method="POST" action="{{ route('messages.store') }}" style="display: flex; gap: 10px; width: 100%;">
+        <!-- Input Bar -->
+        <div class="input-bar">
+            <form id="chatForm" method="POST" action="/messages" class="input-form">
                 @csrf
-
                 <input type="hidden" id="roomIdInput" name="room_id" value="{{ $selectedRoom }}">
 
                 <input
                     type="text"
                     id="messageInput"
                     name="message"
-                    placeholder="พิมพ์ข้อความ... (กด Enter เพื่อส่งทันที)"
+                    class="chat-input"
+                    placeholder="พิมพ์ข้อความในห้องนี้... (กด Enter เพื่อส่งทันที)"
                     required
                     autocomplete="off"
                 >
 
-                <button class="send" id="sendBtn" type="submit">
-                    ส่ง
+                <button class="send-button" id="sendBtn" type="submit">
+                    <span>ส่ง</span>
+                    <span>➔</span>
                 </button>
             </form>
-
         </div>
 
-    </div>
+    </main>
 
-
-    {{-- Modal เพิ่มห้อง --}}
-    <div id="createRoomModal"
-        style="
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        "
-    >
-        <div style="
-            width: 400px;
-            background: #1f2937;
-            padding: 25px;
-            border-radius: 12px;
-            color: white;
-        ">
-
-            <h2 style="margin-top: 0;">
-                ＋ เพิ่มห้องแชต
-            </h2>
+    <!-- Create Room Modal -->
+    <div id="createRoomModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-title">
+                <span>➕</span>
+                <span>สร้างห้องแชตใหม่</span>
+            </div>
 
             <form method="POST" action="{{ route('rooms.store') }}">
                 @csrf
 
-                <label>
-                    ชื่อห้อง
-                </label>
+                <label class="form-label">ชื่อห้องแชต</label>
+                <input type="text"
+                       name="name"
+                       class="form-input"
+                       placeholder="เช่น แผนกการตลาด, โปรเจกต์ Alpha"
+                       required>
 
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="เช่น Project A"
-                    required
-                    style="
-                        width: 100%;
-                        box-sizing: border-box;
-                        padding: 10px;
-                        margin: 8px 0 15px;
-                        border-radius: 6px;
-                        border: 1px solid #4b5563;
-                        background: #111827;
-                        color: white;
-                    "
-                >
+                <label class="form-label">รายละเอียดห้อง (ถ้ามี)</label>
+                <textarea name="description"
+                          class="form-textarea"
+                          rows="3"
+                          placeholder="อธิบายวัตถุประสงค์ของห้องแชตนี้..."></textarea>
 
-                <label>
-                    รายละเอียด
-                </label>
-
-                <textarea
-                    name="description"
-                    placeholder="รายละเอียดของห้อง (ถ้ามี)"
-                    style="
-                        width: 100%;
-                        box-sizing: border-box;
-                        height: 80px;
-                        padding: 10px;
-                        margin: 8px 0 15px;
-                        border-radius: 6px;
-                        border: 1px solid #4b5563;
-                        background: #111827;
-                        color: white;
-                        resize: none;
-                    "
-                ></textarea>
-
-                <div style="
-                    display: flex;
-                    gap: 10px;
-                    justify-content: flex-end;
-                ">
-
-                    <button
-                        type="button"
-                        onclick="document.getElementById('createRoomModal').style.display='none'"
-                        style="
-                            padding: 10px 16px;
-                            border: none;
-                            border-radius: 6px;
-                            cursor: pointer;
-                        "
-                    >
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
+                    <button type="button"
+                            onclick="document.getElementById('createRoomModal').style.display='none'"
+                            style="padding: 9px 16px; border: 1px solid var(--border-color); background: transparent; color: #cbd5e1; border-radius: 8px; cursor: pointer;">
                         ยกเลิก
                     </button>
 
-                    <button
-                        type="submit"
-                        style="
-                            padding: 10px 16px;
-                            border: none;
-                            border-radius: 6px;
-                            background: #2563eb;
-                            color: white;
-                            cursor: pointer;
-                        "
-                    >
+                    <button type="submit"
+                            style="padding: 9px 20px; border: none; background: var(--accent-gradient); color: white; border-radius: 8px; cursor: pointer; font-weight: 600;">
                         สร้างห้อง
                     </button>
-
                 </div>
-
             </form>
         </div>
     </div>
+
 </div>
 
 <script>
@@ -763,7 +912,7 @@
         const socketStatus = document.getElementById('socketStatus');
 
         let highestMessageId = 0;
-        document.querySelectorAll('.message[data-message-id]').forEach(el => {
+        document.querySelectorAll('.message-row[data-message-id]').forEach(el => {
             const id = parseInt(el.getAttribute('data-message-id'), 10);
             if (id > highestMessageId) highestMessageId = id;
         });
@@ -779,22 +928,22 @@
             if (!chatContainer) return;
             if (data.id) {
                 if (data.id > highestMessageId) highestMessageId = data.id;
-                if (document.querySelector(`.message[data-message-id="${data.id}"]`)) {
+                if (document.querySelector(`.message-row[data-message-id="${data.id}"]`)) {
                     return;
                 }
             }
 
             const isMe = Number(data.user_id) === Number(currentUserId);
             const msgEl = document.createElement('div');
-            msgEl.className = `message ${isMe ? 'my-message' : 'other-message'}`;
+            msgEl.className = `message-row ${isMe ? 'my-message' : 'other-message'}`;
             if (data.id) msgEl.setAttribute('data-message-id', data.id);
 
-            const nameHtml = !isMe ? `<div class="message-name">👤 ${escapeHtml(data.user_name || 'User')}</div>` : '';
+            const nameHtml = !isMe ? `<div class="message-sender">👤 ${escapeHtml(data.user_name || 'User')}</div>` : '';
             const timeHtml = data.created_at ? `<div class="message-time">${escapeHtml(data.created_at)}</div>` : '';
 
             msgEl.innerHTML = `
                 ${nameHtml}
-                <div class="message-text">${escapeHtml(data.message)}</div>
+                <div class="message-bubble">${escapeHtml(data.message)}</div>
                 ${timeHtml}
             `;
 
@@ -889,7 +1038,7 @@
                         }
                     }
                 } catch (e) {
-                    // silently handle offline/network blips
+                    // silently handle offline blips
                 }
             }, 3000);
         }
