@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CompanyChat - ระบบแชตและจัดการงานองค์กร</title>
     <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
 
@@ -1921,13 +1921,64 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 19;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            z-index: 199;
+        }
+
+        /* Mobile Drawer Header */
+        .sidebar-mobile-header {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-surface);
+            flex-shrink: 0;
+        }
+
+        .sidebar-close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .sidebar-close-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-surface-hover);
         }
 
         @media (max-width: 768px) {
             .mobile-toggle-btn {
                 display: flex;
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+                border-radius: 8px;
+                flex-shrink: 0;
+            }
+
+            .top-header {
+                height: 56px;
+                min-height: 56px;
+                max-height: 56px;
+                padding: 0 10px;
+                gap: 6px;
+            }
+
+            .app-body {
+                height: calc(100vh - 56px);
+                height: calc(100dvh - 56px);
             }
 
             .header-brand {
@@ -1935,30 +1986,79 @@
                 min-width: auto;
                 max-width: none;
                 border-right: none;
-                padding: 0 8px;
+                padding: 0;
+                gap: 6px;
+                flex-shrink: 0;
+            }
+
+            /* On small screens, hide text "CompanyChat" in top header so room title has ample space */
+            .header-brand .logo-text {
+                display: none;
+            }
+
+            .header-brand .logo-icon {
+                width: 34px;
+                height: 34px;
             }
 
             .header-center {
-                padding-left: 8px;
+                padding-left: 6px;
+                min-width: 0;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .room-title-area {
+                min-width: 0;
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            .room-title-area h2 {
+                font-size: 14.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                line-height: 1.25;
+                margin: 0;
+            }
+
+            .live-status {
+                font-size: 10.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                line-height: 1.2;
+                margin-top: 2px;
+            }
+
+            .sidebar-mobile-header {
+                display: flex;
             }
 
             .sidebar {
                 position: fixed;
-                top: 60px;
+                top: 0;
                 bottom: 0;
                 left: 0;
+                width: 300px;
+                max-width: 85vw;
+                height: 100vh;
+                height: 100dvh;
+                z-index: 200;
                 transform: translateX(-100%);
-                transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-                box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-                height: calc(100vh - 60px);
+                transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
             }
 
             .sidebar.open {
                 transform: translateX(0);
-            }
-
-            .sidebar-backdrop {
-                top: 60px;
             }
 
             .sidebar-backdrop.open {
@@ -1966,10 +2066,12 @@
             }
 
             .sidebar-footer {
-                height: 68px;
-                min-height: 68px;
-                max-height: 68px;
-                padding: 0 14px;
+                height: auto;
+                min-height: 64px;
+                padding: 12px 14px;
+                padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+                background: var(--bg-surface);
+                border-top: 1px solid var(--border-color);
             }
 
             .main {
@@ -1977,43 +2079,89 @@
                 min-width: 100vw;
             }
 
-            .top-header {
-                padding: 0 12px;
-                gap: 8px;
-            }
-
-            .room-title-area h2 {
+            .bell-btn {
+                width: 36px;
+                height: 36px;
                 font-size: 15px;
             }
 
-            .live-status {
-                font-size: 11px;
+            .notification-dropdown {
+                right: -6px;
+                width: 320px;
+                max-width: calc(100vw - 20px);
             }
 
-            .bell-btn {
+            .chat-container {
+                padding: 12px 10px;
+                gap: 12px;
+            }
+
+            .message-row {
+                max-width: 90%;
+            }
+
+            .message-content-wrap {
+                max-width: 100%;
+            }
+
+            .message-bubble {
+                font-size: 14px;
+                padding: 9px 13px;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            .message-chat-image {
+                max-width: 230px;
+                max-height: 230px;
+            }
+
+            .message-audio-player {
+                max-width: 200px;
+                height: 36px;
+            }
+
+            .input-bar {
+                height: auto;
+                min-height: 60px;
+                padding: 8px 10px;
+                padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+            }
+
+            .input-box {
+                height: 40px;
+                padding: 0 10px;
+                font-size: 14px;
+            }
+
+            .chat-tool-btn, .send-btn {
                 width: 38px;
                 height: 38px;
             }
 
-            .chat-container {
-                padding: 14px;
-            }
-
-            .message-row {
-                max-width: 85%;
-            }
-
-            .input-bar {
-                height: 68px;
-                min-height: 68px;
-                max-height: 68px;
-                padding: 0 14px;
-            }
-
             .chat-media-preview-bar {
-                left: 14px;
-                right: 14px;
+                left: 10px;
+                right: 10px;
                 bottom: calc(100% + 6px);
+            }
+
+            .task-workspace {
+                padding: 14px 10px;
+            }
+
+            .task-card {
+                padding: 14px 12px;
+            }
+
+            .filter-pills-bar {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 6px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .filter-pill {
+                flex-shrink: 0;
             }
 
             .form-grid {
@@ -2022,6 +2170,12 @@
 
             .form-full {
                 grid-column: span 1;
+            }
+
+            .modal-card {
+                width: 95vw !important;
+                margin: 10px auto;
+                padding: 18px 14px;
             }
         }
     </style>
@@ -2054,7 +2208,7 @@
                 </h2>
                 <div class="live-status">
                     <span class="live-dot"></span>
-                    <span id="socketStatus">Real-time WebSocket (เชื่อมต่อสำเร็จ)</span>
+                    <span id="socketStatus">Real-time (เชื่อมต่อแล้ว)</span>
                 </div>
             </div>
 
@@ -2155,6 +2309,15 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
+
+            <!-- Mobile Drawer Header (Only visible on mobile) -->
+            <div class="sidebar-mobile-header">
+                <div style="display: flex; align-items: center; gap: 9px;">
+                    <img src="{{ asset('logo.png') }}" alt="CompanyChat" style="width: 28px; height: 28px; object-fit: contain; border-radius: 7px;">
+                    <span style="font-weight: 700; font-size: 16px; color: var(--text-primary); letter-spacing: -0.3px;">CompanyChat</span>
+                </div>
+                <button type="button" id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="ปิดเมนู">✕</button>
+            </div>
 
             <div class="sidebar-scroll">
 
@@ -3805,12 +3968,12 @@
             if (window.Echo.connector && window.Echo.connector.pusher) {
                 window.Echo.connector.pusher.connection.bind('connected', () => {
                     if (socketStatus) {
-                        socketStatus.textContent = 'Real-time WebSocket (เชื่อมต่อสำเร็จ)';
+                        socketStatus.textContent = 'Real-time (เชื่อมต่อแล้ว)';
                     }
                 });
                 window.Echo.connector.pusher.connection.bind('disconnected', () => {
                     if (socketStatus) {
-                        socketStatus.textContent = 'Real-time WebSocket (หลุดการเชื่อมต่อ)';
+                        socketStatus.textContent = 'Real-time (หลุดการเชื่อมต่อ)';
                     }
                 });
             }
