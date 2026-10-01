@@ -16,16 +16,9 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        // เฉพาะหัวหน้างาน ผู้บริหาร ผู้จัดการ และผู้ดูแลระบบ
-        if (!in_array(auth()->user()->position, [
-            'หัวหน้างาน',
-            'ผู้บริหาร',
-            'ผู้จัดการ',
-            'ผู้ดูแลระบบ',
-            'แอดมิน',
-            'Admin'
-        ])) {
-            abort(403, 'คุณไม่มีสิทธิ์สร้างงาน');
+        // เฉพาะผู้บริหาร ผู้จัดการ และผู้ดูแลระบบเท่านั้น
+        if (!auth()->user()?->canManageTasks()) {
+            abort(403, 'คุณไม่มีสิทธิ์สร้างงาน (สำหรับผู้บริหารและผู้ดูแลระบบเท่านั้น)');
         }
 
         $request->validate([
@@ -68,15 +61,8 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        if (!in_array(auth()->user()->position, [
-            'หัวหน้างาน',
-            'ผู้บริหาร',
-            'ผู้จัดการ',
-            'ผู้ดูแลระบบ',
-            'แอดมิน',
-            'Admin'
-        ])) {
-            abort(403, 'คุณไม่มีสิทธิ์แก้ไขงาน');
+        if (!auth()->user()?->canManageTasks()) {
+            abort(403, 'คุณไม่มีสิทธิ์แก้ไขงาน (สำหรับผู้บริหารและผู้ดูแลระบบเท่านั้น)');
         }
 
         $users = User::whereNotIn('position', ['ผู้ดูแลระบบ', 'แอดมิน', 'Admin'])
@@ -88,15 +74,8 @@ class TaskController extends Controller
 
     public function updateDetails(Request $request, Task $task)
     {
-        if (!in_array(auth()->user()->position, [
-            'หัวหน้างาน',
-            'ผู้บริหาร',
-            'ผู้จัดการ',
-            'ผู้ดูแลระบบ',
-            'แอดมิน',
-            'Admin'
-        ])) {
-            abort(403, 'คุณไม่มีสิทธิ์แก้ไขงาน');
+        if (!auth()->user()?->canManageTasks()) {
+            abort(403, 'คุณไม่มีสิทธิ์แก้ไขงาน (สำหรับผู้บริหารและผู้ดูแลระบบเท่านั้น)');
         }
 
         $request->validate([
@@ -134,17 +113,10 @@ class TaskController extends Controller
     {
         $user = auth()->user();
 
-        // คนที่ได้รับมอบหมายสามารถเปลี่ยนสถานะงานตัวเองได้
+        // คนที่ได้รับมอบหมายสามารถเปลี่ยนสถานะงานตัวเองได้ หรือผู้บริหาร/ผู้ดูแลระบบ
         $canUpdate =
             $task->assigned_to == $user->id ||
-            in_array($user->position, [
-                'หัวหน้างาน',
-                'ผู้บริหาร',
-                'ผู้จัดการ',
-                'ผู้ดูแลระบบ',
-                'แอดมิน',
-                'Admin'
-            ]);
+            $user->canManageTasks();
 
         if (!$canUpdate) {
             abort(403, 'คุณไม่มีสิทธิ์แก้ไขงานนี้');
@@ -177,15 +149,8 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
-        if (!in_array(auth()->user()->position, [
-            'หัวหน้างาน',
-            'ผู้บริหาร',
-            'ผู้จัดการ',
-            'ผู้ดูแลระบบ',
-            'แอดมิน',
-            'Admin'
-        ])) {
-            abort(403, 'คุณไม่มีสิทธิ์ลบงาน');
+        if (!auth()->user()?->canManageTasks()) {
+            abort(403, 'คุณไม่มีสิทธิ์ลบงาน (สำหรับผู้บริหารและผู้ดูแลระบบเท่านั้น)');
         }
 
         $task->delete();

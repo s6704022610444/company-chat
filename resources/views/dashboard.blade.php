@@ -3058,8 +3058,8 @@
         <div id="viewAllTasks" class="task-workspace" style="{{ $currentView === 'all-tasks' ? 'display:flex;' : 'display:none;' }}">
             <div class="task-content-inner">
 
-                {{-- Create Task Form (Supervisor, Executive, Manager, Admin only) --}}
-                @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
+                {{-- Create Task Form (Executive, Manager, Admin only) --}}
+                @if(auth()->user()->canManageTasks())
                     <div class="create-card">
                         <div class="card-header-title">
                             <span>สร้างงานและมอบหมาย</span>
@@ -3187,7 +3187,7 @@
                             @php
                                 $canChangeStatus =
                                     $task->assigned_to == auth()->id() ||
-                                    in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']);
+                                    auth()->user()->canManageTasks();
                             @endphp
 
                             <div class="task-actions">
@@ -3206,7 +3206,7 @@
                                 @endif
 
                                 <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-                                    @if(in_array(auth()->user()->position, ['หัวหน้างาน', 'ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
+                                    @if(auth()->user()->canManageTasks())
                                         <a href="{{ route('tasks.edit', $task->id) }}" class="btn-action-edit">
                                             แก้ไข
                                         </a>

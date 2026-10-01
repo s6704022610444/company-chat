@@ -76,8 +76,24 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has permission to create, edit, or delete company news announcements.
-     * Restricted strictly to ผู้บริหาร / แอดมิน as requested.
+     * Check if user has permission to create, edit, or delete tasks.
+     * Restricted strictly to ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ / แอดมิน.
+     */
+    public function canManageTasks(): bool
+    {
+        $pos = mb_strtolower(trim($this->position ?? ''));
+        return str_contains($pos, 'แอดมิน') || 
+               str_contains($pos, 'ผู้ดูแลระบบ') || 
+               str_contains($pos, 'admin') || 
+               str_contains($pos, 'ผู้บริหาร') || 
+               str_contains($pos, 'ผู้จัดการ') || 
+               str_contains($pos, 'executive') ||
+               str_contains($pos, 'manager');
+    }
+
+    /**
+     * Check if user has permission to create, edit, delete, or pin company news announcements.
+     * Restricted strictly to ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ / แอดมิน.
      */
     public function canManageNews(): bool
     {
@@ -87,7 +103,8 @@ class User extends Authenticatable
                str_contains($pos, 'admin') || 
                str_contains($pos, 'ผู้บริหาร') || 
                str_contains($pos, 'ผู้จัดการ') || 
-               str_contains($pos, 'executive');
+               str_contains($pos, 'executive') ||
+               str_contains($pos, 'manager');
     }
 
     public function news(): \Illuminate\Database\Eloquent\Relations\HasMany
