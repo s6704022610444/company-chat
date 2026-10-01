@@ -1968,46 +1968,15 @@
                            placeholder="ชื่อ-นามสกุล">
                 </div>
 
-                <div style="margin-bottom: 14px;">
-                    <label class="form-label">อีเมล</label>
+                <div style="margin-bottom: 18px;">
+                    <label class="form-label">อีเมลบัญชีผู้ใช้</label>
                     <input type="email"
-                           name="email"
                            class="form-input"
-                           value="{{ old('email', auth()->user()->email) }}"
-                           required
-                           placeholder="example@company.com">
-                </div>
-
-                <div style="padding-top: 12px; margin-top: 14px; border-top: 1px dashed var(--border-color);">
-                    <div style="font-size: 13px; font-weight: 600; color: #93c5fd; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                        <span>🔒</span>
-                        <span>เปลี่ยนรหัสผ่าน (เว้นว่างไว้หากไม่ต้องการเปลี่ยน)</span>
-                    </div>
-
-                    <div style="margin-bottom: 12px;">
-                        <label class="form-label">รหัสผ่านปัจจุบัน</label>
-                        <input type="password"
-                               name="current_password"
-                               class="form-input"
-                               placeholder="ระบุรหัสผ่านปัจจุบันหากต้องการเปลี่ยนรหัส">
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <div>
-                            <label class="form-label">รหัสผ่านใหม่</label>
-                            <input type="password"
-                                   name="password"
-                                   class="form-input"
-                                   placeholder="อย่างน้อย 8 ตัวอักษร">
-                        </div>
-                        <div>
-                            <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
-                            <input type="password"
-                                   name="password_confirmation"
-                                   class="form-input"
-                                   placeholder="พิมพ์รหัสใหม่อีกครั้ง">
-                        </div>
-                    </div>
+                           value="{{ auth()->user()->email }}"
+                           disabled
+                           style="opacity: 0.6; cursor: not-allowed; background: rgba(0, 0, 0, 0.25);"
+                           title="ยังไม่เปิดให้แก้ไขอีเมลในขณะนี้">
+                    <span style="font-size: 11.5px; color: var(--text-muted);">* อีเมลใช้สำหรับการเข้าสู่ระบบ ไม่สามารถเปลี่ยนได้</span>
                 </div>
 
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px;">
@@ -2417,7 +2386,7 @@
         });
 
         // Auto-open settings modal if there are profile validation errors
-        @if($errors->has('name') || $errors->has('email') || $errors->has('current_password') || $errors->has('password'))
+        @if($errors->has('name'))
             openSettingsModal();
         @endif
 
