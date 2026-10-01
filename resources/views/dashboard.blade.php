@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CompanyChat - ระบบแชตและจัดการงานองค์กร</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
 
     <script>
         (function() {
@@ -45,8 +46,8 @@
             --text-secondary: #606060;
             --text-muted: #909090;
             
-            --logo-bg: #ff0000;
-            --logo-color: #ffffff;
+            --logo-bg: transparent;
+            --logo-color: #00C853;
             
             /* Message Bubbles */
             --bubble-me-bg: #0f0f0f;
@@ -111,8 +112,8 @@
             --text-secondary: #aaaaaa;
             --text-muted: #717171;
             
-            --logo-bg: #ff0000;
-            --logo-color: #ffffff;
+            --logo-bg: transparent;
+            --logo-color: #00C853;
             
             /* Message Bubbles */
             --bubble-me-bg: #272727;
@@ -229,15 +230,22 @@
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: var(--logo-bg);
-            color: var(--logo-color);
+            background: transparent;
             border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 19px;
             flex-shrink: 0;
+            overflow: hidden;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .app-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: 9px;
         }
 
         .logo-text {
@@ -2030,7 +2038,9 @@
             <button type="button" id="sidebarToggle" class="mobile-toggle-btn" aria-label="เปิดเมนู">
                 ☰
             </button>
-            <div class="logo-icon">💬</div>
+            <div class="logo-icon">
+                <img src="{{ asset('logo.png') }}" alt="CompanyChat" class="app-logo-img">
+            </div>
             <div class="logo-text">CompanyChat</div>
         </div>
 
@@ -2742,6 +2752,7 @@
         <div class="modal-card" style="width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto;">
             <div class="modal-title" style="justify-content: space-between; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="{{ asset('logo.png') }}" alt="CompanyChat" style="width: 24px; height: 24px; object-fit: contain; border-radius: 6px; flex-shrink: 0;">
                     <span>การตั้งค่าบัญชีผู้ใช้</span>
                 </div>
                 <button type="button" onclick="closeSettingsModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px; border-radius: 6px;" aria-label="ปิดหน้าต่าง">✕</button>

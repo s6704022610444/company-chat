@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Explorer - CompanyChat</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -318,7 +319,7 @@
     <div class="top-bar">
         <div>
             <h1 class="page-title">
-                <span>🗄️</span>
+                <img src="{{ asset('logo.png') }}" alt="CompanyChat Logo" style="width: 32px; height: 32px; object-fit: contain; border-radius: 8px; flex-shrink: 0; vertical-align: middle;">
                 <span>Database Explorer (ดูข้อมูลสดในระบบ)</span>
             </h1>
             <div style="margin-top: 6px; display: flex; align-items: center; gap: 10px;">

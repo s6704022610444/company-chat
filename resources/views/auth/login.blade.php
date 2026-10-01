@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CompanyChat</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
 
         <script>
         (function() {
@@ -158,6 +159,10 @@
 <body>
 
 <div class="login-box">
+
+    <div style="text-align: center; margin-bottom: 12px;">
+        <img src="{{ asset('logo.png') }}" alt="CompanyChat Logo" style="width: 76px; height: 76px; object-fit: contain; border-radius: 16px; display: inline-block; filter: drop-shadow(0 4px 12px rgba(0, 200, 83, 0.25));">
+    </div>
 
     <div class="logo">
         CompanyChat
