@@ -2821,6 +2821,198 @@
             background: rgba(255,255,255,0.06);
             flex-shrink: 0;
         }
+
+        /* Collapsible Section & Sleek Scrollbar */
+        .collapsible-list {
+            max-height: 220px;
+            overflow-y: auto;
+            transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-right: 2px;
+        }
+
+        .collapsible-list.collapsed {
+            max-height: 0 !important;
+            overflow: hidden !important;
+            opacity: 0;
+            pointer-events: none;
+            margin-top: 0 !important;
+            padding: 0 !important;
+        }
+
+        .collapse-arrow {
+            display: inline-block;
+            font-size: 11px;
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+            width: 14px;
+        }
+
+        .collapse-arrow.rotated {
+            transform: rotate(-90deg);
+        }
+
+        .section-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 6px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            transition: background 0.15s ease;
+        }
+
+        .section-header-row:hover {
+            background: var(--bg-surface-hover);
+        }
+
+        .btn-section-add {
+            background: transparent;
+            border: none;
+            color: #00C853;
+            cursor: pointer;
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .btn-section-add:hover {
+            background: rgba(0, 200, 83, 0.12);
+            transform: translateY(-1px);
+        }
+
+        /* Custom Sleek Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.25);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.45);
+        }
+
+        /* Sidebar Search Box */
+        .sidebar-search-box {
+            position: relative;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar-search-input {
+            width: 100%;
+            height: 34px;
+            padding: 0 28px 0 30px;
+            font-size: 12.5px;
+            border-radius: 8px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: inherit;
+            outline: none;
+            transition: all 0.18s ease;
+        }
+        .sidebar-search-input:focus {
+            border-color: #00C853;
+            box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.15);
+            background: var(--bg-card);
+        }
+        .sidebar-search-icon {
+            position: absolute;
+            left: 9px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+        .sidebar-search-clear {
+            position: absolute;
+            right: 6px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+        .sidebar-search-clear:hover {
+            color: var(--text-primary);
+        }
+
+        /* DM Row with Close (✕) */
+        .dm-row-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            border-radius: 8px;
+            transition: background 0.15s ease;
+        }
+        .dm-row-wrap .dm-item {
+            flex: 1;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+        .dm-close-btn {
+            opacity: 0;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+            margin-right: 4px;
+        }
+        .dm-row-wrap:hover .dm-close-btn {
+            opacity: 0.7;
+        }
+        .dm-close-btn:hover {
+            opacity: 1 !important;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Sidebar Empty Hint */
+        .sidebar-empty-hint {
+            padding: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            background: var(--bg-surface);
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .sidebar-empty-hint:hover {
+            border-color: #00C853;
+            color: #00C853;
+        }
+        .btn-hint-add {
+            font-weight: 600;
+            font-size: 11.5px;
+            color: #00C853;
+        }
+
+        .dm-select-card:hover {
+            border-color: #00C853 !important;
+            background: var(--bg-surface-hover) !important;
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -3051,25 +3243,48 @@
                 </div>
             </div>
 
+            <!-- Sidebar Quick Search (ค้นหาห้องและเพื่อนร่วมงาน) -->
+            <div class="sidebar-search-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sidebar-search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text"
+                       id="sidebarFilterInput"
+                       class="sidebar-search-input"
+                       placeholder="ค้นหาห้องหรือเพื่อนร่วมงาน..."
+                       oninput="filterSidebarLists(this.value)">
+                <button type="button" 
+                        id="sidebarFilterClearBtn" 
+                        class="sidebar-search-clear" 
+                        onclick="clearSidebarFilter()" 
+                        style="display: none;" 
+                        title="ล้างคำค้นหา">✕</button>
+            </div>
+
             <!-- Chat Rooms Section -->
-            <div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                    <div class="nav-section-title" id="sidebarRoomsCountTitle" style="margin-bottom: 0;">ห้องแชต ({{ $rooms->count() }})</div>
+            <div class="sidebar-section-wrap" style="margin-bottom: 12px;">
+                <div class="section-header-row" onclick="toggleSection('rooms')" style="cursor: pointer; user-select: none;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span id="roomsCollapseArrow" class="collapse-arrow">▾</span>
+                        <div class="nav-section-title" id="sidebarRoomsCountTitle" style="margin-bottom: 0;">
+                            ห้องแชต (<span id="sidebarRoomsCount">{{ $rooms->count() }}</span>)
+                        </div>
+                    </div>
 
                     {{-- ปุ่มสร้างห้อง (ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ) --}}
                     @if(in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
                         <button type="button"
-                                onclick="document.getElementById('createRoomModal').style.display='flex'"
-                                style="background: transparent; border: none; color: var(--accent-blue); cursor: pointer; font-size: 13px; font-weight: 600; padding: 2px 8px; border-radius: 4px;"
+                                onclick="event.stopPropagation(); document.getElementById('createRoomModal').style.display='flex';"
+                                class="btn-section-add"
                                 title="เพิ่มห้องแชตใหม่">
                             ＋ สร้าง
                         </button>
                     @endif
                 </div>
 
-                <div id="sidebarRoomsList">
+                <div id="sidebarRoomsList" class="collapsible-list custom-scrollbar">
                     @foreach($rooms as $room)
-                        <div class="room-item {{ ($currentView === 'chat' && $selectedRoom == $room->id) ? 'active' : '' }}" data-room-id="{{ $room->id }}">
+                        <div class="room-item {{ ($currentView === 'chat' && $selectedRoom == $room->id) ? 'active' : '' }}" 
+                             data-room-id="{{ $room->id }}"
+                             data-search-text="{{ mb_strtolower($room->name) }}">
                             <a href="{{ url('/dashboard?room=' . $room->id) }}"
                                class="room-link"
                                onclick="handleRoomClick({{ $room->id }}, event)">
@@ -3095,38 +3310,69 @@
                 </div>
             </div>
 
-            <!-- Direct Messages Section (แชตส่วนตัว 1-ต่อ-1) -->
-            <div style="margin-top: 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                    <div class="nav-section-title" id="sidebarDmCountTitle" style="margin-bottom: 0;">ข้อความส่วนตัว ({{ $allUsers->where('id', '!=', auth()->id())->count() }})</div>
+            <!-- Direct Messages Section (แชตส่วนตัว 1-ต่อ-1 เฉพาะคนที่เริ่มคุย) -->
+            <div class="sidebar-section-wrap" style="margin-bottom: 14px;">
+                <div class="section-header-row" onclick="toggleSection('dm')" style="cursor: pointer; user-select: none;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span id="dmCollapseArrow" class="collapse-arrow">▾</span>
+                        <div class="nav-section-title" id="sidebarDmCountTitle" style="margin-bottom: 0;">
+                            ข้อความส่วนตัว (<span id="sidebarDmCount">{{ $dmRooms->count() }}</span>)
+                        </div>
+                    </div>
+
+                    <button type="button"
+                            onclick="event.stopPropagation(); openNewDmModal();"
+                            class="btn-section-add"
+                            title="เริ่มแชตกับเพื่อนร่วมงานใหม่">
+                        ＋ เพิ่มแชต
+                    </button>
                 </div>
 
-                <div id="sidebarDmList">
-                    @foreach($allUsers->where('id', '!=', auth()->id()) as $u)
+                <div id="sidebarDmList" class="collapsible-list custom-scrollbar">
+                    @forelse($dmRooms as $dm)
                         @php
-                            $uDmRoom = $dmRooms->first(function($dm) use ($u) {
-                                return ($dm->user1_id == $u->id || $dm->user2_id == $u->id);
-                            });
-                            $dmHref = $uDmRoom ? url('/dashboard?room=' . $uDmRoom->id) : route('messages.directChat', $u->id);
-                            $isActiveDm = ($currentView === 'chat' && $uDmRoom && $selectedRoom == $uDmRoom->id);
-                            $uFirst = $u->resolved_first_name ?? explode(' ', $u->name)[0];
+                            $u = $dm->getOtherUser(auth()->id());
                         @endphp
-                        <a href="{{ $dmHref }}"
-                           class="dm-item {{ $isActiveDm ? 'active' : '' }}"
-                           data-dm-user-id="{{ $u->id }}"
-                           data-dm-room-id="{{ $uDmRoom?->id ?? '' }}"
-                           title="แชตส่วนตัวกับ {{ $u->name }}">
-                            @if($u->avatar)
-                                <img src="{{ $u->avatar }}" class="dm-avatar" alt="{{ $u->name }}">
-                            @else
-                                <div class="dm-avatar-fallback" style="color: {{ $u->position_color ?? '#00C853' }};">
-                                    {{ strtoupper(mb_substr($uFirst, 0, 1)) }}
-                                </div>
-                            @endif
-                            <span class="dm-name">{{ $uFirst }}</span>
-                            <span class="dm-role-tag" style="color: {{ $u->position_color ?? '#00C853' }};">{{ $u->position ?? 'พนักงาน' }}</span>
-                        </a>
-                    @endforeach
+                        @if($u)
+                            @php
+                                $isActiveDm = ($currentView === 'chat' && $selectedRoom == $dm->id);
+                                $uFirst = $u->resolved_first_name ?? explode(' ', $u->name)[0];
+                            @endphp
+                            <div class="dm-row-wrap {{ $isActiveDm ? 'active' : '' }}" 
+                                 data-search-text="{{ mb_strtolower($u->name . ' ' . ($u->position ?? '') . ' ' . $uFirst) }}"
+                                 data-dm-user-id="{{ $u->id }}"
+                                 data-dm-room-id="{{ $dm->id }}">
+                                <a href="{{ url('/dashboard?room=' . $dm->id) }}"
+                                   class="dm-item {{ $isActiveDm ? 'active' : '' }}"
+                                   title="แชตส่วนตัวกับ {{ $u->name }}">
+                                    @if($u->avatar)
+                                        <img src="{{ $u->avatar }}" class="dm-avatar" alt="{{ $u->name }}">
+                                    @else
+                                        <div class="dm-avatar-fallback" style="color: {{ $u->position_color ?? '#00C853' }};">
+                                            {{ strtoupper(mb_substr($uFirst, 0, 1)) }}
+                                        </div>
+                                    @endif
+                                    <span class="dm-name">{{ $uFirst }}</span>
+                                    <span class="dm-role-tag" style="color: {{ $u->position_color ?? '#00C853' }};">{{ $u->position ?? 'พนักงาน' }}</span>
+                                </a>
+
+                                {{-- ปุ่มปิดแชต (✕) --}}
+                                <form method="POST"
+                                      action="{{ route('rooms.destroy', $dm->id) }}"
+                                      onsubmit="return confirm('ต้องการปิดแชตส่วนตัวกับ {{ $u->name }} ใช่หรือไม่?')"
+                                      style="margin: 0;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="dm-close-btn" title="ปิดแชตนี้">✕</button>
+                                </form>
+                            </div>
+                        @endif
+                    @empty
+                        <div class="sidebar-empty-hint" onclick="openNewDmModal()">
+                            <span>ยังไม่มีแชตส่วนตัว</span>
+                            <span class="btn-hint-add">＋ เริ่มคุยกับเพื่อนร่วมงาน</span>
+                        </div>
+                    @endforelse
                 </div>
             </div>
 
@@ -4101,6 +4347,74 @@
                         <span>ออกจากระบบ</span>
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start New Direct Message Modal -->
+    <div id="newDmModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card" style="width: 480px; max-width: 95vw; max-height: 85vh; display: flex; flex-direction: column;">
+            <div class="modal-title" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 20px;">💬</span>
+                    <span>เริ่มแชตส่วนตัวใหม่</span>
+                </div>
+                <button type="button" onclick="closeNewDmModal()" style="background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer;">✕</button>
+            </div>
+            
+            <p style="font-size: 13px; color: var(--text-secondary); margin: -4px 0 14px 0;">
+                เลือกเพื่อนร่วมงานที่ต้องการสนทนาแบบตัวต่อตัว
+            </p>
+
+            <div style="position: relative; margin-bottom: 12px;">
+                <input type="text" 
+                       id="dmModalSearchInput"
+                       class="form-input" 
+                       placeholder="พิมพ์ชื่อเพื่อนร่วมงาน หรือตำแหน่ง..." 
+                       oninput="filterDmModalUsers(this.value)"
+                       style="padding-left: 36px;">
+                <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px;">🔍</span>
+            </div>
+
+            <div id="dmModalUserList" style="flex: 1; overflow-y: auto; max-height: 340px; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+                @foreach($allUsers->where('id', '!=', auth()->id()) as $colleague)
+                    @php
+                        $colFirstName = $colleague->resolved_first_name ?? explode(' ', $colleague->name)[0];
+                    @endphp
+                    <a href="{{ route('messages.directChat', $colleague->id) }}" 
+                       class="dm-select-card"
+                       data-user-name="{{ mb_strtolower($colleague->name) }}"
+                       data-user-pos="{{ mb_strtolower($colleague->position ?? '') }}"
+                       style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: var(--bg-surface); border: 1px solid var(--border-color); text-decoration: none; transition: all 0.15s ease;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            @if($colleague->avatar)
+                                <img src="{{ $colleague->avatar }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex-shrink: 0;" alt="{{ $colleague->name }}">
+                            @else
+                                <div class="dm-avatar-fallback" style="width: 38px; height: 38px; font-size: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,200,83,0.1); color: {{ $colleague->position_color ?? '#00C853' }}; font-weight: 700;">
+                                    {{ strtoupper(mb_substr($colFirstName, 0, 1)) }}
+                                </div>
+                            @endif
+                            <div style="display: flex; flex-direction: column; min-width: 0;">
+                                <span style="font-weight: 600; font-size: 13.5px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $colleague->name }}</span>
+                                <span style="font-size: 11.5px; color: var(--text-secondary);">{{ $colleague->email }}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                            <span class="role-pill" style="font-size: 10.5px; padding: 2px 8px; color: {{ $colleague->position_color ?? '#00C853' }};">
+                                {{ $colleague->position ?? 'พนักงาน' }}
+                            </span>
+                            <span style="font-size: 13px; color: #00C853; font-weight: 600;">คุยแชต →</span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+                <button type="button" 
+                        onclick="closeNewDmModal()" 
+                        style="padding: 8px 18px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 8px; cursor: pointer; font-size: 13px;">
+                    ปิดหน้าต่าง
+                </button>
             </div>
         </div>
     </div>
@@ -5747,10 +6061,113 @@
             }
         };
 
-        // Initialize theme UI on load
+        // Collapsible Sections Management
+        window.toggleSection = function(section) {
+            const list = document.getElementById(section === 'rooms' ? 'sidebarRoomsList' : 'sidebarDmList');
+            const arrow = document.getElementById(section === 'rooms' ? 'roomsCollapseArrow' : 'dmCollapseArrow');
+            if (!list) return;
+
+            const isCollapsed = list.classList.toggle('collapsed');
+            if (arrow) {
+                arrow.classList.toggle('rotated', isCollapsed);
+            }
+            try {
+                localStorage.setItem(`companychat_${section}_collapsed`, isCollapsed ? '1' : '0');
+            } catch(e) {}
+        };
+
+        // Quick Search / Filter in Sidebar
+        window.filterSidebarLists = function(rawQuery) {
+            const query = (rawQuery || '').trim().toLowerCase();
+            const clearBtn = document.getElementById('sidebarFilterClearBtn');
+            if (clearBtn) {
+                clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+            }
+
+            const roomItems = document.querySelectorAll('#sidebarRoomsList .room-item');
+            const dmItems = document.querySelectorAll('#sidebarDmList .dm-row-wrap');
+
+            // Auto-expand sections if user searches
+            if (query.length > 0) {
+                const roomsList = document.getElementById('sidebarRoomsList');
+                const dmList = document.getElementById('sidebarDmList');
+                const roomsArrow = document.getElementById('roomsCollapseArrow');
+                const dmArrow = document.getElementById('dmCollapseArrow');
+                if (roomsList) roomsList.classList.remove('collapsed');
+                if (dmList) dmList.classList.remove('collapsed');
+                if (roomsArrow) roomsArrow.classList.remove('rotated');
+                if (dmArrow) dmArrow.classList.remove('rotated');
+            }
+
+            roomItems.forEach(el => {
+                const text = el.getAttribute('data-search-text') || el.textContent.toLowerCase();
+                el.style.display = (!query || text.includes(query)) ? 'flex' : 'none';
+            });
+
+            dmItems.forEach(el => {
+                const text = el.getAttribute('data-search-text') || el.textContent.toLowerCase();
+                el.style.display = (!query || text.includes(query)) ? 'flex' : 'none';
+            });
+        };
+
+        window.clearSidebarFilter = function() {
+            const input = document.getElementById('sidebarFilterInput');
+            if (input) {
+                input.value = '';
+                filterSidebarLists('');
+                input.focus();
+            }
+        };
+
+        // Direct Message Modal
+        window.openNewDmModal = function() {
+            const modal = document.getElementById('newDmModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                const input = document.getElementById('dmModalSearchInput');
+                if (input) {
+                    input.value = '';
+                    filterDmModalUsers('');
+                    setTimeout(() => input.focus(), 100);
+                }
+            }
+        };
+
+        window.closeNewDmModal = function() {
+            const modal = document.getElementById('newDmModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.filterDmModalUsers = function(rawQuery) {
+            const query = (rawQuery || '').trim().toLowerCase();
+            const cards = document.querySelectorAll('#dmModalUserList .dm-select-card');
+            cards.forEach(card => {
+                const name = card.getAttribute('data-user-name') || '';
+                const pos = card.getAttribute('data-user-pos') || '';
+                card.style.display = (!query || name.includes(query) || pos.includes(query)) ? 'flex' : 'none';
+            });
+        };
+
+        // Initialize UI & state on load
         document.addEventListener('DOMContentLoaded', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('companychat_theme') || 'dark';
             updateThemeIcon(currentTheme);
+
+            // Restore collapsible section state
+            try {
+                if (localStorage.getItem('companychat_rooms_collapsed') === '1') {
+                    const roomsList = document.getElementById('sidebarRoomsList');
+                    const roomsArrow = document.getElementById('roomsCollapseArrow');
+                    if (roomsList) roomsList.classList.add('collapsed');
+                    if (roomsArrow) roomsArrow.classList.add('rotated');
+                }
+                if (localStorage.getItem('companychat_dm_collapsed') === '1') {
+                    const dmList = document.getElementById('sidebarDmList');
+                    const dmArrow = document.getElementById('dmCollapseArrow');
+                    if (dmList) dmList.classList.add('collapsed');
+                    if (dmArrow) dmArrow.classList.add('rotated');
+                }
+            } catch(e) {}
         });
 
         window.openSettingsModal = function() {
@@ -6453,16 +6870,44 @@
                 if (data.dm_hash && data.dm_hash !== lastDmHash) {
                     lastDmHash = data.dm_hash;
                     if (data.dm_rooms && Array.isArray(data.dm_rooms)) {
-                        data.dm_rooms.forEach(dm => {
-                            const item = document.querySelector(`.dm-item[data-dm-user-id="${dm.other_user_id}"]`);
-                            if (item) {
-                                item.setAttribute('data-dm-room-id', dm.id);
-                                item.href = `/dashboard?room=${dm.id}`;
-                                if (window.currentRoomId && window.currentRoomId == dm.id) {
-                                    item.classList.add('active');
-                                }
-                            }
-                        });
+                        const countEl = document.getElementById('sidebarDmCount');
+                        if (countEl) countEl.textContent = data.dm_rooms.length;
+                        
+                        const dmList = document.getElementById('sidebarDmList');
+                        if (dmList && data.dm_rooms.length > 0) {
+                            let html = '';
+                            data.dm_rooms.forEach(dm => {
+                                const isActive = (window.currentRoomId && window.currentRoomId == dm.id);
+                                const avatarHtml = dm.other_user_avatar
+                                    ? `<img src="${dm.other_user_avatar}" class="dm-avatar" alt="${window.escapeHtml(dm.other_user_name)}">`
+                                    : `<div class="dm-avatar-fallback" style="color:${dm.other_user_position_color || '#00C853'};">${(dm.other_user_first_name || 'U').charAt(0).toUpperCase()}</div>`;
+                                html += `
+                                    <div class="dm-row-wrap ${isActive ? 'active' : ''}" 
+                                         data-search-text="${window.escapeHtml((dm.other_user_name + ' ' + (dm.other_user_position || '') + ' ' + dm.other_user_first_name).toLowerCase())}"
+                                         data-dm-user-id="${dm.other_user_id}"
+                                         data-dm-room-id="${dm.id}">
+                                        <a href="/dashboard?room=${dm.id}" class="dm-item ${isActive ? 'active' : ''}" title="แชตส่วนตัวกับ ${window.escapeHtml(dm.other_user_name)}">
+                                            ${avatarHtml}
+                                            <span class="dm-name">${window.escapeHtml(dm.other_user_first_name)}</span>
+                                            <span class="dm-role-tag" style="color: ${dm.other_user_position_color || '#00C853'};">${window.escapeHtml(dm.other_user_position || 'พนักงาน')}</span>
+                                        </a>
+                                        <form method="POST" action="/rooms/${dm.id}" onsubmit="return confirm('ต้องการปิดแชตส่วนตัวกับ ${window.escapeHtml(dm.other_user_name)} ใช่หรือไม่?')" style="margin: 0;">
+                                            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]')?.content || ''}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="dm-close-btn" title="ปิดแชตนี้">✕</button>
+                                        </form>
+                                    </div>
+                                `;
+                            });
+                            dmList.innerHTML = html;
+                        } else if (dmList && data.dm_rooms.length === 0) {
+                            dmList.innerHTML = `
+                                <div class="sidebar-empty-hint" onclick="openNewDmModal()">
+                                    <span>ยังไม่มีแชตส่วนตัว</span>
+                                    <span class="btn-hint-add">＋ เริ่มคุยกับเพื่อนร่วมงาน</span>
+                                </div>
+                            `;
+                        }
                     }
                 }
 

@@ -31,13 +31,24 @@ class ChatRoomController extends Controller
 
     public function destroy(ChatRoom $room)
     {
-        // ผู้ดูแลระบบเท่านั้น
+        // กรณีเป็นแชตส่วนตัว 1-ต่อ-1
+        if ($room->is_direct) {
+            $myId = auth()->id();
+            if ($room->user1_id !== $myId && $room->user2_id !== $myId && auth()->user()->position !== 'ผู้ดูแลระบบ') {
+                abort(403, 'คุณไม่มีสิทธิ์ปิดบทสนทนานี้');
+            }
+            $room->delete();
+            return redirect()->route('dashboard')
+                ->with('success', 'ปิดบทสนทนาส่วนตัวเรียบร้อยแล้ว');
+        }
+
+        // กรณีเป็นห้องแชตสาธารณะ (ผู้ดูแลระบบเท่านั้น)
         if (auth()->user()->position !== 'ผู้ดูแลระบบ') {
             abort(403, 'คุณไม่มีสิทธิ์ลบห้อง');
         }
 
-        // ป้องกันไม่ให้ลบห้องสุดท้าย
-         if (\App\Models\ChatRoom::count() <= 1) {
+        // ป้องกันไม่ให้ลบห้องสาธารณะสุดท้าย
+        if (\App\Models\ChatRoom::where('is_direct', false)->count() <= 1) {
             return redirect()->route('dashboard')
                 ->with('error', 'ไม่สามารถลบห้องสุดท้ายได้');
         }
