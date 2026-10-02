@@ -3898,7 +3898,7 @@
                             </span>
 
                             <select name="status" class="status-select" onchange="updateTaskStatusAjax(this, {{ $task->id }}, 'my')">
-                                <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>⏳ ยังไม่เริ่ม</option>
+                                <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>ยังไม่เริ่ม</option>
                                 <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>รับงานแล้ว</option>
                                 <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>กำลังดำเนินการ</option>
                                 <option value="เสร็จแล้ว">เสร็จแล้ว</option>
@@ -3992,7 +3992,7 @@
                 {{-- Quick Filter Pills --}}
                 <div class="filter-pills-bar">
                     <button type="button" class="filter-pill active" onclick="filterAllTasks('all', this)">ทั้งหมด ({{ $allTasks->count() }})</button>
-                    <button type="button" class="filter-pill" onclick="filterAllTasks('ยังไม่เริ่ม', this)">⏳ ยังไม่เริ่ม ({{ $allTasks->where('status', 'ยังไม่เริ่ม')->count() }})</button>
+                    <button type="button" class="filter-pill" onclick="filterAllTasks('ยังไม่เริ่ม', this)">ยังไม่เริ่ม ({{ $allTasks->where('status', 'ยังไม่เริ่ม')->count() }})</button>
                     <button type="button" class="filter-pill" onclick="filterAllTasks('รับงานแล้ว', this)">รับงานแล้ว ({{ $allTasks->where('status', 'รับงานแล้ว')->count() }})</button>
                     <button type="button" class="filter-pill" onclick="filterAllTasks('กำลังดำเนินการ', this)">กำลังทำ ({{ $allTasks->where('status', 'กำลังดำเนินการ')->count() }})</button>
                     <button type="button" class="filter-pill" onclick="filterAllTasks('เสร็จแล้ว', this)">เสร็จแล้ว ({{ $allTasks->where('status', 'เสร็จแล้ว')->count() }})</button>
@@ -4071,7 +4071,7 @@
                                         @method('PUT')
                                         <span style="font-size: 12.5px; color: var(--text-secondary);">เปลี่ยนสถานะ:</span>
                                         <select name="status" class="status-select" onchange="updateTaskStatusAjax(this, {{ $task->id }}, 'all')">
-                                            <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>⏳ ยังไม่เริ่ม</option>
+                                            <option value="ยังไม่เริ่ม" {{ $task->status === 'ยังไม่เริ่ม' ? 'selected' : '' }}>ยังไม่เริ่ม</option>
                                             <option value="รับงานแล้ว" {{ $task->status === 'รับงานแล้ว' ? 'selected' : '' }}>รับงานแล้ว</option>
                                             <option value="กำลังดำเนินการ" {{ $task->status === 'กำลังดำเนินการ' ? 'selected' : '' }}>กำลังดำเนินการ</option>
                                             <option value="เสร็จแล้ว" {{ $task->status === 'เสร็จแล้ว' ? 'selected' : '' }}>เสร็จแล้ว</option>
