@@ -231,13 +231,12 @@
             width: 36px;
             height: 36px;
             background: transparent;
-            border-radius: 9px;
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            box-shadow: none !important;
         }
 
         .app-logo-img {
@@ -245,7 +244,6 @@
             height: 100%;
             object-fit: contain;
             display: block;
-            border-radius: 9px;
         }
 
         .logo-text {
@@ -654,13 +652,19 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.18s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             font-family: inherit;
         }
 
         .bell-btn:hover {
             background: var(--bg-surface-hover);
-            transform: translateY(-1px);
+            transform: scale(1.06);
+            border-color: #00C853;
+        }
+
+        .bell-btn:active {
+            transform: scale(0.96);
         }
 
         .bell-badge {
@@ -3095,18 +3099,8 @@
             </div>
         </div>
 
-        <!-- Right: Header Actions (Theme Toggle & Notification Bell) -->
+        <!-- Right: Header Actions (Notification Bell & Theme Toggle) -->
         <div class="header-right">
-            <!-- Theme Toggle Button (Login/Register Style) -->
-            <button type="button" 
-                    class="theme-toggle-btn" 
-                    id="themeToggleBtn" 
-                    onclick="toggleTheme()" 
-                    aria-label="สลับธีม" 
-                    title="สลับโหมดมืด/สว่าง">
-                <span id="themeIcon">☀️</span>
-            </button>
-
             <!-- Notification Bell -->
             <div style="position: relative;" id="notificationContainer">
                 <button type="button"
@@ -3168,6 +3162,17 @@
                     </a>
                 </div>
             </div>
+        </div>
+
+            <!-- Theme Toggle Button (Login/Register Style) -->
+            <button type="button" 
+                    class="theme-toggle-btn" 
+                    id="themeToggleBtn" 
+                    onclick="toggleTheme()" 
+                    aria-label="สลับธีม" 
+                    title="สลับโหมดมืด/สว่าง">
+                <span id="themeIcon">☀️</span>
+            </button>
         </div>
 
     </header>
