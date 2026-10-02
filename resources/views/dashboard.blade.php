@@ -3263,7 +3263,7 @@
 
         /* Collapsible Section & Sleek Scrollbar */
         .collapsible-list {
-            max-height: 220px;
+            max-height: 240px;
             overflow-y: auto;
             transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
             display: flex;
@@ -3273,20 +3273,30 @@
         }
 
         .collapsible-list.collapsed {
+            display: none !important;
             max-height: 0 !important;
+            height: 0 !important;
+            min-height: 0 !important;
             overflow: hidden !important;
-            opacity: 0;
-            pointer-events: none;
+            opacity: 0 !important;
+            pointer-events: none !important;
             margin-top: 0 !important;
+            margin-bottom: 0 !important;
             padding: 0 !important;
+            visibility: hidden !important;
         }
 
         .collapse-arrow {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             font-size: 11px;
             color: var(--text-muted);
             transition: transform 0.2s ease;
             width: 14px;
+            height: 14px;
+            user-select: none;
+            flex-shrink: 0;
         }
 
         .collapse-arrow.rotated {
@@ -5450,6 +5460,57 @@
 </div>
 
 <script>
+    // Global Collapsible Sections Toggle & State Restore
+    window.toggleSection = function(section) {
+        const list = document.getElementById(section === 'rooms' ? 'sidebarRoomsList' : 'sidebarDmList');
+        const arrow = document.getElementById(section === 'rooms' ? 'roomsCollapseArrow' : 'dmCollapseArrow');
+        if (!list) return;
+
+        const isCurrentlyCollapsed = list.classList.contains('collapsed');
+        const willBeCollapsed = !isCurrentlyCollapsed;
+
+        if (willBeCollapsed) {
+            list.classList.add('collapsed');
+            if (arrow) {
+                arrow.classList.add('rotated');
+                arrow.textContent = '▸';
+            }
+        } else {
+            list.classList.remove('collapsed');
+            if (arrow) {
+                arrow.classList.remove('rotated');
+                arrow.textContent = '▾';
+            }
+        }
+
+        try {
+            localStorage.setItem(`companychat_${section}_collapsed`, willBeCollapsed ? '1' : '0');
+        } catch(e) {}
+    };
+
+    window.restoreCollapsibleSections = function() {
+        try {
+            if (localStorage.getItem('companychat_rooms_collapsed') === '1') {
+                const roomsList = document.getElementById('sidebarRoomsList');
+                const roomsArrow = document.getElementById('roomsCollapseArrow');
+                if (roomsList) roomsList.classList.add('collapsed');
+                if (roomsArrow) {
+                    roomsArrow.classList.add('rotated');
+                    roomsArrow.textContent = '▸';
+                }
+            }
+            if (localStorage.getItem('companychat_dm_collapsed') === '1') {
+                const dmList = document.getElementById('sidebarDmList');
+                const dmArrow = document.getElementById('dmCollapseArrow');
+                if (dmList) dmList.classList.add('collapsed');
+                if (dmArrow) {
+                    dmArrow.classList.add('rotated');
+                    dmArrow.textContent = '▸';
+                }
+            }
+        } catch(e) {}
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         const currentUserId = {{ auth()->id() }};
         const currentRoomId = {{ $selectedRoom ?? 'null' }};
@@ -7218,20 +7279,7 @@
             }
         };
 
-        // Collapsible Sections Management
-        window.toggleSection = function(section) {
-            const list = document.getElementById(section === 'rooms' ? 'sidebarRoomsList' : 'sidebarDmList');
-            const arrow = document.getElementById(section === 'rooms' ? 'roomsCollapseArrow' : 'dmCollapseArrow');
-            if (!list) return;
-
-            const isCollapsed = list.classList.toggle('collapsed');
-            if (arrow) {
-                arrow.classList.toggle('rotated', isCollapsed);
-            }
-            try {
-                localStorage.setItem(`companychat_${section}_collapsed`, isCollapsed ? '1' : '0');
-            } catch(e) {}
-        };
+        // Collapsible sections handled by global window.toggleSection
 
         // Quick Search / Filter in Sidebar
         window.filterSidebarLists = function(rawQuery) {
@@ -7252,8 +7300,14 @@
                 const dmArrow = document.getElementById('dmCollapseArrow');
                 if (roomsList) roomsList.classList.remove('collapsed');
                 if (dmList) dmList.classList.remove('collapsed');
-                if (roomsArrow) roomsArrow.classList.remove('rotated');
-                if (dmArrow) dmArrow.classList.remove('rotated');
+                if (roomsArrow) {
+                    roomsArrow.classList.remove('rotated');
+                    roomsArrow.textContent = '▾';
+                }
+                if (dmArrow) {
+                    dmArrow.classList.remove('rotated');
+                    dmArrow.textContent = '▾';
+                }
             }
 
             roomItems.forEach(el => {
@@ -7403,40 +7457,29 @@
         };
 
         // Initialize UI & state on load
-        document.addEventListener('DOMContentLoaded', () => {
+        try {
             const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('companychat_theme') || 'dark';
-            updateThemeIcon(currentTheme);
-
-            // Restore collapsible section state
-            try {
-                if (localStorage.getItem('companychat_rooms_collapsed') === '1') {
-                    const roomsList = document.getElementById('sidebarRoomsList');
-                    const roomsArrow = document.getElementById('roomsCollapseArrow');
-                    if (roomsList) roomsList.classList.add('collapsed');
-                    if (roomsArrow) roomsArrow.classList.add('rotated');
-                }
-                if (localStorage.getItem('companychat_dm_collapsed') === '1') {
-                    const dmList = document.getElementById('sidebarDmList');
-                    const dmArrow = document.getElementById('dmCollapseArrow');
-                    if (dmList) dmList.classList.add('collapsed');
-                    if (dmArrow) dmArrow.classList.add('rotated');
-                }
-            } catch(e) {}
-
-            // Close modals when clicking backdrop
-            const editRoomModal = document.getElementById('editRoomModal');
-            if (editRoomModal) {
-                editRoomModal.addEventListener('click', function(e) {
-                    if (e.target === this) closeEditRoomModal();
-                });
+            if (typeof window.updateThemeIcon === 'function') {
+                window.updateThemeIcon(currentTheme);
             }
-            const createRoomModal = document.getElementById('createRoomModal');
-            if (createRoomModal) {
-                createRoomModal.addEventListener('click', function(e) {
-                    if (e.target === this) this.style.display = 'none';
-                });
-            }
-        });
+        } catch (e) {}
+
+        // Restore collapsible section state on load
+        window.restoreCollapsibleSections();
+
+        // Close modals when clicking backdrop
+        const editRoomModal = document.getElementById('editRoomModal');
+        if (editRoomModal) {
+            editRoomModal.addEventListener('click', function(e) {
+                if (e.target === this) closeEditRoomModal();
+            });
+        }
+        const createRoomModal = document.getElementById('createRoomModal');
+        if (createRoomModal) {
+            createRoomModal.addEventListener('click', function(e) {
+                if (e.target === this) this.style.display = 'none';
+            });
+        }
 
         window.openSettingsModal = function() {
             const modal = document.getElementById('settingsModal');
