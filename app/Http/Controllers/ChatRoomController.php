@@ -15,18 +15,50 @@ class ChatRoomController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:100',
+            'name' => 'required|string|max:30',
             'description' => 'nullable|string|max:500',
+        ], [
+            'name.required' => 'กรุณาระบุชื่อห้องแชต',
+            'name.max' => 'ชื่อห้องแชตต้องมีความยาวไม่เกิน 30 ตัวอักษร',
         ]);
 
         ChatRoom::create([
-            'name' => $request->name,
+            'name' => trim($request->name),
             'description' => $request->description,
             'created_by' => auth()->id(),
         ]);
 
         return redirect()->route('dashboard')
             ->with('success', 'สร้างห้องแชตเรียบร้อยแล้ว');
+    }
+
+    public function update(Request $request, ChatRoom $room)
+    {
+        // ป้องกันการแก้ไขแชตส่วนตัว 1-ต่อ-1 ผ่านฟังก์ชันนี้
+        if ($room->is_direct) {
+            abort(403, 'ไม่สามารถแก้ไขชื่อบทสนทนาส่วนตัวได้');
+        }
+
+        // ผู้บริหาร ผู้จัดการ และผู้ดูแลระบบเท่านั้นที่แก้ไขห้องได้
+        if (!in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin', 'Executive', 'Manager'])) {
+            abort(403, 'คุณไม่มีสิทธิ์แก้ไขชื่อห้องแชต');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:30',
+            'description' => 'nullable|string|max:500',
+        ], [
+            'name.required' => 'กรุณาระบุชื่อห้องแชต',
+            'name.max' => 'ชื่อห้องแชตต้องมีความยาวไม่เกิน 30 ตัวอักษร',
+        ]);
+
+        $room->update([
+            'name' => trim($request->name),
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('dashboard', ['room' => $room->id])
+            ->with('success', 'แก้ไขชื่อห้องแชตเรียบร้อยแล้ว');
     }
 
     public function destroy(ChatRoom $room)

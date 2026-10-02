@@ -394,23 +394,60 @@
         .room-hash {
             color: var(--room-hash-color);
             font-weight: 700;
+            flex-shrink: 0;
         }
 
+        .room-name-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .room-actions {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-shrink: 0;
+            margin-left: 6px;
+        }
+
+        .room-edit-btn,
         .room-delete-btn {
             background: transparent;
             border: none;
-            color: var(--text-muted);
             cursor: pointer;
-            padding: 4px 6px;
+            padding: 4px 5px;
             border-radius: 6px;
-            opacity: 0.6;
-            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.18s ease;
+            line-height: 1;
+        }
+
+        .room-edit-btn {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .room-edit-btn:hover {
+            opacity: 1;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.12);
+            transform: scale(1.08);
+        }
+
+        .room-delete-btn {
+            color: #ef4444;
+            opacity: 0.85;
         }
 
         .room-delete-btn:hover {
             opacity: 1;
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            background: rgba(239, 68, 68, 0.15);
+            transform: scale(1.08);
         }
 
         /* Main Workspace */
@@ -3294,22 +3331,41 @@
                                class="room-link"
                                onclick="handleRoomClick({{ $room->id }}, event)">
                                 <span class="room-hash">#</span>
-                                <span>{{ $room->name }}</span>
+                                <span class="room-name-text">{{ $room->name }}</span>
                             </a>
 
-                            {{-- ลบห้อง (ผู้ดูแลระบบเท่านั้น) --}}
-                            @if(auth()->user()->position === 'ผู้ดูแลระบบ')
-                                <form method="POST"
-                                      action="{{ route('rooms.destroy', $room->id) }}"
-                                      onsubmit="return confirm('ต้องการลบห้อง {{ $room->name }} ใช่หรือไม่?')"
-                                      style="margin: 0;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
-                                        🗑️
+                            <div class="room-actions">
+                                {{-- แก้ไขชื่อห้อง (ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ) --}}
+                                @if(in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
+                                    <button type="button"
+                                            class="room-edit-btn"
+                                            title="แก้ไขชื่อห้อง"
+                                            onclick="event.stopPropagation(); openEditRoomModal({{ $room->id }}, @js($room->name), @js($room->description ?? ''))">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                        </svg>
                                     </button>
-                                </form>
-                            @endif
+                                @endif
+
+                                {{-- ลบห้อง (ผู้ดูแลระบบเท่านั้น) --}}
+                                @if(auth()->user()->position === 'ผู้ดูแลระบบ')
+                                    <form method="POST"
+                                          action="{{ route('rooms.destroy', $room->id) }}"
+                                          onsubmit="return confirm('ต้องการลบห้อง {{ $room->name }} ใช่หรือไม่?')"
+                                          style="margin: 0;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -4427,17 +4483,24 @@
     <!-- Create Room Modal -->
     <div id="createRoomModal" class="modal-overlay">
         <div class="modal-card">
-            <div class="modal-title">
+            <div class="modal-title" style="display: flex; align-items: center; justify-content: space-between;">
                 <span>สร้างห้องแชตใหม่</span>
+                <button type="button" onclick="document.getElementById('createRoomModal').style.display='none'" style="background: transparent; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; padding: 2px 6px;">✕</button>
             </div>
 
             <form method="POST" action="{{ route('rooms.store') }}">
                 @csrf
 
-                <label class="form-label">ชื่อห้องแชต</label>
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                    <label class="form-label">ชื่อห้องแชต (สูงสุด 30 ตัวอักษร)</label>
+                    <span id="createRoomNameCount" style="font-size: 11px; color: var(--text-muted);">0/30</span>
+                </div>
                 <input type="text"
                        name="name"
+                       id="createRoomNameInput"
                        class="form-input"
+                       maxlength="30"
+                       oninput="document.getElementById('createRoomNameCount').textContent = this.value.length + '/30'"
                        placeholder="เช่น แผนกการตลาด, โปรเจกต์ Alpha"
                        required>
 
@@ -4445,9 +4508,10 @@
                 <textarea name="description"
                           class="form-textarea"
                           rows="3"
+                          maxlength="500"
                           placeholder="อธิบายวัตถุประสงค์ของห้องแชตนี้..."></textarea>
 
-                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;">
                     <button type="button"
                             onclick="document.getElementById('createRoomModal').style.display='none'"
                             style="padding: 9px 16px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 8px; cursor: pointer;">
@@ -4457,6 +4521,58 @@
                     <button type="submit"
                             style="padding: 9px 20px; border: none; background: var(--accent-gradient); color: white; border-radius: 8px; cursor: pointer; font-weight: 600;">
                         สร้างห้อง
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Room Modal -->
+    <div id="editRoomModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-title" style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 18px;">✏️</span>
+                    <span>แก้ไขชื่อห้องแชต</span>
+                </div>
+                <button type="button" onclick="closeEditRoomModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; padding: 2px 6px;">✕</button>
+            </div>
+
+            <form id="editRoomForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                    <label class="form-label">ชื่อห้องแชต (สูงสุด 30 ตัวอักษร)</label>
+                    <span id="editRoomNameCount" style="font-size: 11px; color: var(--text-muted);">0/30</span>
+                </div>
+                <input type="text"
+                       name="name"
+                       id="editRoomNameInput"
+                       class="form-input"
+                       maxlength="30"
+                       oninput="document.getElementById('editRoomNameCount').textContent = this.value.length + '/30'"
+                       placeholder="เช่น แผนกการตลาด"
+                       required>
+
+                <label class="form-label">รายละเอียดห้อง (ถ้ามี)</label>
+                <textarea name="description"
+                          id="editRoomDescInput"
+                          class="form-textarea"
+                          rows="3"
+                          maxlength="500"
+                          placeholder="อธิบายวัตถุประสงค์ของห้องแชตนี้..."></textarea>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;">
+                    <button type="button"
+                            onclick="closeEditRoomModal()"
+                            style="padding: 9px 16px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 8px; cursor: pointer;">
+                        ยกเลิก
+                    </button>
+
+                    <button type="submit"
+                            style="padding: 9px 20px; border: none; background: var(--accent-gradient); color: white; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        บันทึกการแก้ไข
                     </button>
                 </div>
             </form>
@@ -6143,6 +6259,33 @@
             if (modal) modal.style.display = 'none';
         };
 
+        // Edit Room Modal
+        window.openEditRoomModal = function(roomId, roomName, roomDesc) {
+            const modal = document.getElementById('editRoomModal');
+            const form = document.getElementById('editRoomForm');
+            const nameInput = document.getElementById('editRoomNameInput');
+            const descInput = document.getElementById('editRoomDescInput');
+            const countSpan = document.getElementById('editRoomNameCount');
+
+            if (!modal || !form || !nameInput) return;
+
+            form.action = '/rooms/' + roomId;
+            nameInput.value = roomName || '';
+            if (descInput) descInput.value = roomDesc || '';
+            if (countSpan) countSpan.textContent = (roomName || '').length + '/30';
+
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                nameInput.focus();
+                nameInput.select();
+            }, 100);
+        };
+
+        window.closeEditRoomModal = function() {
+            const modal = document.getElementById('editRoomModal');
+            if (modal) modal.style.display = 'none';
+        };
+
         window.filterDmModalUsers = function(rawQuery) {
             const query = (rawQuery || '').trim().toLowerCase();
             const cards = document.querySelectorAll('#dmModalUserList .dm-select-card');
@@ -6173,6 +6316,20 @@
                     if (dmArrow) dmArrow.classList.add('rotated');
                 }
             } catch(e) {}
+
+            // Close modals when clicking backdrop
+            const editRoomModal = document.getElementById('editRoomModal');
+            if (editRoomModal) {
+                editRoomModal.addEventListener('click', function(e) {
+                    if (e.target === this) closeEditRoomModal();
+                });
+            }
+            const createRoomModal = document.getElementById('createRoomModal');
+            if (createRoomModal) {
+                createRoomModal.addEventListener('click', function(e) {
+                    if (e.target === this) this.style.display = 'none';
+                });
+            }
         });
 
         window.openSettingsModal = function() {
@@ -6845,24 +7002,47 @@
                             let rHtml = '';
                             data.rooms.forEach(r => {
                                 const isActive = (window.currentRoomId && window.currentRoomId == r.id);
+                                let editHtml = '';
                                 let deleteHtml = '';
+
+                                if (data.can_manage_rooms || data.is_admin) {
+                                    const safeName = window.escapeHtml(r.name).replace(/'/g, "\\'");
+                                    const safeDesc = window.escapeHtml(r.description || '').replace(/'/g, "\\'");
+                                    editHtml = `
+                                        <button type="button" class="room-edit-btn" title="แก้ไขชื่อห้อง" onclick="event.stopPropagation(); openEditRoomModal(${r.id}, '${safeName}', '${safeDesc}')">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                            </svg>
+                                        </button>
+                                    `;
+                                }
+
                                 if (data.is_admin) {
                                     deleteHtml = `
                                         <form method="POST" action="/rooms/${r.id}" onsubmit="return confirm('ต้องการลบห้อง ${window.escapeHtml(r.name)} ใช่หรือไม่?')" style="margin: 0;">
                                             <input type="hidden" name="_token" value="${csrfToken}">
                                             <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="room-delete-btn" title="ลบห้องนี้">🗑️</button>
+                                            <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                </svg>
+                                            </button>
                                         </form>
                                     `;
                                 }
 
+                                const actionsHtml = (editHtml || deleteHtml) ? `<div class="room-actions">${editHtml}${deleteHtml}</div>` : '';
+
                                 rHtml += `
-                                    <div class="room-item ${isActive ? 'active' : ''}" data-room-id="${r.id}">
+                                    <div class="room-item ${isActive ? 'active' : ''}" data-room-id="${r.id}" data-search-text="${window.escapeHtml(r.name).toLowerCase()}">
                                         <a href="/dashboard?room=${r.id}" class="room-link" onclick="handleRoomClick(${r.id}, event)">
                                             <span class="room-hash">#</span>
-                                            <span>${window.escapeHtml(r.name)}</span>
+                                            <span class="room-name-text">${window.escapeHtml(r.name)}</span>
                                         </a>
-                                        ${deleteHtml}
+                                        ${actionsHtml}
                                     </div>
                                 `;
                             });

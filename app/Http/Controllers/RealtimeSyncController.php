@@ -186,6 +186,7 @@ class RealtimeSyncController extends Controller
             'dm_hash' => $dmHash,
             'can_manage_news' => $user->canManageNews(),
             'can_manage_tasks' => $user->canManageTasks(),
+            'can_manage_rooms' => in_array($user->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin', 'Executive', 'Manager']),
             'is_admin' => $user->position === 'ผู้ดูแลระบบ',
         ]);
     }

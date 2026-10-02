@@ -266,6 +266,10 @@ Route::post('/rooms', [ChatRoomController::class, 'store'])
     ->middleware('auth')
     ->name('rooms.store');
 
+Route::put('/rooms/{room}', [ChatRoomController::class, 'update'])
+    ->middleware('auth')
+    ->name('rooms.update');
+
 Route::delete('/rooms/{room}', [ChatRoomController::class, 'destroy'])
     ->middleware('auth')
     ->name('rooms.destroy');
