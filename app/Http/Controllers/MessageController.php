@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Events\MessageDeleted;
 use App\Events\MessageSent;
 use App\Events\MessageUpdated;
+use App\Events\ReactionUpdated;
 use App\Models\ChatRoom;
 use App\Models\Message;
+use App\Models\MessageReaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,19 +28,14 @@ class MessageController extends Controller
             return response()->json([]);
         }
 
-        $hasDirectCol = \Illuminate\Support\Facades\Schema::hasColumn('chat_rooms', 'is_direct');
-        $hasDeletedCol = \Illuminate\Support\Facades\Schema::hasColumn('messages', 'is_deleted');
-
-        // Privacy check for Direct Messages
-        if ($hasDirectCol && $room->is_direct) {
-            $myId = auth()->id();
-            $isAdmin = auth()->user()->position === 'ผู้ดูแลระบบ';
-            if ((int)$myId !== (int)$room->user1_id && (int)$myId !== (int)$room->user2_id && !$isAdmin) {
-                return response()->json(['error' => 'Unauthorized'], 403);
-            }
+        // Room access check (supports direct and private group rooms)
+        if (!$room->canAccess(auth()->id())) {
+            return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $query = Message::with('user')
+        $hasDeletedCol = \Illuminate\Support\Facades\Schema::hasColumn('messages', 'is_deleted');
+
+        $query = Message::with(['user', 'replyTo.user', 'reactions.user'])
             ->where('room_id', $roomId)
             ->where('id', '>', $afterId);
 
@@ -46,9 +43,11 @@ class MessageController extends Controller
             $query->where('is_deleted', false);
         }
 
+        $currentUserId = auth()->id();
+
         $messages = $query->oldest()
             ->get()
-            ->map(function ($msg) {
+            ->map(function ($msg) use ($currentUserId) {
                 return [
                     'id' => $msg->id,
                     'message' => $msg->message ?? '',
@@ -71,6 +70,16 @@ class MessageController extends Controller
                     'user_display_name' => $msg->user ? $msg->user->chat_display_name : 'User',
                     'user_avatar' => $msg->user ? $msg->user->avatar : null,
                     'created_at' => $msg->created_at ? $msg->created_at->format('H:i') : '',
+                    'reply_to' => $msg->replyTo ? [
+                        'id' => $msg->replyTo->id,
+                        'user_name' => $msg->replyTo->user?->name ?? 'User',
+                        'user_first_name' => $msg->replyTo->user?->resolved_first_name ?? 'User',
+                        'message' => mb_substr($msg->replyTo->message ?? '', 0, 100),
+                        'has_image' => !empty($msg->replyTo->image),
+                        'has_file' => !empty($msg->replyTo->file_data),
+                        'has_audio' => !empty($msg->replyTo->audio),
+                    ] : null,
+                    'reactions' => $msg->getGroupedReactions($currentUserId),
                 ];
             });
 
@@ -82,9 +91,10 @@ class MessageController extends Controller
         $request->validate([
             'message' => 'nullable|string|max:4000',
             'room_id' => 'required|exists:chat_rooms,id',
+            'reply_to_id' => 'nullable|exists:messages,id',
             'image' => 'nullable|string',
             'audio' => 'nullable|string',
-            'audio_duration' => 'nullable|integer',
+            'audio_duration' => 'nullable|numeric',
             'file_data' => 'nullable|string',
             'file_name' => 'nullable|string|max:255',
             'file_size' => 'nullable|integer',
@@ -93,13 +103,9 @@ class MessageController extends Controller
 
         $room = ChatRoom::findOrFail($request->room_id);
 
-        // Privacy check for Direct Messages
-        if ($room->is_direct) {
-            $myId = auth()->id();
-            $isAdmin = auth()->user()->position === 'ผู้ดูแลระบบ';
-            if ($myId !== $room->user1_id && $myId !== $room->user2_id && !$isAdmin) {
-                return response()->json(['error' => 'Unauthorized'], 403);
-            }
+        // Room access check
+        if (!$room->canAccess(auth()->id())) {
+            return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $text = trim($request->input('message') ?? '');
@@ -110,6 +116,7 @@ class MessageController extends Controller
         $fileName = $request->input('file_name');
         $fileSize = $request->input('file_size');
         $fileType = $request->input('file_type');
+        $replyToId = $request->input('reply_to_id');
 
         if ($text === '' && empty($image) && empty($audio) && empty($fileData)) {
             if ($request->wantsJson() || $request->ajax()) {
@@ -121,6 +128,7 @@ class MessageController extends Controller
         $message = Message::create([
             'user_id' => auth()->id(),
             'room_id' => $request->room_id,
+            'reply_to_id' => $replyToId,
             'message' => $text,
             'image' => $image,
             'audio' => $audio,
@@ -131,7 +139,7 @@ class MessageController extends Controller
             'file_type' => $fileType,
         ]);
 
-        $message->load('user');
+        $message->load(['user', 'replyTo.user', 'reactions.user']);
 
         // Broadcast to WebSocket channel
         try {
@@ -165,12 +173,73 @@ class MessageController extends Controller
                     'user_display_name' => $message->user ? $message->user->chat_display_name : 'User',
                     'user_avatar' => $message->user ? $message->user->avatar : null,
                     'created_at' => $message->created_at ? $message->created_at->format('H:i') : '',
+                    'reply_to' => $message->replyTo ? [
+                        'id' => $message->replyTo->id,
+                        'user_name' => $message->replyTo->user?->name ?? 'User',
+                        'user_first_name' => $message->replyTo->user?->resolved_first_name ?? 'User',
+                        'message' => mb_substr($message->replyTo->message ?? '', 0, 100),
+                        'has_image' => !empty($message->replyTo->image),
+                        'has_file' => !empty($message->replyTo->file_data),
+                        'has_audio' => !empty($message->replyTo->audio),
+                    ] : null,
+                    'reactions' => $message->getGroupedReactions(auth()->id()),
                 ],
             ]);
         }
 
         return redirect()->route('dashboard', [
             'room' => $request->room_id,
+        ]);
+    }
+
+    /**
+     * Toggle reaction on a message
+     */
+    public function toggleReaction(Request $request, Message $message)
+    {
+        $request->validate([
+            'emoji' => 'required|string|max:16',
+        ]);
+
+        if (!$message->room->canAccess(auth()->id())) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $userId = auth()->id();
+        $emoji = $request->emoji;
+
+        $existing = MessageReaction::where('message_id', $message->id)
+            ->where('user_id', $userId)
+            ->where('emoji', $emoji)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
+            $action = 'removed';
+        } else {
+            MessageReaction::create([
+                'message_id' => $message->id,
+                'user_id' => $userId,
+                'emoji' => $emoji,
+            ]);
+            $action = 'added';
+        }
+
+        $message->load('reactions.user');
+        $grouped = $message->getGroupedReactions($userId);
+
+        // Broadcast to WebSocket channel
+        try {
+            broadcast(new ReactionUpdated($message->id, $message->room_id, $message->getGroupedReactions()));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Reaction broadcast error: ' . $e->getMessage());
+        }
+
+        return response()->json([
+            'success' => true,
+            'action' => $action,
+            'message_id' => $message->id,
+            'reactions' => $grouped,
         ]);
     }
 

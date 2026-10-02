@@ -111,4 +111,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\News::class);
     }
+
+    public function chatRooms(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(ChatRoom::class, 'chat_room_users')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    public function reactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MessageReaction::class);
+    }
 }

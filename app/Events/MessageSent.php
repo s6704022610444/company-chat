@@ -20,7 +20,7 @@ class MessageSent implements ShouldBroadcastNow
      */
     public function __construct(Message $message)
     {
-        $this->message = $message->load('user');
+        $this->message = $message->load(['user', 'replyTo.user', 'reactions.user']);
     }
 
     /**
@@ -72,6 +72,16 @@ class MessageSent implements ShouldBroadcastNow
             'user_display_name' => $this->message->user ? $this->message->user->chat_display_name : 'User',
             'user_avatar' => $this->message->user ? $this->message->user->avatar : null,
             'created_at' => $this->message->created_at ? $this->message->created_at->format('H:i') : '',
+            'reply_to' => $this->message->replyTo ? [
+                'id' => $this->message->replyTo->id,
+                'user_name' => $this->message->replyTo->user?->name ?? 'User',
+                'user_first_name' => $this->message->replyTo->user?->resolved_first_name ?? 'User',
+                'message' => mb_substr($this->message->replyTo->message ?? '', 0, 100),
+                'has_image' => !empty($this->message->replyTo->image),
+                'has_file' => !empty($this->message->replyTo->file_data),
+                'has_audio' => !empty($this->message->replyTo->audio),
+            ] : null,
+            'reactions' => $this->message->getGroupedReactions(),
         ];
     }
 }

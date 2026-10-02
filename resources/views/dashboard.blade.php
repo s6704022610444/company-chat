@@ -2831,6 +2831,376 @@
             border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
+        /* ============================================================ */
+        /* CHAT EXPERIENCE: REACTIONS, REPLIES, LIGHTBOX, MEMBER MANAGE */
+        /* ============================================================ */
+
+        /* Reaction Quick Picker inside Action Toolbar */
+        .msg-reaction-picker {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding-right: 4px;
+            margin-right: 4px;
+            border-right: 1px solid var(--border-color);
+        }
+        .btn-reaction-emoji {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            padding: 3px 4px;
+            border-radius: 4px;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-reaction-emoji:hover {
+            transform: scale(1.35);
+            background: var(--bg-hover);
+        }
+
+        /* Message Reactions Badges Row (Below message bubble) */
+        .message-reactions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        .message-row.my-message .message-reactions-row {
+            justify-content: flex-end;
+        }
+        .message-row.other-message .message-reactions-row {
+            justify-content: flex-start;
+        }
+        .reaction-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+        .reaction-badge:hover {
+            border-color: #00C853;
+            transform: translateY(-1px);
+        }
+        .reaction-badge.active {
+            background: rgba(0, 200, 83, 0.15);
+            border-color: rgba(0, 200, 83, 0.5);
+            color: #00C853;
+            font-weight: 600;
+        }
+        .rx-emoji {
+            font-size: 12.5px;
+            line-height: 1;
+        }
+        .rx-count {
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        /* Reply Quote Box (Inside Message Bubble) */
+        .message-reply-quote {
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            background: rgba(0, 0, 0, 0.12);
+            border-left: 3px solid #00C853;
+            cursor: pointer;
+            transition: background 0.15s;
+            max-width: 100%;
+        }
+        [data-theme="light"] .message-reply-quote {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .message-reply-quote:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .reply-quote-sender {
+            font-size: 11px;
+            font-weight: 700;
+            color: #00C853;
+            margin-bottom: 2px;
+        }
+        .reply-quote-snippet {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 320px;
+        }
+
+        /* Floating Reply Preview Bar (Above Input Form) */
+        .chat-reply-preview-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #00C853;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            animation: slideDownFade 0.2s ease;
+        }
+        .reply-preview-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            color: #00C853;
+        }
+        .reply-preview-text {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+        .reply-snippet-text {
+            color: var(--text-secondary);
+            font-size: 11.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 450px;
+        }
+        .reply-preview-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+        .reply-preview-close:hover {
+            color: #ef4444;
+        }
+
+        /* Image Lightbox Modal */
+        .image-lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 99999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            box-sizing: border-box;
+            animation: fadeIn 0.2s ease;
+        }
+        .lightbox-toolbar {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100000;
+        }
+        .lightbox-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .lightbox-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.04);
+        }
+        .lightbox-close-btn {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #ef4444;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .lightbox-close-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .lightbox-img-wrapper {
+            max-width: 90vw;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .lightbox-full-img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s ease;
+        }
+
+        /* Member Management in Chat Header */
+        .btn-manage-members {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 10px;
+            vertical-align: middle;
+            transition: all 0.15s;
+        }
+        .btn-manage-members:hover {
+            border-color: #00C853;
+            color: #00C853;
+            transform: translateY(-1px);
+        }
+
+        /* Member Management Modal Layout */
+        .members-modal-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            gap: 8px;
+        }
+        .members-tab-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 14px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+        }
+        .members-tab-btn.active {
+            color: #00C853;
+            border-bottom-color: #00C853;
+        }
+        .member-list-scroll {
+            max-height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 4px;
+        }
+        .member-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: all 0.15s;
+        }
+        .member-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .member-item-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .member-item-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .member-item-pos {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .member-role-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+        .member-role-badge.admin {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .member-role-badge.member {
+            background: rgba(0, 200, 83, 0.12);
+            color: #00C853;
+            border: 1px solid rgba(0, 200, 83, 0.25);
+        }
+        .btn-kick-member {
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-kick-member:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* Add Member Checkbox Row */
+        .add-member-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .add-member-item:hover {
+            border-color: #00C853;
+            background: var(--bg-card);
+        }
+
+        /* Highlight flash when jumping to a referenced message */
+        @keyframes flashMessage {
+            0% { background: rgba(0, 200, 83, 0.3); }
+            100% { background: transparent; }
+        }
+        .flash-target {
+            animation: flashMessage 1.5s ease-out;
+            border-radius: 12px;
         }
 
         /* Direct Messages Sidebar items */
@@ -3119,9 +3489,25 @@
                         <span class="role-pill" id="chatRoomHeaderRole" style="font-size: 10.5px; margin-left: 6px; padding: 1px 7px; vertical-align: middle; color: {{ $dmOtherColor }};">{{ $dmOtherPos }}</span>
                     </h2>
                 @else
+                    @php
+                        $curRoom = $rooms->firstWhere('id', $selectedRoom);
+                    @endphp
                     <h2>
-                        <span style="color: var(--text-secondary); opacity: 0.7;">#</span>
-                        <span id="chatRoomHeaderTitle">{{ $rooms->firstWhere('id', $selectedRoom)?->name ?? 'ไม่มีห้อง' }}</span>
+                        @if($curRoom && $curRoom->is_private)
+                            <span style="color: #f59e0b; font-size: 15px;" title="ห้องเฉพาะกลุ่ม">🔒</span>
+                        @else
+                            <span style="color: var(--text-secondary); opacity: 0.7;">#</span>
+                        @endif
+                        <span id="chatRoomHeaderTitle">{{ $curRoom?->name ?? 'ไม่มีห้อง' }}</span>
+                        @if($curRoom && $curRoom->is_private)
+                            <span class="role-pill" style="font-size: 10px; margin-left: 6px; padding: 2px 7px; color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.12);">เฉพาะกลุ่ม</span>
+                        @endif
+                        @if($curRoom)
+                            <button type="button" class="btn-manage-members" onclick="openRoomMembersModal({{ $curRoom->id }})" title="จัดการสมาชิกในห้อง">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                <span id="headerMembersCountText">สมาชิก</span>
+                            </button>
+                        @endif
                     </h2>
                 @endif
                 <div class="live-status">
@@ -3339,15 +3725,13 @@
                         </div>
                     </div>
 
-                    {{-- ปุ่มสร้างห้อง (ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ) --}}
-                    @if(in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
-                        <button type="button"
-                                onclick="event.stopPropagation(); document.getElementById('createRoomModal').style.display='flex';"
-                                class="btn-section-add"
-                                title="เพิ่มห้องแชตใหม่">
-                            ＋ สร้าง
-                        </button>
-                    @endif
+                    {{-- ปุ่มสร้างห้อง --}}
+                    <button type="button"
+                            onclick="event.stopPropagation(); document.getElementById('createRoomModal').style.display='flex';"
+                            class="btn-section-add"
+                            title="เพิ่มห้องแชตใหม่">
+                        ＋ สร้าง
+                    </button>
                 </div>
 
                 <div id="sidebarRoomsList" class="collapsible-list custom-scrollbar">
@@ -3358,13 +3742,13 @@
                             <a href="{{ url('/dashboard?room=' . $room->id) }}"
                                class="room-link"
                                onclick="handleRoomClick({{ $room->id }}, event)">
-                                <span class="room-hash">#</span>
+                                <span class="room-hash" style="{{ $room->is_private ? 'color: #f59e0b; font-size: 13px;' : '' }}">{{ $room->is_private ? '🔒' : '#' }}</span>
                                 <span class="room-name-text">{{ $room->name }}</span>
                             </a>
 
                             <div class="room-actions">
-                                {{-- แก้ไขชื่อห้อง (ผู้บริหาร / ผู้จัดการ / ผู้ดูแลระบบ) --}}
-                                @if(in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']))
+                                {{-- แก้ไขชื่อห้อง --}}
+                                @if(in_array(auth()->user()->position, ['ผู้บริหาร', 'ผู้จัดการ', 'ผู้ดูแลระบบ', 'แอดมิน', 'Admin']) || ($room->is_private && $room->isMember(auth()->id())))
                                     <button type="button"
                                             class="room-edit-btn"
                                             title="แก้ไขชื่อห้อง"
@@ -3375,8 +3759,8 @@
                                     </button>
                                 @endif
 
-                                {{-- ลบห้อง (ผู้ดูแลระบบเท่านั้น) --}}
-                                @if(auth()->user()->position === 'ผู้ดูแลระบบ')
+                                {{-- ลบห้อง (ผู้ดูแลระบบ หรือ ผู้สร้างห้องเฉพาะกลุ่ม) --}}
+                                @if(auth()->user()->position === 'ผู้ดูแลระบบ' || ($room->is_private && $room->created_by === auth()->id()))
                                     <form method="POST"
                                           action="{{ route('rooms.destroy', $room->id) }}"
                                           onsubmit="return confirm('ต้องการลบห้อง {{ $room->name }} ใช่หรือไม่?')"
@@ -3550,21 +3934,37 @@
                     @endphp
                     <div class="message-row {{ $isMe ? 'my-message' : 'other-message' }} {{ $isMentioned ? 'is-mentioned' : '' }}" data-message-id="{{ $message->id }}">
                         
-                        {{-- Hover Action Toolbar (Edit / Delete) --}}
-                        @if($isMe || $isAdmin)
-                            <div class="message-action-toolbar">
-                                @if($isMe)
-                                    <button type="button" class="btn-msg-tool" onclick="startEditMessage({{ $message->id }}, this)" title="แก้ไขข้อความ">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                        <span>แก้ไข</span>
-                                    </button>
-                                @endif
+                        {{-- Hover Action Toolbar (Reactions / Reply / Edit / Delete) --}}
+                        <div class="message-action-toolbar">
+                            {{-- Reaction Emoji Quick Picker --}}
+                            <div class="msg-reaction-picker">
+                                <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax({{ $message->id }}, '👍')" title="กดถูกใจ">👍</button>
+                                <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax({{ $message->id }}, '❤️')" title="หัวใจ">❤️</button>
+                                <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax({{ $message->id }}, '😂')" title="หัวเราะ">😂</button>
+                                <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax({{ $message->id }}, '🎉')" title="ยินดีด้วย">🎉</button>
+                                <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax({{ $message->id }}, '🙏')" title="ขอบคุณ">🙏</button>
+                            </div>
+
+                            {{-- Reply Button --}}
+                            <button type="button" class="btn-msg-tool" onclick="setReplyMessage({{ $message->id }}, @js($firstName), @js(mb_substr($message->message ?? ($message->image ? 'รูปภาพ' : ($message->file_name ? 'ไฟล์: ' . $message->file_name : 'ข้อความ')), 0, 50)))" title="ตอบกลับข้อความนี้">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
+                                <span>ตอบกลับ</span>
+                            </button>
+
+                            @if($isMe)
+                                <button type="button" class="btn-msg-tool" onclick="startEditMessage({{ $message->id }}, this)" title="แก้ไขข้อความ">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                    <span>แก้ไข</span>
+                                </button>
+                            @endif
+
+                            @if($isMe || $isAdmin)
                                 <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax({{ $message->id }})" title="ลบข้อความ">
                                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg>
                                     <span>ลบ</span>
                                 </button>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
 
                         @if($isMe)
                             <div class="message-content-wrap">
@@ -3573,6 +3973,13 @@
                                     <span class="message-sender-name" style="color: {{ $positionColor }} !important;">{{ $senderDisplay }}</span>
                                 </div>
                                 <div class="message-bubble">
+                                    @if($message->replyTo)
+                                        <div class="message-reply-quote" onclick="scrollToMessage({{ $message->replyTo->id }})">
+                                            <div class="reply-quote-sender">↩ {{ $message->replyTo->user?->resolved_first_name ?? 'User' }}</div>
+                                            <div class="reply-quote-snippet">{{ mb_substr($message->replyTo->message ?? ($message->replyTo->image ? '📷 รูปภาพ' : ($message->replyTo->file_name ? '📎 ไฟล์เอกสาร' : 'เสียงข้อความ')), 0, 80) }}</div>
+                                        </div>
+                                    @endif
+
                                     @if($message->image)
                                         <div class="message-image-wrap">
                                             <img src="{{ $message->image }}" class="message-chat-image" onclick="openChatImage(this.src)" alt="รูปภาพแชต">
@@ -3635,6 +4042,19 @@
                                             @endif
                                         </div>
                                     @endif
+                                </div>
+
+                                {{-- Reactions Badges Row --}}
+                                @php
+                                    $groupedRx = $message->getGroupedReactions($myUserId);
+                                @endphp
+                                <div class="message-reactions-row" id="reactionsRow{{ $message->id }}">
+                                    @foreach($groupedRx as $rx)
+                                        <button type="button" class="reaction-badge {{ $rx['has_me'] ? 'active' : '' }}" onclick="toggleReactionAjax({{ $message->id }}, '{{ $rx['emoji'] }}')" title="{{ implode(', ', $rx['users']) }}">
+                                            <span class="rx-emoji">{{ $rx['emoji'] }}</span>
+                                            <span class="rx-count">{{ $rx['count'] }}</span>
+                                        </button>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="message-avatar-wrap">
@@ -3658,6 +4078,13 @@
                                     <span class="message-time">{{ $message->created_at ? $message->created_at->format('H:i') : '' }}</span>
                                 </div>
                                 <div class="message-bubble">
+                                    @if($message->replyTo)
+                                        <div class="message-reply-quote" onclick="scrollToMessage({{ $message->replyTo->id }})">
+                                            <div class="reply-quote-sender">↩ {{ $message->replyTo->user?->resolved_first_name ?? 'User' }}</div>
+                                            <div class="reply-quote-snippet">{{ mb_substr($message->replyTo->message ?? ($message->replyTo->image ? '📷 รูปภาพ' : ($message->replyTo->file_name ? '📎 ไฟล์เอกสาร' : 'เสียงข้อความ')), 0, 80) }}</div>
+                                        </div>
+                                    @endif
+
                                     @if($message->image)
                                         <div class="message-image-wrap">
                                             <img src="{{ $message->image }}" class="message-chat-image" onclick="openChatImage(this.src)" alt="รูปภาพแชต">
@@ -3721,6 +4148,19 @@
                                         </div>
                                     @endif
                                 </div>
+
+                                {{-- Reactions Badges Row --}}
+                                @php
+                                    $groupedRx = $message->getGroupedReactions($myUserId);
+                                @endphp
+                                <div class="message-reactions-row" id="reactionsRow{{ $message->id }}">
+                                    @foreach($groupedRx as $rx)
+                                        <button type="button" class="reaction-badge {{ $rx['has_me'] ? 'active' : '' }}" onclick="toggleReactionAjax({{ $message->id }}, '{{ $rx['emoji'] }}')" title="{{ implode(', ', $rx['users']) }}">
+                                            <span class="rx-emoji">{{ $rx['emoji'] }}</span>
+                                            <span class="rx-count">{{ $rx['count'] }}</span>
+                                        </button>
+                                    @endforeach
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -3734,6 +4174,19 @@
                 <div id="mentionAutocomplete" class="mention-autocomplete-dropdown"></div>
 
                 <!-- Attached Media Preview Bar (Floating above input) -->
+                <!-- Reply Preview Bar (Floating above input) -->
+                <div id="chatReplyPreview" class="chat-reply-preview-bar" style="display: none;">
+                    <div class="chat-reply-preview-indicator"></div>
+                    <div class="chat-reply-preview-content">
+                        <div class="chat-reply-preview-header">
+                            <span class="chat-reply-preview-title">ตอบกลับ</span>
+                            <span id="replyPreviewSender" class="chat-reply-preview-sender">คุณ</span>
+                        </div>
+                        <div id="replyPreviewText" class="chat-reply-preview-snippet">ข้อความที่ตอบกลับ...</div>
+                    </div>
+                    <button type="button" class="chat-reply-preview-close" onclick="cancelReplyMessage()" title="ยกเลิกการตอบกลับ">✕</button>
+                </div>
+
                 <div id="chatMediaPreview" class="chat-media-preview-bar">
                     <!-- Image Preview Item -->
                     <div id="imagePreviewItem" class="media-preview-card" style="display: none;">
@@ -3782,6 +4235,7 @@
                 <form id="chatForm" method="POST" action="/messages" class="input-form">
                     @csrf
                     <input type="hidden" id="roomIdInput" name="room_id" value="{{ $selectedRoom }}">
+                    <input type="hidden" id="replyToIdInput" name="reply_to_id" value="">
                     
                     <!-- Hidden File Inputs -->
                     <input type="file" id="chatFileInput" accept="image/*" style="display:none;" onchange="handleChatImageSelect(event)">
@@ -4525,9 +4979,14 @@
 
     <!-- Create Room Modal -->
     <div id="createRoomModal" class="modal-overlay">
-        <div class="modal-card">
+        <div class="modal-card" style="max-width: 480px; width: 95%;">
             <div class="modal-title" style="display: flex; align-items: center; justify-content: space-between;">
-                <span>สร้างห้องแชตใหม่</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #00C853;">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>สร้างห้องแชตใหม่</span>
+                </div>
                 <button type="button" onclick="document.getElementById('createRoomModal').style.display='none'" style="background: transparent; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; padding: 2px 6px;">✕</button>
             </div>
 
@@ -4550,9 +5009,67 @@
                 <label class="form-label">รายละเอียดห้อง (ถ้ามี)</label>
                 <textarea name="description"
                           class="form-textarea"
-                          rows="3"
+                          rows="2"
                           maxlength="500"
                           placeholder="อธิบายวัตถุประสงค์ของห้องแชตนี้..."></textarea>
+
+                <!-- Room Privacy Type -->
+                <div style="margin-top: 10px; margin-bottom: 12px;">
+                    <label class="form-label" style="margin-bottom: 6px;">ประเภทห้องแชต</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <label class="room-type-radio-label" id="roomTypePublicLabel" style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1.5px solid #3b82f6; border-radius: 8px; cursor: pointer; background: rgba(59, 130, 246, 0.08);">
+                            <input type="radio" name="is_private" value="0" checked onchange="toggleCreateRoomPrivacy(false)">
+                            <div>
+                                <div style="font-weight: 600; font-size: 13px; color: var(--text-primary);">🌐 สาธารณะ</div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">ทุกคนในองค์กรเข้าได้</div>
+                            </div>
+                        </label>
+                        <label class="room-type-radio-label" id="roomTypePrivateLabel" style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; background: var(--bg-surface);">
+                            <input type="radio" name="is_private" value="1" onchange="toggleCreateRoomPrivacy(true)">
+                            <div>
+                                <div style="font-weight: 600; font-size: 13px; color: var(--text-primary);">🔒 เฉพาะกลุ่ม</div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">เลือกสมาชิกที่เข้าร่วม</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Searchable Member Selection for Private Group -->
+                <div id="createRoomMembersBox" style="display: none; margin-bottom: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="form-label" style="margin-bottom: 0;">เลือกสมาชิกในกลุ่ม</label>
+                        <span id="selectedMembersCount" style="font-size: 12px; color: #3b82f6; font-weight: 600;">เลือกแล้ว 0 คน</span>
+                    </div>
+                    <div style="position: relative; margin-bottom: 8px;">
+                        <input type="text" id="createRoomMemberSearch" class="form-input" placeholder="พิมพ์ชื่อเพื่อค้นหาสมาชิก..." style="padding-left: 32px;" oninput="filterCreateRoomMembers(this.value)">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted);">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <div id="createRoomMemberList" style="max-height: 180px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; gap: 4px; background: var(--bg-input);">
+                        @foreach($allUsers as $u)
+                            @if($u->id !== auth()->id())
+                                <label class="create-member-item" data-name="{{ mb_strtolower($u->name) }}" data-pos="{{ mb_strtolower($u->position ?? '') }}" style="display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;">
+                                    <input type="checkbox" name="member_ids[]" value="{{ $u->id }}" onchange="updateSelectedMembersCount()" style="width: 16px; height: 16px; cursor: pointer;">
+                                    <div style="width: 28px; height: 28px; border-radius: 50%; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; overflow: hidden; flex-shrink: 0;">
+                                        @if($u->avatar)
+                                            <img src="{{ $u->avatar }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            {{ mb_substr($u->name, 0, 1) }}
+                                        @endif
+                                    </div>
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="font-size: 13px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $u->name }}</div>
+                                    </div>
+                                    <span style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: {{ $u->position_color ?? '#e2e8f0' }}22; color: {{ $u->position_color ?? '#64748b' }}; font-weight: 500;">
+                                        {{ $u->position ?: 'พนักงาน' }}
+                                    </span>
+                                </label>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
 
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;">
                     <button type="button"
@@ -4619,6 +5136,74 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Manage Room Members Modal -->
+    <div id="roomMembersModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card" style="max-width: 480px; width: 95%;">
+            <div class="modal-title" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #3b82f6;">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span id="manageMembersModalTitle">จัดการสมาชิกห้องแชต</span>
+                </div>
+                <button type="button" onclick="closeRoomMembersModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; padding: 2px 6px;">✕</button>
+            </div>
+
+            <!-- Tabs: สมาชิกปัจจุบัน / เพิ่มสมาชิกใหม่ -->
+            <div class="members-modal-tabs" style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 12px;">
+                <button type="button" class="tab-btn active" id="tabCurrentMembers" onclick="switchMembersTab('current')">
+                    สมาชิกปัจจุบัน (<span id="membersCountBadge">0</span>)
+                </button>
+                <button type="button" class="tab-btn" id="tabAddMembers" onclick="switchMembersTab('add')">
+                    ➕ เพิ่มสมาชิก
+                </button>
+            </div>
+
+            <!-- Tab 1: Current Members -->
+            <div id="panelCurrentMembers">
+                <div style="position: relative; margin-bottom: 10px;">
+                    <input type="text" id="searchCurrentMembersInput" class="form-input" placeholder="ค้นหาสมาชิกปัจจุบัน..." style="padding-left: 32px;" oninput="filterCurrentMembers(this.value)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted);">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <div id="currentMembersList" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+                    <!-- Rendered dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Tab 2: Add Members -->
+            <div id="panelAddMembers" style="display: none;">
+                <div style="position: relative; margin-bottom: 10px;">
+                    <input type="text" id="searchNonMembersInput" class="form-input" placeholder="พิมพ์ชื่อเพื่อนร่วมงานที่ต้องการเพิ่ม..." style="padding-left: 32px;" oninput="filterNonMembers(this.value)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted);">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <div id="nonMembersList" style="max-height: 230px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-input);">
+                    <!-- Rendered dynamically via JS -->
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                    <span id="selectedNewMembersCount" style="font-size: 12px; color: #3b82f6; font-weight: 600;">เลือก 0 คน</span>
+                    <button type="button" id="btnSubmitAddMembers" onclick="submitAddRoomMembers()" style="padding: 8px 18px; border: none; background: #3b82f6; color: white; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        ยืนยันการเพิ่ม
+                    </button>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 14px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                <button type="button" onclick="closeRoomMembersModal()" style="padding: 8px 16px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); border-radius: 8px; cursor: pointer;">
+                    ปิด
+                </button>
+            </div>
         </div>
     </div>
 
@@ -4990,13 +5575,25 @@
             const time = data.created_at || '';
             const avatarSrc = (isMe && currentUserAvatar) ? currentUserAvatar : (data.user_avatar || null);
 
-            // Message Action Toolbar (Edit / Delete)
+            // Message Action Toolbar (Reactions / Reply / Edit / Delete)
             let actionsToolbarHtml = '';
-            if (data.id && (isMe || isAdminUser)) {
+            if (data.id) {
+                const snippet = (data.message || (data.image ? 'รูปภาพ' : (data.file_name ? 'ไฟล์: ' + data.file_name : 'ข้อความ'))).substring(0, 50);
                 actionsToolbarHtml = `
                     <div class="message-action-toolbar">
+                        <div class="msg-reaction-picker">
+                            <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax(${data.id}, '👍')" title="ถูกใจ">👍</button>
+                            <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax(${data.id}, '❤️')" title="รักเลย">❤️</button>
+                            <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax(${data.id}, '😂')" title="หัวเราะ">😂</button>
+                            <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax(${data.id}, '🎉')" title="ยินดีด้วย">🎉</button>
+                            <button type="button" class="btn-reaction-emoji" onclick="toggleReactionAjax(${data.id}, '🙏')" title="ขอบคุณ">🙏</button>
+                        </div>
+                        <button type="button" class="btn-msg-tool" onclick="setReplyMessage(${data.id}, '${escapeHtml(firstName)}', '${escapeHtml(snippet)}')" title="ตอบกลับข้อความนี้">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
+                            <span>ตอบกลับ</span>
+                        </button>
                         ${isMe ? `<button type="button" class="btn-msg-tool" onclick="startEditMessage(${data.id}, this)" title="แก้ไขข้อความ"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg><span>แก้ไข</span></button>` : ''}
-                        <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax(${data.id})" title="ลบข้อความ"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg><span>ลบ</span></button>
+                        ${(isMe || isAdminUser) ? `<button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax(${data.id})" title="ลบข้อความ"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg><span>ลบ</span></button>` : ''}
                     </div>
                 `;
             }
@@ -5019,6 +5616,16 @@
             `;
 
             let bubbleContent = '';
+            if (data.reply_to) {
+                const replySender = data.reply_to.user_first_name || (data.reply_to.user ? data.reply_to.user.resolved_first_name : (data.reply_to.user_name || 'User'));
+                const replyText = (data.reply_to.message || (data.reply_to.image ? '📷 รูปภาพ' : (data.reply_to.file_name ? '📎 ไฟล์เอกสาร' : 'ข้อความ'))).substring(0, 80);
+                bubbleContent += `
+                    <div class="message-reply-quote" onclick="scrollToMessage(${data.reply_to.id})">
+                        <div class="reply-quote-sender">↩ ${escapeHtml(replySender)}</div>
+                        <div class="reply-quote-snippet">${escapeHtml(replyText)}</div>
+                    </div>
+                `;
+            }
             if (data.image) {
                 bubbleContent += `
                     <div class="message-image-wrap">
@@ -5062,10 +5669,24 @@
                 bubbleContent += `<div class="message-text" id="msgText${data.id}">${formatChatMessage(data.message, data.is_edited)}</div>`;
             }
 
+            let reactionsHtml = `<div class="message-reactions-row" id="reactionsRow${data.id}">`;
+            if (data.reactions && Array.isArray(data.reactions)) {
+                reactionsHtml += data.reactions.map(rx => {
+                    const hasMe = (rx.user_ids && rx.user_ids.map(Number).includes(Number(currentUserId))) || rx.has_me;
+                    const usersStr = (rx.users && Array.isArray(rx.users)) ? rx.users.join(', ') : '';
+                    return `<button type="button" class="reaction-badge ${hasMe ? 'active' : ''}" onclick="toggleReactionAjax(${data.id}, '${rx.emoji}')" title="${escapeHtml(usersStr)}">
+                        <span class="rx-emoji">${rx.emoji}</span>
+                        <span class="rx-count">${rx.count}</span>
+                    </button>`;
+                }).join('');
+            }
+            reactionsHtml += `</div>`;
+
             const contentWrapHtml = `
                 <div class="message-content-wrap">
                     ${headerLineHtml}
                     <div class="message-bubble">${bubbleContent}</div>
+                    ${reactionsHtml}
                 </div>
             `;
 
@@ -5949,6 +6570,7 @@
                 const chatFileName = document.getElementById('chatFileName');
                 const chatFileSize = document.getElementById('chatFileSize');
                 const chatFileType = document.getElementById('chatFileType');
+                const replyToIdInput = document.getElementById('replyToIdInput');
 
                 const text = messageInput.value.trim();
                 const image = chatImageData ? chatImageData.value : '';
@@ -5958,6 +6580,7 @@
                 const fileName = chatFileName ? chatFileName.value : '';
                 const fileSize = chatFileSize ? (parseInt(chatFileSize.value, 10) || null) : null;
                 const fileType = chatFileType ? chatFileType.value : '';
+                const replyToId = replyToIdInput ? replyToIdInput.value : '';
 
                 if (!text && !image && !audio && !fileData) {
                     messageInput.focus();
@@ -5976,11 +6599,13 @@
                 const oldFileName = fileName;
                 const oldFileSize = fileSize;
                 const oldFileType = fileType;
+                const oldReplyToId = replyToId;
 
                 messageInput.value = '';
                 window.removeAttachedImage();
                 window.removeAttachedVoice();
                 window.removeAttachedDocument();
+                window.cancelReplyMessage();
 
                 try {
                     const res = await fetch('/messages', {
@@ -5999,7 +6624,8 @@
                             file_data: oldFileData || null,
                             file_name: oldFileName || null,
                             file_size: oldFileSize || null,
-                            file_type: oldFileType || null
+                            file_type: oldFileType || null,
+                            reply_to_id: oldReplyToId ? (parseInt(oldReplyToId, 10) || null) : null
                         })
                     });
 
@@ -6014,6 +6640,10 @@
                         console.error('Send error:', err);
                         messageInput.value = oldText;
                         if (oldImage) window.setAttachedImage(oldImage);
+                        if (oldReplyToId) {
+                            const replyToInput = document.getElementById('replyToIdInput');
+                            if (replyToInput) replyToInput.value = oldReplyToId;
+                        }
                         alert('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
                     }
                 } catch (err) {
@@ -6027,6 +6657,349 @@
                 }
             });
         }
+
+        // ==========================================
+        // CHAT EXPERIENCE 1: REPLY / QUOTE MESSAGE
+        // ==========================================
+        window.setReplyMessage = function(msgId, senderName, snippet) {
+            const replyPreview = document.getElementById('chatReplyPreview');
+            const replyToIdInput = document.getElementById('replyToIdInput');
+            const senderEl = document.getElementById('replyPreviewSender');
+            const textEl = document.getElementById('replyPreviewText');
+            const messageInput = document.getElementById('messageInput');
+
+            if (replyPreview && replyToIdInput) {
+                replyToIdInput.value = msgId;
+                if (senderEl) senderEl.textContent = senderName || 'เพื่อนร่วมงาน';
+                if (textEl) textEl.textContent = snippet || 'ข้อความ';
+                replyPreview.style.display = 'flex';
+                if (messageInput) {
+                    messageInput.focus();
+                }
+            }
+        };
+
+        window.cancelReplyMessage = function() {
+            const replyPreview = document.getElementById('chatReplyPreview');
+            const replyToIdInput = document.getElementById('replyToIdInput');
+            if (replyToIdInput) replyToIdInput.value = '';
+            if (replyPreview) replyPreview.style.display = 'none';
+        };
+
+        window.scrollToMessage = function(msgId) {
+            const el = document.querySelector(`.message-row[data-message-id="${msgId}"]`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('flash-target');
+                setTimeout(() => el.classList.remove('flash-target'), 2000);
+            }
+        };
+
+        // ==========================================
+        // CHAT EXPERIENCE 2: EMOJI REACTIONS
+        // ==========================================
+        window.toggleReactionAjax = async function(messageId, emoji) {
+            try {
+                const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                              '{{ csrf_token() }}';
+                const res = await fetch(`/messages/${messageId}/reactions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({ emoji: emoji })
+                });
+                const data = await res.json();
+                if (data.success && data.reactions) {
+                    window.renderReactionsRow(messageId, data.reactions);
+                }
+            } catch (err) {
+                console.error('Reaction toggle error:', err);
+            }
+        };
+
+        window.renderReactionsRow = function(messageId, reactions) {
+            const row = document.getElementById(`reactionsRow${messageId}`);
+            if (!row) return;
+            if (!reactions || !Array.isArray(reactions) || reactions.length === 0) {
+                row.innerHTML = '';
+                return;
+            }
+            const currentUserIdNum = Number(currentUserId);
+            row.innerHTML = reactions.map(rx => {
+                const hasMe = (rx.user_ids && rx.user_ids.map(Number).includes(currentUserIdNum)) || rx.has_me;
+                const usersStr = (rx.users && Array.isArray(rx.users)) ? rx.users.join(', ') : '';
+                return `<button type="button" class="reaction-badge ${hasMe ? 'active' : ''}" onclick="toggleReactionAjax(${messageId}, '${rx.emoji}')" title="${escapeHtml(usersStr)}">
+                    <span class="rx-emoji">${rx.emoji}</span>
+                    <span class="rx-count">${rx.count}</span>
+                </button>`;
+            }).join('');
+        };
+
+        window.handleReactionUpdatedRealtime = function(data) {
+            if (!data || !data.message_id) return;
+            window.renderReactionsRow(data.message_id, data.reactions);
+        };
+
+        // ==========================================
+        // GROUP CHAT: CREATE ROOM PRIVACY & MEMBERS
+        // ==========================================
+        window.toggleCreateRoomPrivacy = function(isPrivate) {
+            const membersBox = document.getElementById('createRoomMembersBox');
+            if (membersBox) {
+                membersBox.style.display = isPrivate ? 'block' : 'none';
+            }
+            const publicLabel = document.getElementById('roomTypePublicLabel');
+            const privateLabel = document.getElementById('roomTypePrivateLabel');
+            if (isPrivate) {
+                if (privateLabel) {
+                    privateLabel.style.border = '1.5px solid #3b82f6';
+                    privateLabel.style.background = 'rgba(59, 130, 246, 0.08)';
+                }
+                if (publicLabel) {
+                    publicLabel.style.border = '1px solid var(--border-color)';
+                    publicLabel.style.background = 'var(--bg-surface)';
+                }
+            } else {
+                if (publicLabel) {
+                    publicLabel.style.border = '1.5px solid #3b82f6';
+                    publicLabel.style.background = 'rgba(59, 130, 246, 0.08)';
+                }
+                if (privateLabel) {
+                    privateLabel.style.border = '1px solid var(--border-color)';
+                    privateLabel.style.background = 'var(--bg-surface)';
+                }
+            }
+        };
+
+        window.filterCreateRoomMembers = function(query) {
+            const q = (query || '').toLowerCase().trim();
+            document.querySelectorAll('#createRoomMemberList .create-member-item').forEach(el => {
+                const name = el.getAttribute('data-name') || '';
+                const pos = el.getAttribute('data-pos') || '';
+                el.style.display = (name.includes(q) || pos.includes(q)) ? 'flex' : 'none';
+            });
+        };
+
+        window.updateSelectedMembersCount = function() {
+            const count = document.querySelectorAll('#createRoomMemberList input[type="checkbox"]:checked').length;
+            const badge = document.getElementById('selectedMembersCount');
+            if (badge) badge.textContent = `เลือกแล้ว ${count} คน`;
+        };
+
+        // ==========================================
+        // GROUP CHAT: MANAGE ROOM MEMBERS MODAL
+        // ==========================================
+        let currentManagingRoomId = null;
+
+        window.openRoomMembersModal = async function(roomId) {
+            currentManagingRoomId = roomId;
+            const modal = document.getElementById('roomMembersModal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            window.switchMembersTab('current');
+            await window.loadRoomMembers(roomId);
+        };
+
+        window.closeRoomMembersModal = function() {
+            const modal = document.getElementById('roomMembersModal');
+            if (modal) modal.style.display = 'none';
+            document.body.style.overflow = '';
+        };
+
+        window.switchMembersTab = function(tab) {
+            const tabCurrent = document.getElementById('tabCurrentMembers');
+            const tabAdd = document.getElementById('tabAddMembers');
+            const panelCurrent = document.getElementById('panelCurrentMembers');
+            const panelAdd = document.getElementById('panelAddMembers');
+
+            if (tab === 'current') {
+                tabCurrent?.classList.add('active');
+                tabAdd?.classList.remove('active');
+                if (panelCurrent) panelCurrent.style.display = 'block';
+                if (panelAdd) panelAdd.style.display = 'none';
+            } else {
+                tabAdd?.classList.add('active');
+                tabCurrent?.classList.remove('active');
+                if (panelAdd) panelAdd.style.display = 'block';
+                if (panelCurrent) panelCurrent.style.display = 'none';
+            }
+        };
+
+        window.loadRoomMembers = async function(roomId) {
+            try {
+                const res = await fetch(`/rooms/${roomId}/members`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const badge = document.getElementById('membersCountBadge');
+                    if (badge) badge.textContent = data.members.length;
+                    const title = document.getElementById('manageMembersModalTitle');
+                    if (title) title.textContent = `สมาชิกห้อง: ${data.room_name}`;
+                    
+                    const tabAdd = document.getElementById('tabAddMembers');
+                    if (tabAdd) {
+                        tabAdd.style.display = data.can_manage ? 'inline-flex' : 'none';
+                    }
+
+                    window.renderCurrentMembersList(data.members, data.can_manage, data.created_by);
+                    window.renderNonMembersList(data.non_members);
+                }
+            } catch (err) {
+                console.error('Load room members error:', err);
+            }
+        };
+
+        window.renderCurrentMembersList = function(members, canManage, createdById) {
+            const list = document.getElementById('currentMembersList');
+            if (!list) return;
+            if (!members || members.length === 0) {
+                list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">ไม่มีสมาชิกในห้องนี้</div>';
+                return;
+            }
+
+            list.innerHTML = members.map(m => {
+                const isCreator = m.id === createdById || m.role === 'admin';
+                const canRemove = canManage && !isCreator && m.id !== Number(currentUserId);
+                const avatarHtml = m.avatar 
+                    ? `<img src="${m.avatar}" style="width: 100%; height: 100%; object-fit: cover;">` 
+                    : `${(m.first_name || m.name || 'U').charAt(0).toUpperCase()}`;
+
+                return `
+                    <div class="member-item-row" data-name="${escapeHtml((m.name || '').toLowerCase())}">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; overflow: hidden; flex-shrink: 0;">
+                            ${avatarHtml}
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                ${escapeHtml(m.name)} ${isCreator ? '<span style="font-size: 10px; color: #f59e0b; margin-left: 4px;">👑 ผู้ดูแลห้อง</span>' : ''}
+                            </div>
+                            <div style="font-size: 11px; color: var(--text-secondary);">${escapeHtml(m.position || 'พนักงาน')}</div>
+                        </div>
+                        ${canRemove ? `
+                            <button type="button" class="btn-remove-member" onclick="removeRoomMember(${m.id}, '${escapeHtml(m.name)}')" title="นำออกจากห้อง">
+                                ลบออก
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        };
+
+        window.renderNonMembersList = function(nonMembers) {
+            const list = document.getElementById('nonMembersList');
+            if (!list) return;
+            if (!nonMembers || nonMembers.length === 0) {
+                list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">เพื่อนร่วมงานทุกคนเข้าร่วมห้องนี้แล้ว</div>';
+                return;
+            }
+
+            list.innerHTML = nonMembers.map(u => {
+                const avatarHtml = u.avatar 
+                    ? `<img src="${u.avatar}" style="width: 100%; height: 100%; object-fit: cover;">` 
+                    : `${(u.first_name || u.name || 'U').charAt(0).toUpperCase()}`;
+
+                return `
+                    <label class="add-member-item" data-name="${escapeHtml((u.name || '').toLowerCase())}" style="display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 6px; cursor: pointer;">
+                        <input type="checkbox" class="new-member-checkbox" value="${u.id}" onchange="updateNewMembersSelectedCount()" style="width: 16px; height: 16px; cursor: pointer;">
+                        <div style="width: 28px; height: 28px; border-radius: 50%; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; overflow: hidden; flex-shrink: 0;">
+                            ${avatarHtml}
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 13px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(u.name)}</div>
+                        </div>
+                        <span style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: ${u.position_color || '#e2e8f0'}22; color: ${u.position_color || '#64748b'}; font-weight: 500;">
+                            ${escapeHtml(u.position || 'พนักงาน')}
+                        </span>
+                    </label>
+                `;
+            }).join('');
+        };
+
+        window.filterCurrentMembers = function(query) {
+            const q = (query || '').toLowerCase().trim();
+            document.querySelectorAll('#currentMembersList .member-item-row').forEach(el => {
+                const name = el.getAttribute('data-name') || '';
+                el.style.display = name.includes(q) ? 'flex' : 'none';
+            });
+        };
+
+        window.filterNonMembers = function(query) {
+            const q = (query || '').toLowerCase().trim();
+            document.querySelectorAll('#nonMembersList .add-member-item').forEach(el => {
+                const name = el.getAttribute('data-name') || '';
+                el.style.display = name.includes(q) ? 'flex' : 'none';
+            });
+        };
+
+        window.updateNewMembersSelectedCount = function() {
+            const checked = document.querySelectorAll('#nonMembersList .new-member-checkbox:checked');
+            const badge = document.getElementById('selectedNewMembersCount');
+            if (badge) badge.textContent = `เลือก ${checked.length} คน`;
+        };
+
+        window.submitAddRoomMembers = async function() {
+            if (!currentManagingRoomId) return;
+            const checked = Array.from(document.querySelectorAll('#nonMembersList .new-member-checkbox:checked')).map(cb => Number(cb.value));
+            if (checked.length === 0) {
+                alert('กรุณาเลือกสมาชิกอย่างน้อย 1 คน');
+                return;
+            }
+
+            try {
+                const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                              '{{ csrf_token() }}';
+                const res = await fetch(`/rooms/${currentManagingRoomId}/members`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({ user_ids: checked })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    await window.loadRoomMembers(currentManagingRoomId);
+                    window.switchMembersTab('current');
+                } else {
+                    alert(data.message || 'เกิดข้อผิดพลาดในการเพิ่มสมาชิก');
+                }
+            } catch (err) {
+                console.error('Add members error:', err);
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
+            }
+        };
+
+        window.removeRoomMember = async function(userId, userName) {
+            if (!currentManagingRoomId) return;
+            if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการนำ "${userName}" ออกจากห้องนี้?`)) return;
+
+            try {
+                const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                              '{{ csrf_token() }}';
+                const res = await fetch(`/rooms/${currentManagingRoomId}/members/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    await window.loadRoomMembers(currentManagingRoomId);
+                } else {
+                    alert(data.message || 'เกิดข้อผิดพลาดในการนำสมาชิกออก');
+                }
+            } catch (err) {
+                console.error('Remove member error:', err);
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
+            }
+        };
 
         window.handleMessageUpdatedRealtime = function(data) {
             if (!data || !data.id) return;
@@ -6057,6 +7030,10 @@
                 appendMessage(e);
             }).listen('MessageSent', (e) => {
                 appendMessage(e);
+            }).listen('.ReactionUpdated', (e) => {
+                window.handleReactionUpdatedRealtime(e);
+            }).listen('ReactionUpdated', (e) => {
+                window.handleReactionUpdatedRealtime(e);
             }).listen('.MessageUpdated', (e) => {
                 window.handleMessageUpdatedRealtime(e);
             }).listen('MessageUpdated', (e) => {

@@ -20,6 +20,7 @@ class Message extends Model
         'file_type',
         'is_edited',
         'is_deleted',
+        'reply_to_id',
     ];
 
     protected $casts = [
@@ -35,6 +36,41 @@ class Message extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(ChatRoom::class, 'room_id');
+    }
+
+    public function replyTo(): BelongsTo
+    {
+        return $this->belongsTo(Message::class, 'reply_to_id')->with('user');
+    }
+
+    public function reactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MessageReaction::class, 'message_id')->with('user');
+    }
+
+    /**
+     * Group reactions by emoji with counts, user list, and has_me indicator
+     */
+    public function getGroupedReactions(?int $currentUserId = null): array
+    {
+        $grouped = [];
+        foreach ($this->reactions as $rx) {
+            $e = $rx->emoji;
+            if (!isset($grouped[$e])) {
+                $grouped[$e] = [
+                    'emoji' => $e,
+                    'count' => 0,
+                    'has_me' => false,
+                    'users' => [],
+                ];
+            }
+            $grouped[$e]['count']++;
+            $grouped[$e]['users'][] = $rx->user?->name ?? 'User';
+            if ($currentUserId && $rx->user_id === $currentUserId) {
+                $grouped[$e]['has_me'] = true;
+            }
+        }
+        return array_values($grouped);
     }
 
     /**

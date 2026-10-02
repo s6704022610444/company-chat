@@ -125,9 +125,21 @@ Route::get('/dashboard', function () {
             ->get();
         $newsCount = $newsList->count();
 
-        // Public rooms list
+        // Public and accessible Private rooms list
+        $roomsQuery = \App\Models\ChatRoom::query();
         if ($hasDirectCol) {
-            $rooms = \App\Models\ChatRoom::where('is_direct', false)->orderBy('name')->get();
+            $roomsQuery->where('is_direct', false);
+        }
+        $roomsQuery->where(function ($q) use ($user) {
+            $q->where('is_private', false)
+              ->orWhere('created_by', $user->id)
+              ->orWhereHas('members', function ($mq) use ($user) {
+                  $mq->where('user_id', $user->id);
+              });
+        });
+        $rooms = $roomsQuery->orderBy('name')->get();
+
+        if ($hasDirectCol) {
             $dmRooms = \App\Models\ChatRoom::with(['user1', 'user2'])
                 ->where('is_direct', true)
                 ->where(function ($q) use ($user) {
@@ -135,7 +147,6 @@ Route::get('/dashboard', function () {
                 })
                 ->get();
         } else {
-            $rooms = \App\Models\ChatRoom::orderBy('name')->get();
             $dmRooms = collect();
         }
 
@@ -149,16 +160,13 @@ Route::get('/dashboard', function () {
         $messages = collect();
 
         if ($selectedRoom) {
-            $selectedRoomModel = \App\Models\ChatRoom::with(['user1', 'user2'])->find($selectedRoom);
-            if ($hasDirectCol && $selectedRoomModel && $selectedRoomModel->is_direct) {
-                $isAdmin = $user->position === 'ผู้ดูแลระบบ';
-                if ((int)$user->id !== (int)$selectedRoomModel->user1_id && (int)$user->id !== (int)$selectedRoomModel->user2_id && !$isAdmin) {
-                    return redirect()->route('dashboard');
-                }
+            $selectedRoomModel = \App\Models\ChatRoom::with(['user1', 'user2', 'members'])->find($selectedRoom);
+            if ($selectedRoomModel && !$selectedRoomModel->canAccess($user->id)) {
+                return redirect()->route('dashboard');
             }
 
             if ($selectedRoomModel) {
-                $msgQuery = \App\Models\Message::with('user')->where('room_id', $selectedRoom);
+                $msgQuery = \App\Models\Message::with(['user', 'replyTo.user', 'reactions.user'])->where('room_id', $selectedRoom);
                 if ($hasDeletedCol) {
                     $msgQuery->where('is_deleted', false);
                 }
@@ -305,4 +313,20 @@ Route::get('/my-tasks', function () {
 Route::put('/my-tasks/{task}/status', [MyTaskController::class, 'updateStatus'])
     ->middleware('auth')
     ->name('my.tasks.status');
+
+Route::post('/messages/{message}/reactions', [MessageController::class, 'toggleReaction'])
+    ->middleware('auth')
+    ->name('messages.reaction');
+
+Route::get('/rooms/{room}/members', [ChatRoomController::class, 'getMembers'])
+    ->middleware('auth')
+    ->name('rooms.members');
+
+Route::post('/rooms/{room}/members', [ChatRoomController::class, 'addMembers'])
+    ->middleware('auth')
+    ->name('rooms.members.add');
+
+Route::delete('/rooms/{room}/members/{user}', [ChatRoomController::class, 'removeMember'])
+    ->middleware('auth')
+    ->name('rooms.members.remove');
 

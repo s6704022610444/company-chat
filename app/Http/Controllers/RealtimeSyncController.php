@@ -127,16 +127,24 @@ class RealtimeSyncController extends Controller
 
         $hasDirectCol = \Illuminate\Support\Facades\Schema::hasColumn('chat_rooms', 'is_direct');
 
-        // 5. Public Rooms List
+        // 5. Public and accessible Private Rooms List
         $roomsQuery = ChatRoom::query();
         if ($hasDirectCol) {
             $roomsQuery->where('is_direct', false);
         }
+        $roomsQuery->where(function ($q) use ($user) {
+            $q->where('is_private', false)
+              ->orWhere('created_by', $user->id)
+              ->orWhereHas('members', function ($mq) use ($user) {
+                  $mq->where('user_id', $user->id);
+              });
+        });
         $rooms = $roomsQuery->orderBy('name')->get()->map(function ($r) {
             return [
                 'id' => $r->id,
                 'name' => $r->name,
                 'description' => $r->description,
+                'is_private' => (bool)$r->is_private,
             ];
         });
 

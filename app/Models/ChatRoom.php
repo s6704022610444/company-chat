@@ -13,13 +13,47 @@ class ChatRoom extends Model
         'description',
         'created_by',
         'is_direct',
+        'is_private',
         'user1_id',
         'user2_id',
     ];
 
     protected $casts = [
         'is_direct' => 'boolean',
+        'is_private' => 'boolean',
     ];
+
+    public function members(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'chat_room_users')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    public function isMember(int $userId): bool
+    {
+        if ($this->created_by === $userId) return true;
+        return $this->members()->where('user_id', $userId)->exists();
+    }
+
+    public function isAdmin(int $userId): bool
+    {
+        if ($this->created_by === $userId) return true;
+        $pivot = $this->members()->where('user_id', $userId)->first()?->pivot;
+        return $pivot && $pivot->role === 'admin';
+    }
+
+    public function canAccess(?int $userId): bool
+    {
+        if (!$userId) return false;
+        if ($this->is_direct) {
+            return $this->user1_id === $userId || $this->user2_id === $userId;
+        }
+        if (!$this->is_private) {
+            return true;
+        }
+        return $this->isMember($userId);
+    }
 
     public function creator(): BelongsTo
     {
