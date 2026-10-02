@@ -3208,7 +3208,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 8px 10px;
+            padding: 7px 10px;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.18s ease;
@@ -3216,32 +3216,32 @@
             color: var(--text-primary);
         }
         .dm-item:hover {
-            background: var(--bg-surface-hover);
+            background: rgba(255,255,255,0.05);
         }
         .dm-item.active {
-            background: rgba(56, 189, 248, 0.12);
-            border: 1px solid rgba(56, 189, 248, 0.25);
+            background: rgba(56, 189, 248, 0.1);
         }
         .dm-avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             object-fit: cover;
             flex-shrink: 0;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
         .dm-avatar-fallback {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(0,200,83,0.25), rgba(0,200,83,0.08));
-            font-size: 12px;
+            background: rgba(30, 30, 35, 0.9);
+            font-size: 13px;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            border: 1.5px solid rgba(0,200,83,0.35);
+            border: 2px solid rgba(255,255,255,0.12);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             letter-spacing: 0;
         }
         .dm-info {
@@ -3249,7 +3249,7 @@
             flex-direction: column;
             min-width: 0;
             flex: 1;
-            gap: 1px;
+            gap: 3px;
         }
         .dm-name {
             font-size: 13px;
@@ -3258,19 +3258,24 @@
             overflow: hidden;
             text-overflow: ellipsis;
             color: var(--text-primary);
-            line-height: 1.3;
+            line-height: 1.2;
         }
         .dm-item.active .dm-name {
             color: #38bdf8;
         }
         .dm-role-tag {
-            font-size: 10.5px;
-            font-weight: 500;
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: var(--text-muted);
-            line-height: 1.2;
+            line-height: 1;
+            padding: 2px 7px;
+            border-radius: 20px;
+            border: 1px solid currentColor;
+            opacity: 0.85;
+            max-width: 100%;
         }
 
         /* Collapsible Section & Sleek Scrollbar */
@@ -3854,13 +3859,14 @@
                                     @if($u->avatar)
                                         <img src="{{ $u->avatar }}" class="dm-avatar" alt="{{ $u->name }}">
                                     @else
-                                        <div class="dm-avatar-fallback" style="color: {{ $u->position_color ?? '#00C853' }}; border-color: {{ $u->position_color ?? '#00C853' }}40; background: {{ $u->position_color ?? '#00C853' }}18;">
+                                        @php $dmColor = $u->position_color ?? '#00C853'; @endphp
+                                        <div class="dm-avatar-fallback" style="color: {{ $dmColor }}; border-color: rgba(255,255,255,0.15);">
                                             {{ strtoupper(mb_substr($uFirst, 0, 1)) }}
                                         </div>
                                     @endif
                                     <div class="dm-info">
                                         <span class="dm-name">{{ $uFirst }}</span>
-                                        <span class="dm-role-tag" style="color: {{ $u->position_color ?? '#00C853' }};">{{ $u->position ?? 'พนักงาน' }}</span>
+                                        <span class="dm-role-tag" style="color: {{ $u->position_color ?? '#00C853' }}; background: {{ $u->position_color ?? '#00C853' }}22; border-color: {{ $u->position_color ?? '#00C853' }}55;">{{ $u->position ?? 'พนักงาน' }}</span>
                                     </div>
                                 </a>
 
@@ -8252,7 +8258,7 @@
                                 const color = dm.other_user_position_color || '#00C853';
                                 const avatarHtml = dm.other_user_avatar
                                     ? `<img src="${dm.other_user_avatar}" class="dm-avatar" alt="${window.escapeHtml(dm.other_user_name)}">`
-                                    : `<div class="dm-avatar-fallback" style="color:${color}; border-color:${color}40; background:${color}18;">${(dm.other_user_first_name || 'U').charAt(0).toUpperCase()}</div>`;
+                                    : `<div class="dm-avatar-fallback" style="color:${color}; border-color:rgba(255,255,255,0.15);">${(dm.other_user_first_name || 'U').charAt(0).toUpperCase()}</div>`;
                                 html += `
                                     <div class="dm-row-wrap ${isActive ? 'active' : ''}" 
                                          data-search-text="${window.escapeHtml((dm.other_user_name + ' ' + (dm.other_user_position || '') + ' ' + dm.other_user_first_name).toLowerCase())}"
@@ -8262,7 +8268,7 @@
                                             ${avatarHtml}
                                             <div class="dm-info">
                                                 <span class="dm-name">${window.escapeHtml(dm.other_user_first_name)}</span>
-                                                <span class="dm-role-tag" style="color: ${dm.other_user_position_color || '#00C853'};">${window.escapeHtml(dm.other_user_position || 'พนักงาน')}</span>
+                                                <span class="dm-role-tag" style="color:${color}; background:${color}22; border-color:${color}55;">${window.escapeHtml(dm.other_user_position || 'พนักงาน')}</span>
                                             </div>
                                         </a>
                                         <form method="POST" action="/rooms/${dm.id}" onsubmit="return confirm('ต้องการปิดแชตส่วนตัวกับ ${window.escapeHtml(dm.other_user_name)} ใช่หรือไม่?')" style="margin: 0;">
