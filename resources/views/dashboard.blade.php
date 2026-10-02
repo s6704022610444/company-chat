@@ -4914,7 +4914,6 @@
         <div class="modal-card" style="width: 480px; max-width: 95vw; max-height: 85vh; display: flex; flex-direction: column;">
             <div class="modal-title" style="justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 20px;">💬</span>
                     <span>เริ่มแชตส่วนตัวใหม่</span>
                 </div>
                 <button type="button" onclick="closeNewDmModal()" style="background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer;">✕</button>
@@ -4930,11 +4929,21 @@
                        class="form-input" 
                        placeholder="พิมพ์ชื่อเพื่อนร่วมงาน หรือตำแหน่ง..." 
                        oninput="filterDmModalUsers(this.value)"
-                       style="padding-left: 36px;">
-                <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px;">🔍</span>
+                       autocomplete="off"
+                       style="padding: 10px 14px;">
             </div>
 
             <div id="dmModalUserList" style="flex: 1; overflow-y: auto; max-height: 340px; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+                <!-- Empty Search Prompt -->
+                <div id="dmModalEmptyPrompt" style="padding: 36px 16px; text-align: center; color: var(--text-muted); font-size: 13px;">
+                    พิมพ์ชื่อหรือตำแหน่งเพื่อนร่วมงานในช่องด้านบน เพื่อค้นหา
+                </div>
+
+                <!-- No Results State -->
+                <div id="dmModalNoResults" style="display: none; padding: 36px 16px; text-align: center; color: var(--text-muted); font-size: 13px;">
+                    ไม่พบเพื่อนร่วมงานที่ใกล้เคียงกับชื่อที่พิมพ์
+                </div>
+
                 @foreach($allUsers->where('id', '!=', auth()->id()) as $colleague)
                     @php
                         $colFirstName = $colleague->resolved_first_name ?? explode(' ', $colleague->name)[0];
@@ -4943,7 +4952,8 @@
                        class="dm-select-card"
                        data-user-name="{{ mb_strtolower($colleague->name) }}"
                        data-user-pos="{{ mb_strtolower($colleague->position ?? '') }}"
-                       style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: var(--bg-surface); border: 1px solid var(--border-color); text-decoration: none; transition: all 0.15s ease;">
+                       data-user-email="{{ mb_strtolower($colleague->email ?? '') }}"
+                       style="display: none; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: var(--bg-surface); border: 1px solid var(--border-color); text-decoration: none; transition: all 0.15s ease;">
                         <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
                             @if($colleague->avatar)
                                 <img src="{{ $colleague->avatar }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex-shrink: 0;" alt="{{ $colleague->name }}">
@@ -7314,12 +7324,82 @@
 
         window.filterDmModalUsers = function(rawQuery) {
             const query = (rawQuery || '').trim().toLowerCase();
-            const cards = document.querySelectorAll('#dmModalUserList .dm-select-card');
+            const cards = Array.from(document.querySelectorAll('#dmModalUserList .dm-select-card'));
+            const emptyPrompt = document.getElementById('dmModalEmptyPrompt');
+            const noResults = document.getElementById('dmModalNoResults');
+            const listContainer = document.getElementById('dmModalUserList');
+
+            if (!query) {
+                // ต้องพิมพ์ค้นหาก่อน จึงจะแสดงรายชื่อ
+                cards.forEach(card => card.style.display = 'none');
+                if (emptyPrompt) emptyPrompt.style.display = 'block';
+                if (noResults) noResults.style.display = 'none';
+                return;
+            }
+
+            if (emptyPrompt) emptyPrompt.style.display = 'none';
+
+            let matchedCount = 0;
+            const scoredCards = [];
+
             cards.forEach(card => {
-                const name = card.getAttribute('data-user-name') || '';
-                const pos = card.getAttribute('data-user-pos') || '';
-                card.style.display = (!query || name.includes(query) || pos.includes(query)) ? 'flex' : 'none';
+                const name = (card.getAttribute('data-user-name') || '').toLowerCase();
+                const pos = (card.getAttribute('data-user-pos') || '').toLowerCase();
+                const email = (card.getAttribute('data-user-email') || '').toLowerCase();
+
+                let score = 0;
+
+                // ตรวจสอบความใกล้เคียงของชื่อและข้อมูลที่พิมพ์
+                if (name === query) {
+                    score = 100;
+                } else if (name.startsWith(query)) {
+                    score = 90;
+                } else if (name.split(/\s+/).some(w => w.startsWith(query))) {
+                    score = 80;
+                } else if (name.includes(query)) {
+                    score = 70;
+                } else if (pos.startsWith(query)) {
+                    score = 60;
+                } else if (pos.includes(query)) {
+                    score = 50;
+                } else if (email.startsWith(query) || email.includes(query)) {
+                    score = 40;
+                } else {
+                    // Subsequence / Fuzzy matching สำหรับชื่อที่ใกล้เคียง
+                    let qIdx = 0;
+                    for (let i = 0; i < name.length && qIdx < query.length; i++) {
+                        if (name[i] === query[qIdx]) qIdx++;
+                    }
+                    if (qIdx === query.length && query.length >= 2) {
+                        score = 30;
+                    }
+                }
+
+                if (score > 0) {
+                    matchedCount++;
+                    card.style.display = 'flex';
+                    scoredCards.push({ card, score });
+                } else {
+                    card.style.display = 'none';
+                }
             });
+
+            // เรียงลำดับชื่อที่ใกล้เคียงที่สุดขึ้นมาก่อน
+            scoredCards.sort((a, b) => b.score - a.score);
+            if (listContainer) {
+                scoredCards.forEach(item => {
+                    listContainer.appendChild(item.card);
+                });
+            }
+
+            if (noResults) {
+                if (matchedCount === 0) {
+                    noResults.innerHTML = `ไม่พบเพื่อนร่วมงานที่ใกล้เคียงกับ "<strong>${escapeHtml(rawQuery)}</strong>"`;
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
         };
 
         // Initialize UI & state on load
