@@ -424,7 +424,7 @@
                             id="first_name"
                             name="first_name"
                             value="{{ old('first_name') }}"
-                            placeholder="เช่น รัฐกรณ์"
+                            placeholder="เช่น เกษม"
                             required
                             autocomplete="given-name"
                         >
@@ -439,7 +439,7 @@
                             id="last_name"
                             name="last_name"
                             value="{{ old('last_name') }}"
-                            placeholder="นามสกุล"
+                            placeholder="น้ำเพชร"
                             required
                             autocomplete="family-name"
                         >
@@ -459,7 +459,7 @@
                         id="email"
                         name="email"
                         value="{{ old('email') }}"
-                        placeholder="yourname@gmail.com"
+                        placeholder="example@gmail.com"
                         required
                         autocomplete="email"
                     >
@@ -477,8 +477,9 @@
                         type="password"
                         id="password"
                         name="password"
-                        placeholder="กำหนดรหัสผ่าน (อย่างน้อย 6 ตัวอักษร)"
+                        placeholder="กำหนดรหัสผ่าน (อย่างน้อย 8 ตัวอักษร)"
                         required
+                        minlength="8"
                         autocomplete="new-password"
                     >
                 </div>
@@ -497,6 +498,7 @@
                         name="password_confirmation"
                         placeholder="กรอกรหัสผ่านซ้ำอีกครั้ง"
                         required
+                        minlength="8"
                         autocomplete="new-password"
                     >
                 </div>
