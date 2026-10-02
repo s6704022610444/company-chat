@@ -3207,58 +3207,70 @@
         .dm-item {
             display: flex;
             align-items: center;
-            gap: 9px;
-            padding: 7px 10px;
-            border-radius: 8px;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.18s ease;
             text-decoration: none;
-            color: var(--text-secondary);
-            margin-bottom: 2px;
-        }
-        .dm-item:hover {
-            background: var(--bg-hover);
             color: var(--text-primary);
         }
+        .dm-item:hover {
+            background: var(--bg-surface-hover);
+        }
         .dm-item.active {
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
-            font-weight: 600;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.25);
         }
         .dm-avatar {
-            width: 26px;
-            height: 26px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
             flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
         }
         .dm-avatar-fallback {
-            width: 26px;
-            height: 26px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: var(--bg-surface);
-            color: var(--text-primary);
-            font-size: 11px;
+            background: linear-gradient(135deg, rgba(0,200,83,0.25), rgba(0,200,83,0.08));
+            font-size: 12px;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            border: 1px solid var(--border-color);
+            border: 1.5px solid rgba(0,200,83,0.35);
+            letter-spacing: 0;
+        }
+        .dm-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+            gap: 1px;
         }
         .dm-name {
             font-size: 13px;
+            font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex: 1;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+        .dm-item.active .dm-name {
+            color: #38bdf8;
         }
         .dm-role-tag {
-            font-size: 10px;
-            padding: 1px 5px;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.06);
-            flex-shrink: 0;
+            font-size: 10.5px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-muted);
+            line-height: 1.2;
         }
 
         /* Collapsible Section & Sleek Scrollbar */
@@ -3400,15 +3412,18 @@
         .dm-row-wrap {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             position: relative;
-            border-radius: 8px;
-            transition: background 0.15s ease;
+            border-radius: 10px;
+            margin-bottom: 2px;
+            transition: all 0.15s ease;
         }
         .dm-row-wrap .dm-item {
             flex: 1;
             min-width: 0;
-            margin-bottom: 0;
+        }
+        .dm-row-wrap.active {
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.25);
         }
         .dm-close-btn {
             opacity: 0;
@@ -3416,19 +3431,24 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 12px;
-            padding: 4px 6px;
-            border-radius: 4px;
+            font-size: 11px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.15s ease;
-            margin-right: 4px;
+            margin-right: 6px;
+            flex-shrink: 0;
         }
         .dm-row-wrap:hover .dm-close-btn {
-            opacity: 0.7;
+            opacity: 0.6;
         }
         .dm-close-btn:hover {
             opacity: 1 !important;
             color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.12);
         }
 
         /* Sidebar Empty Hint */
@@ -3834,12 +3854,14 @@
                                     @if($u->avatar)
                                         <img src="{{ $u->avatar }}" class="dm-avatar" alt="{{ $u->name }}">
                                     @else
-                                        <div class="dm-avatar-fallback" style="color: {{ $u->position_color ?? '#00C853' }};">
+                                        <div class="dm-avatar-fallback" style="color: {{ $u->position_color ?? '#00C853' }}; border-color: {{ $u->position_color ?? '#00C853' }}40; background: {{ $u->position_color ?? '#00C853' }}18;">
                                             {{ strtoupper(mb_substr($uFirst, 0, 1)) }}
                                         </div>
                                     @endif
-                                    <span class="dm-name">{{ $uFirst }}</span>
-                                    <span class="dm-role-tag" style="color: {{ $u->position_color ?? '#00C853' }};">{{ $u->position ?? 'พนักงาน' }}</span>
+                                    <div class="dm-info">
+                                        <span class="dm-name">{{ $uFirst }}</span>
+                                        <span class="dm-role-tag" style="color: {{ $u->position_color ?? '#00C853' }};">{{ $u->position ?? 'พนักงาน' }}</span>
+                                    </div>
                                 </a>
 
                                 {{-- ปุ่มปิดแชต (✕) --}}
@@ -8227,9 +8249,10 @@
                             let html = '';
                             data.dm_rooms.forEach(dm => {
                                 const isActive = (window.currentRoomId && window.currentRoomId == dm.id);
+                                const color = dm.other_user_position_color || '#00C853';
                                 const avatarHtml = dm.other_user_avatar
                                     ? `<img src="${dm.other_user_avatar}" class="dm-avatar" alt="${window.escapeHtml(dm.other_user_name)}">`
-                                    : `<div class="dm-avatar-fallback" style="color:${dm.other_user_position_color || '#00C853'};">${(dm.other_user_first_name || 'U').charAt(0).toUpperCase()}</div>`;
+                                    : `<div class="dm-avatar-fallback" style="color:${color}; border-color:${color}40; background:${color}18;">${(dm.other_user_first_name || 'U').charAt(0).toUpperCase()}</div>`;
                                 html += `
                                     <div class="dm-row-wrap ${isActive ? 'active' : ''}" 
                                          data-search-text="${window.escapeHtml((dm.other_user_name + ' ' + (dm.other_user_position || '') + ' ' + dm.other_user_first_name).toLowerCase())}"
@@ -8237,8 +8260,10 @@
                                          data-dm-room-id="${dm.id}">
                                         <a href="/dashboard?room=${dm.id}" class="dm-item ${isActive ? 'active' : ''}" title="แชตส่วนตัวกับ ${window.escapeHtml(dm.other_user_name)}">
                                             ${avatarHtml}
-                                            <span class="dm-name">${window.escapeHtml(dm.other_user_first_name)}</span>
-                                            <span class="dm-role-tag" style="color: ${dm.other_user_position_color || '#00C853'};">${window.escapeHtml(dm.other_user_position || 'พนักงาน')}</span>
+                                            <div class="dm-info">
+                                                <span class="dm-name">${window.escapeHtml(dm.other_user_first_name)}</span>
+                                                <span class="dm-role-tag" style="color: ${dm.other_user_position_color || '#00C853'};">${window.escapeHtml(dm.other_user_position || 'พนักงาน')}</span>
+                                            </div>
                                         </a>
                                         <form method="POST" action="/rooms/${dm.id}" onsubmit="return confirm('ต้องการปิดแชตส่วนตัวกับ ${window.escapeHtml(dm.other_user_name)} ใช่หรือไม่?')" style="margin: 0;">
                                             <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]')?.content || ''}">
