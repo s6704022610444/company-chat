@@ -1716,7 +1716,7 @@
         }
 
         .btn-action-edit {
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: 7px;
             font-size: 12.5px;
             font-weight: 600;
@@ -1724,22 +1724,30 @@
             border: 1px solid var(--border-color);
             color: var(--text-primary);
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             transition: all 0.15s;
         }
 
         .btn-action-edit:hover {
             background: var(--bg-surface-hover);
+            color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.4);
         }
 
         .btn-action-delete {
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: 7px;
             font-size: 12.5px;
             font-weight: 600;
-            background: #fee2e2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #ef4444;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             transition: all 0.15s;
             font-family: inherit;
         }
@@ -2521,12 +2529,12 @@
             border-radius: 8px;
             color: var(--text-secondary);
             font-size: 12px;
-            padding: 4px 9px;
+            padding: 4px 10px;
             cursor: pointer;
             font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             transition: all 0.15s;
         }
 
@@ -2536,10 +2544,27 @@
             border-color: var(--text-muted);
         }
 
-        .btn-news-action.danger:hover {
+        .btn-news-action.danger {
             color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.4);
-            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-news-action.danger:hover {
+            color: #dc2626;
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .btn-news-action.pinned {
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.4);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .btn-news-action.pinned:hover {
+            color: #d97706;
+            border-color: rgba(245, 158, 11, 0.6);
+            background: rgba(245, 158, 11, 0.15);
         }
 
         .chat-news-card {
@@ -2733,20 +2758,23 @@
             border: none;
             cursor: pointer;
             font-size: 12px;
-            padding: 3px 6px;
-            border-radius: 5px;
+            padding: 4px 7px;
+            border-radius: 6px;
             color: var(--text-secondary);
             transition: all 0.15s;
             display: inline-flex;
             align-items: center;
-            gap: 2px;
+            gap: 4px;
         }
         .btn-msg-tool:hover {
             background: var(--bg-hover);
             color: var(--text-primary);
         }
-        .btn-msg-tool.danger:hover {
+        .btn-msg-tool.danger {
             color: #ef4444;
+        }
+        .btn-msg-tool.danger:hover {
+            color: #dc2626;
             background: rgba(239, 68, 68, 0.12);
         }
         .message-edited-badge {
@@ -3356,11 +3384,12 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path>
+                                                <path d="M4 6h16"></path>
+                                                <path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path>
+                                                <line x1="10" y1="10" x2="10" y2="17"></line>
+                                                <line x1="14" y1="10" x2="14" y2="17"></line>
                                             </svg>
                                         </button>
                                     </form>
@@ -3525,9 +3554,15 @@
                         @if($isMe || $isAdmin)
                             <div class="message-action-toolbar">
                                 @if($isMe)
-                                    <button type="button" class="btn-msg-tool" onclick="startEditMessage({{ $message->id }}, this)" title="แก้ไขข้อความ">✏️ แก้ไข</button>
+                                    <button type="button" class="btn-msg-tool" onclick="startEditMessage({{ $message->id }}, this)" title="แก้ไขข้อความ">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                        <span>แก้ไข</span>
+                                    </button>
                                 @endif
-                                <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax({{ $message->id }})" title="ลบข้อความ">🗑️ ลบ</button>
+                                <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax({{ $message->id }})" title="ลบข้อความ">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg>
+                                    <span>ลบ</span>
+                                </button>
                             </div>
                         @endif
 
@@ -4047,13 +4082,15 @@
                                 <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
                                     @if(auth()->user()->canManageTasks())
                                         <a href="{{ route('tasks.edit', $task->id) }}" class="btn-action-edit">
-                                            แก้ไข
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                            <span>แก้ไข</span>
                                         </a>
                                         <form method="POST" action="{{ route('tasks.destroy', $task->id) }}" onsubmit="return handleDeleteTaskAjax(event, {{ $task->id }})" style="margin: 0;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-action-delete">
-                                                ลบ
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg>
+                                                <span>ลบ</span>
                                             </button>
                                         </form>
                                     @endif
@@ -4164,7 +4201,10 @@
                                                 {{ $item->user?->position ?? 'ผู้บริหาร' }}
                                             </span>
                                             @if($item->is_pinned)
-                                                <span class="news-badge-pinned">📌 ปักหมุด</span>
+                                                <span class="news-badge-pinned">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-2l-2-2V6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1v7l-2 2v2z"></path></svg>
+                                                    <span>ปักหมุด</span>
+                                                </span>
                                             @endif
                                         </div>
                                         <div class="news-timestamp">
@@ -4180,8 +4220,9 @@
                                     <div class="news-admin-actions">
                                         <form method="POST" action="{{ route('news.pin', $item->id) }}" onsubmit="return handlePinNewsAjax(event, {{ $item->id }})" style="display:inline; margin:0;">
                                             @csrf
-                                            <button type="submit" class="btn-news-action" title="{{ $item->is_pinned ? 'ยกเลิกการปักหมุด' : 'ปักหมุดข่าวนี้' }}">
-                                                {{ $item->is_pinned ? '📌 เลิกปักหมุด' : '📍 ปักหมุด' }}
+                                            <button type="submit" class="btn-news-action {{ $item->is_pinned ? 'pinned' : '' }}" title="{{ $item->is_pinned ? 'ยกเลิกการปักหมุด' : 'ปักหมุดข่าวนี้' }}">
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="{{ $item->is_pinned ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-2l-2-2V6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1v7l-2 2v2z"></path></svg>
+                                                <span>{{ $item->is_pinned ? 'เลิกปักหมุด' : 'ปักหมุด' }}</span>
                                             </button>
                                         </form>
 
@@ -4194,14 +4235,16 @@
                                             'has_cover' => !empty($item->cover_image),
                                             'has_audio' => !empty($item->audio_file),
                                         ]) }})" title="แก้ไขข่าว">
-                                            ✏️ แก้ไข
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                            <span>แก้ไข</span>
                                         </button>
 
                                         <form method="POST" action="{{ route('news.destroy', $item->id) }}" onsubmit="return handleDeleteNewsAjax(event, {{ $item->id }})" style="display:inline; margin:0;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-news-action danger" title="ลบประกาศข่าว">
-                                                🗑️ ลบ
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg>
+                                                <span>ลบ</span>
                                             </button>
                                         </form>
                                     </div>
@@ -4532,7 +4575,7 @@
         <div class="modal-card">
             <div class="modal-title" style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 18px;">✏️</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #3b82f6;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                     <span>แก้ไขชื่อห้องแชต</span>
                 </div>
                 <button type="button" onclick="closeEditRoomModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; padding: 2px 6px;">✕</button>
@@ -4615,7 +4658,10 @@
                         <label class="form-label">การปักหมุด</label>
                         <label style="display: flex; align-items: center; gap: 8px; height: 42px; cursor: pointer; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 12px;">
                             <input type="checkbox" name="is_pinned" value="1" style="width: 16px; height: 16px; accent-color: #00C853;">
-                            <span style="font-size: 13px; font-weight: 500; color: var(--text-primary);">📌 ปักหมุดไว้บนสุด</span>
+                            <span style="font-size: 13px; font-weight: 500; color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #f59e0b;"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-2l-2-2V6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1v7l-2 2v2z"></path></svg>
+                                <span>ปักหมุดไว้บนสุด</span>
+                            </span>
                         </label>
                     </div>
                 </div>
@@ -4665,7 +4711,7 @@
         <div class="modal-card" style="width: 620px; max-width: 95vw; max-height: 90vh; overflow-y: auto;">
             <div class="modal-title" style="justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 20px;">✏️</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #3b82f6;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                     <span>แก้ไขประกาศข่าว</span>
                 </div>
                 <button type="button" onclick="closeEditNewsModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px;" aria-label="ปิด">✕</button>
@@ -4696,7 +4742,10 @@
                         <label class="form-label">การปักหมุด</label>
                         <label style="display: flex; align-items: center; gap: 8px; height: 42px; cursor: pointer; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 12px;">
                             <input type="checkbox" id="edit_news_pinned" name="is_pinned" value="1" style="width: 16px; height: 16px; accent-color: #00C853;">
-                            <span style="font-size: 13px; font-weight: 500; color: var(--text-primary);">📌 ปักหมุดไว้บนสุด</span>
+                            <span style="font-size: 13px; font-weight: 500; color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: #f59e0b;"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-2l-2-2V6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1v7l-2 2v2z"></path></svg>
+                                <span>ปักหมุดไว้บนสุด</span>
+                            </span>
                         </label>
                     </div>
                 </div>
@@ -4946,8 +4995,8 @@
             if (data.id && (isMe || isAdminUser)) {
                 actionsToolbarHtml = `
                     <div class="message-action-toolbar">
-                        ${isMe ? `<button type="button" class="btn-msg-tool" onclick="startEditMessage(${data.id}, this)" title="แก้ไขข้อความ">✏️ แก้ไข</button>` : ''}
-                        <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax(${data.id})" title="ลบข้อความ">🗑️ ลบ</button>
+                        ${isMe ? `<button type="button" class="btn-msg-tool" onclick="startEditMessage(${data.id}, this)" title="แก้ไขข้อความ"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg><span>แก้ไข</span></button>` : ''}
+                        <button type="button" class="btn-msg-tool danger" onclick="deleteMessageAjax(${data.id})" title="ลบข้อความ"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg><span>ลบ</span></button>
                     </div>
                 `;
             }
@@ -6883,7 +6932,9 @@
                                         ? `<img src="${item.author_avatar}" class="news-author-avatar" alt="${window.escapeHtml(item.author_name)}">`
                                         : `<div class="news-author-initial" style="background: ${item.position_color};">${window.escapeHtml(item.author_initial)}</div>`;
                                     
-                                    const pinBadge = item.is_pinned ? `<span class="news-badge-pinned">📌 ปักหมุด</span>` : '';
+                                    const pinBadge = item.is_pinned 
+                                        ? `<span class="news-badge-pinned"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-2l-2-2V6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1v7l-2 2v2z"></path></svg><span>ปักหมุด</span></span>` 
+                                        : '';
                                     
                                     let adminActionsHtml = '';
                                     if (data.can_manage_news) {
@@ -6901,20 +6952,23 @@
                                             <div class="news-admin-actions">
                                                 <form method="POST" action="/news/${item.id}/pin" onsubmit="return handlePinNewsAjax(event, ${item.id})" style="display:inline; margin:0;">
                                                     <input type="hidden" name="_token" value="${csrfToken}">
-                                                    <button type="submit" class="btn-news-action" title="${item.is_pinned ? 'ยกเลิกการปักหมุด' : 'ปักหมุดข่าวนี้'}">
-                                                        ${item.is_pinned ? '📌 เลิกปักหมุด' : '📍 ปักหมุด'}
+                                                    <button type="submit" class="btn-news-action ${item.is_pinned ? 'pinned' : ''}" title="${item.is_pinned ? 'ยกเลิกการปักหมุด' : 'ปักหมุดข่าวนี้'}">
+                                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="${item.is_pinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-2l-2-2V6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1v7l-2 2v2z"></path></svg>
+                                                        <span>${item.is_pinned ? 'เลิกปักหมุด' : 'ปักหมุด'}</span>
                                                     </button>
                                                 </form>
 
                                                 <button type="button" class="btn-news-action" onclick='openEditNewsModal(${editJson})' title="แก้ไขข่าว">
-                                                    ✏️ แก้ไข
+                                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                                    <span>แก้ไข</span>
                                                 </button>
 
                                                 <form method="POST" action="/news/${item.id}" onsubmit="return handleDeleteNewsAjax(event, ${item.id})" style="display:inline; margin:0;">
                                                     <input type="hidden" name="_token" value="${csrfToken}">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <button type="submit" class="btn-news-action danger" title="ลบประกาศข่าว">
-                                                        🗑️ ลบ
+                                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path><path d="M4 6h16"></path><path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path><line x1="10" y1="10" x2="10" y2="17"></line><line x1="14" y1="10" x2="14" y2="17"></line></svg>
+                                                        <span>ลบ</span>
                                                     </button>
                                                 </form>
                                             </div>
@@ -7010,7 +7064,7 @@
                                     const safeDesc = window.escapeHtml(r.description || '').replace(/'/g, "\\'");
                                     editHtml = `
                                         <button type="button" class="room-edit-btn" title="แก้ไขชื่อห้อง" onclick="event.stopPropagation(); openEditRoomModal(${r.id}, '${safeName}', '${safeDesc}')">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                                             </svg>
                                         </button>
@@ -7023,11 +7077,12 @@
                                             <input type="hidden" name="_token" value="${csrfToken}">
                                             <input type="hidden" name="_method" value="DELETE">
                                             <button type="submit" class="room-delete-btn" title="ลบห้องนี้">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V4z"></path>
+                                                    <path d="M4 6h16"></path>
+                                                    <path d="M6 6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6"></path>
+                                                    <line x1="10" y1="10" x2="10" y2="17"></line>
+                                                    <line x1="14" y1="10" x2="14" y2="17"></line>
                                                 </svg>
                                             </button>
                                         </form>
