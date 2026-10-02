@@ -3494,36 +3494,39 @@
                         $dmOtherColor = $dmOther?->position_color ?? '#38bdf8';
                     @endphp
                     <h2>
-                        <span style="color: #38bdf8;">💬</span>
                         <span id="chatRoomHeaderTitle">แชตส่วนตัว: {{ $dmOtherName }}</span>
                         <span class="role-pill" id="chatRoomHeaderRole" style="font-size: 10.5px; margin-left: 6px; padding: 1px 7px; vertical-align: middle; color: {{ $dmOtherColor }};">{{ $dmOtherPos }}</span>
                     </h2>
+                    <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                        <span>แชตส่วนตัว</span>
+                    </div>
                 @else
                     @php
                         $curRoom = $rooms->firstWhere('id', $selectedRoom);
+                        $curRoomMemberCount = $curRoom ? $curRoom->members()->count() : 0;
+                        // ห้องสาธารณะ: นับทุก users ในระบบ
+                        if ($curRoom && !$curRoom->is_private) {
+                            $curRoomMemberCount = \App\Models\User::count();
+                        }
                     @endphp
                     <h2>
-                        @if($curRoom && $curRoom->is_private)
-                            <span style="color: #f59e0b; font-size: 15px;" title="ห้องเฉพาะกลุ่ม">🔒</span>
-                        @else
-                            <span style="color: var(--text-secondary); opacity: 0.7;">#</span>
-                        @endif
                         <span id="chatRoomHeaderTitle">{{ $curRoom?->name ?? 'ไม่มีห้อง' }}</span>
                         @if($curRoom && $curRoom->is_private)
                             <span class="role-pill" style="font-size: 10px; margin-left: 6px; padding: 2px 7px; color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.12);">เฉพาะกลุ่ม</span>
                         @endif
                         @if($curRoom)
                             <button type="button" class="btn-manage-members" onclick="openRoomMembersModal({{ $curRoom->id }})" title="จัดการสมาชิกในห้อง">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                <span id="headerMembersCountText">สมาชิก</span>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                <span id="headerMembersCountText">{{ $curRoomMemberCount }} สมาชิก</span>
                             </button>
                         @endif
                     </h2>
+                    <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                        <span>{{ $curRoom?->description ? $curRoom->description : ($curRoom && $curRoom->is_private ? 'ห้องแชตเฉพาะกลุ่ม' : 'ห้องแชตสาธารณะ') }}</span>
+                    </div>
                 @endif
-                <div class="live-status">
-                    <span class="live-dot"></span>
-                    <span id="socketStatus">Real-time (เชื่อมต่อแล้ว)</span>
-                </div>
+                {{-- socketStatus hidden สำหรับ JS --}}
+                <span id="socketStatus" style="display:none;"></span>
             </div>
 
             <!-- My Tasks Title -->
@@ -3752,8 +3755,7 @@
                             <a href="{{ url('/dashboard?room=' . $room->id) }}"
                                class="room-link"
                                onclick="handleRoomClick({{ $room->id }}, event)">
-                                <span class="room-hash" style="{{ $room->is_private ? 'color: #f59e0b; font-size: 13px;' : '' }}">{{ $room->is_private ? '🔒' : '#' }}</span>
-                                <span class="room-name-text">{{ $room->name }}</span>
+                                <span class="room-name-text">{{ $room->name }}@if($room->is_private)<span style="font-size: 10px; color: #f59e0b; margin-left: 5px; vertical-align: middle;">🔒</span>@endif</span>
                             </a>
 
                             <div class="room-actions">
@@ -6907,17 +6909,24 @@
                 });
                 const data = await res.json();
                 if (data.success) {
+                    const isPublicRoom = !data.is_private;
+
                     const badge = document.getElementById('membersCountBadge');
                     if (badge) badge.textContent = data.members.length;
                     const title = document.getElementById('manageMembersModalTitle');
                     if (title) title.textContent = `สมาชิกห้อง: ${data.room_name}`;
+
+                    // อัปเดต header member count button
+                    const headerCount = document.getElementById('headerMembersCountText');
+                    if (headerCount) headerCount.textContent = `${data.members.length} สมาชิก`;
                     
+                    // ห้องสาธารณะ: ซ่อนแท็บ "เพิ่มสมาชิก" เพราะทุกคนเป็นสมาชิกอยู่แล้ว
                     const tabAdd = document.getElementById('tabAddMembers');
                     if (tabAdd) {
-                        tabAdd.style.display = data.can_manage ? 'inline-flex' : 'none';
+                        tabAdd.style.display = (data.can_manage && !isPublicRoom) ? 'inline-flex' : 'none';
                     }
 
-                    window.renderCurrentMembersList(data.members, data.can_manage, data.created_by);
+                    window.renderCurrentMembersList(data.members, data.can_manage && !isPublicRoom, data.created_by);
                     window.renderNonMembersList(data.non_members);
                 }
             } catch (err) {

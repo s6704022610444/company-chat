@@ -136,10 +136,20 @@ class ChatRoomController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $members = $room->members()
-            ->select('users.id', 'users.name', 'users.first_name', 'users.last_name', 'users.position', 'users.avatar')
-            ->get()
-            ->map(function ($u) use ($room) {
+        $nonMembers = collect();
+
+        // ห้องสาธารณะ: ทุกคนในระบบถือเป็นสมาชิก
+        if (!$room->is_private && !$room->is_direct) {
+            $allUsers = User::select('id', 'name', 'first_name', 'last_name', 'position', 'avatar')
+                ->orderBy('name')
+                ->get();
+
+            // ดึง pivot สำหรับ role
+            $pivotRoles = $room->members()->pluck('chat_room_users.role', 'users.id');
+            $creatorId = $room->created_by;
+
+            $members = $allUsers->map(function ($u) use ($room, $pivotRoles, $creatorId) {
+                $isCreator = $u->id === $creatorId;
                 return [
                     'id' => $u->id,
                     'name' => $u->name,
@@ -148,47 +158,69 @@ class ChatRoomController extends Controller
                     'position' => $u->position ?: 'พนักงาน',
                     'position_color' => $u->position_color,
                     'avatar' => $u->avatar,
-                    'role' => $u->pivot->role ?? 'member',
-                    'is_creator' => $room->created_by === $u->id,
+                    'role' => $isCreator ? 'admin' : ($pivotRoles[$u->id] ?? 'member'),
+                    'is_creator' => $isCreator,
                 ];
             });
 
-        // ตรวจสอบว่าผู้สร้างห้องถูกรวมอยู่ในลิสต์หรือไม่
-        $memberIds = $members->pluck('id')->toArray();
-        if ($room->created_by && !in_array($room->created_by, $memberIds)) {
-            $creator = $room->creator;
-            if ($creator) {
-                $members->prepend([
-                    'id' => $creator->id,
-                    'name' => $creator->name,
-                    'first_name' => $creator->resolved_first_name,
-                    'display_name' => $creator->chat_display_name,
-                    'position' => $creator->position ?: 'พนักงาน',
-                    'position_color' => $creator->position_color,
-                    'avatar' => $creator->avatar,
-                    'role' => 'admin',
-                    'is_creator' => true,
-                ]);
-                $memberIds[] = $creator->id;
+            // ไม่มี non_members สำหรับห้องสาธารณะ
+            $nonMembers = collect();
+        } else {
+            // ห้องเฉพาะกลุ่มหรือ DM: ดึงเฉพาะจาก pivot
+            $members = $room->members()
+                ->select('users.id', 'users.name', 'users.first_name', 'users.last_name', 'users.position', 'users.avatar')
+                ->get()
+                ->map(function ($u) use ($room) {
+                    return [
+                        'id' => $u->id,
+                        'name' => $u->name,
+                        'first_name' => $u->resolved_first_name,
+                        'display_name' => $u->chat_display_name,
+                        'position' => $u->position ?: 'พนักงาน',
+                        'position_color' => $u->position_color,
+                        'avatar' => $u->avatar,
+                        'role' => $u->pivot->role ?? 'member',
+                        'is_creator' => $room->created_by === $u->id,
+                    ];
+                });
+
+            // ตรวจสอบว่าผู้สร้างห้องถูกรวมอยู่ในลิสต์หรือไม่
+            $memberIds = $members->pluck('id')->toArray();
+            if ($room->created_by && !in_array($room->created_by, $memberIds)) {
+                $creator = $room->creator;
+                if ($creator) {
+                    $members->prepend([
+                        'id' => $creator->id,
+                        'name' => $creator->name,
+                        'first_name' => $creator->resolved_first_name,
+                        'display_name' => $creator->chat_display_name,
+                        'position' => $creator->position ?: 'พนักงาน',
+                        'position_color' => $creator->position_color,
+                        'avatar' => $creator->avatar,
+                        'role' => 'admin',
+                        'is_creator' => true,
+                    ]);
+                    $memberIds[] = $creator->id;
+                }
             }
-        }
 
-        // ผู้ใช้ที่ยังไม่ได้อยู่ในห้อง (สำหรับเพิ่มเข้าห้อง)
-        $nonMembers = User::select('id', 'name', 'first_name', 'last_name', 'position', 'avatar')
-            ->whereNotIn('id', $memberIds)
-            ->orderBy('name')
-            ->get()
-            ->map(function ($u) {
-                return [
-                    'id' => $u->id,
-                    'name' => $u->name,
-                    'first_name' => $u->resolved_first_name,
-                    'display_name' => $u->chat_display_name,
-                    'position' => $u->position ?: 'พนักงาน',
-                    'position_color' => $u->position_color,
-                    'avatar' => $u->avatar,
-                ];
-            });
+            // ผู้ใช้ที่ยังไม่ได้อยู่ในห้อง
+            $nonMembers = User::select('id', 'name', 'first_name', 'last_name', 'position', 'avatar')
+                ->whereNotIn('id', $memberIds)
+                ->orderBy('name')
+                ->get()
+                ->map(function ($u) {
+                    return [
+                        'id' => $u->id,
+                        'name' => $u->name,
+                        'first_name' => $u->resolved_first_name,
+                        'display_name' => $u->chat_display_name,
+                        'position' => $u->position ?: 'พนักงาน',
+                        'position_color' => $u->position_color,
+                        'avatar' => $u->avatar,
+                    ];
+                });
+        }
 
         $canManage = $room->created_by === auth()->id() 
             || auth()->user()->position === 'ผู้ดูแลระบบ' 
